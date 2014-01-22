@@ -18,7 +18,7 @@ CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 INCPATH       = -I/opt/Qt5.2.0/5.2.0/gcc/mkspecs/linux-g++ -I. -I/opt/Qt5.2.0/5.2.0/gcc/include -I/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL -I/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets -I/opt/Qt5.2.0/5.2.0/gcc/include/QtGui -I/opt/Qt5.2.0/5.2.0/gcc/include/QtCore -I.
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/opt/Qt5.2.0/5.2.0/gcc -Wl,-rpath,/opt/Qt5.2.0/5.2.0/gcc/lib
-LIBS          = $(SUBLIBS) -L/opt/Qt5.2.0/5.2.0/gcc/lib -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -lGLU -lglut -L/opt/Qt5.2.0/5.2.0/gcc/lib -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /opt/Qt5.2.0/5.2.0/gcc/bin/qmake
@@ -1529,7 +1529,9 @@ football.o: football.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
+		print.c \
+		CSCIx229.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o football.o football.cpp
 
 moc_football.o: moc_football.cpp 

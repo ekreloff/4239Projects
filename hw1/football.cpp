@@ -2,7 +2,9 @@
 //  OpenGL Triangle widget
 //
 #include <QtOpenGL>
+#include <GL/glu.h>
 #include "football.h"
+#include "print.c"
 
 //
 //  Constructor
@@ -16,7 +18,13 @@ Football::Football(QWidget* parent)
    //  Initialize color/texture toggle
    texture = false;
 */
-	theta = 0;
+
+	pan = 0.0;
+}
+
+void Football::setPan(int distance){
+	pan = distance/10.0;
+	updateGL();
 }
 
 //
@@ -59,8 +67,8 @@ void Football::initializeGL()
 //
 //  Set projection when window is resized
 //
-/*
-void Triangle::resizeGL(int width, int height)
+
+void Football::resizeGL(int width, int height)
 {
    //  Window aspect ration
    float asp= height ? width / (float)height : 1;
@@ -76,7 +84,7 @@ void Triangle::resizeGL(int width, int height)
    //  Back to model view
    glMatrixMode(GL_MODELVIEW);
 }
-*/
+
 //
 //  Draw the window
 //
@@ -86,14 +94,32 @@ void Football::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //  Reset transformations
-    glLoadIdentity();
-
+    //glLoadIdentity();
+    /*
+    gluLookAt(-4.0, pan, 0.0,
+			  0.0, -1.0, 0.0,
+			  0.0, 1.0, 0.0);
+	
+	*/
+	glLoadIdentity();
+	
     //  Draw RGB triangle
     glBegin(GL_TRIANGLES);
-    glColor3f(1,0,0); glVertex3d( 0, 1,0);
-    glColor3f(0,1,0); glVertex3d(-1,-1,0);
-    glColor3f(0,0,1); glVertex3d(+1,-1,0);
+    glColor3f(1,0,0); glVertex3d( pan, 0.2,0);
+    glColor3f(0,1,0); glVertex3d(pan-.2,-.2,0);
+    glColor3f(0,0,1); glVertex3d(pan+.2,-.2,0);
     glEnd();
+    
+     //  Draw axes in white
+   glColor3f(1,1,1);
+   glBegin(GL_LINES);
+   glVertex3d(0,0,0);
+   glVertex3d(1,0,0);
+   glVertex3d(0,0,0);
+   glVertex3d(0,1,0);
+   glVertex3d(0,0,0);
+   glVertex3d(0,0,1);
+   glEnd();
 
 	/*
     //  Set rotation
