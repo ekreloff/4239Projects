@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QLCDNumber>
 #include <QPushButton>
+#include <QGridLayout>
 #include <QString>
 #include "main.h"
 #include "football.h"
@@ -48,7 +49,7 @@ Main::Main()
    QPushButton *button8 = new QPushButton(string8);
    QPushButton *button9 = new QPushButton(string9);
    QPushButton *button0 = new QPushButton(string0);
-   QPushButton *buttonPLus = new QPushButton(stringPlus);
+   QPushButton *buttonPlus = new QPushButton(stringPlus);
    QPushButton *buttonMinus = new QPushButton(stringMinus);
    QPushButton *buttonTimes = new QPushButton(stringTimes);
    QPushButton *buttonDivide = new QPushButton(stringDivide);
@@ -66,6 +67,8 @@ Main::Main()
    
    Football *football = new Football;
    */
+   
+   QGridLayout *topLayout = new QGridLayout();
    
    QBoxLayout *layout = new QBoxLayout(QBoxLayout::TopToBottom);
    layout->addWidget(resultDisplay);
@@ -88,7 +91,27 @@ Main::Main()
    //layout->addWidget(verticalSlider);
    //layout->addWidget(football);
    //layout->addWidget(horizontalSlider);
-   setLayout(layout);
+   topLayout->addWidget(resultDisplay, 0,3, Qt::AlignRight);
+   topLayout->addWidget(button1,1,0);
+   topLayout->addWidget(button2,1,1);
+   topLayout->addWidget(button3,1,2);
+   topLayout->addWidget(button4,2,0);
+   topLayout->addWidget(button5,2,1);
+   topLayout->addWidget(button6,2,2);
+   topLayout->addWidget(button7,3,0);
+   topLayout->addWidget(button8,3,1);
+   topLayout->addWidget(button9,3,2);
+   topLayout->addWidget(button0,4,1);
+   topLayout->addWidget(buttonPlus,1,3);
+   topLayout->addWidget(buttonMinus,2,3);
+   topLayout->addWidget(buttonTimes,3,3);
+   topLayout->addWidget(buttonDivide,4,3);
+   topLayout->addWidget(buttonEquals,5,3);
+   topLayout->addWidget(buttonClear,5,1);
+   //topLayout->addLayout(layout, 1, 4);
+   setLayout(topLayout);
+   
+   connect(button1, SIGNAL(clicked(bool)) , resultDisplay , SLOT(display(int)));
    
    //  Connect valueChanged() signal of slider to setTheta slot of triangle
    //connect(verticalSlider, SIGNAL(valueChanged(int)) , football , SLOT(setPan(int)));
