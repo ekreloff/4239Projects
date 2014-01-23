@@ -9,6 +9,7 @@
 #include <QString>
 #include "main.h"
 #include "football.h"
+#include "calcdisplay.h"
 
 
 //
@@ -19,8 +20,7 @@ Main::Main()
    //  Set window title
    setWindowTitle(tr("Homework 1 - Ethan Kreloff"));
 
-   QLCDNumber *resultDisplay = new QLCDNumber();
-   //resultDisplay->intValue = 4568;
+   CalcDisplay *resultDisplay = new CalcDisplay();
    
    QString string1 = "1";
    QString string2 = "2";
@@ -38,6 +38,9 @@ Main::Main()
    QString stringTimes = "X";
    QString stringDivide = "/";
    QString stringEquals = "=";
+   
+   
+   
    
    QPushButton *button1 = new QPushButton(string1);
    QPushButton *button2 = new QPushButton(string2);

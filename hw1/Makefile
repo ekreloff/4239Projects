@@ -47,11 +47,11 @@ OBJECTS_DIR   = ./
 
 SOURCES       = hw1.cpp \
 		main.cpp \
-		football.cpp moc_football.cpp
+		calcdisplay.cpp moc_calcdisplay.cpp
 OBJECTS       = hw1.o \
 		main.o \
-		football.o \
-		moc_football.o
+		calcdisplay.o \
+		moc_calcdisplay.o
 DIST          = /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/common/shell-unix.conf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/common/unix.conf \
@@ -410,7 +410,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/hw11.0.0 || mkdir -p .tmp/hw11.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/hw11.0.0/ && $(COPY_FILE) --parents main.h football.h .tmp/hw11.0.0/ && $(COPY_FILE) --parents hw1.cpp main.cpp football.cpp .tmp/hw11.0.0/ && (cd `dirname .tmp/hw11.0.0` && $(TAR) hw11.0.0.tar hw11.0.0 && $(COMPRESS) hw11.0.0.tar) && $(MOVE) `dirname .tmp/hw11.0.0`/hw11.0.0.tar.gz . && $(DEL_FILE) -r .tmp/hw11.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/hw11.0.0/ && $(COPY_FILE) --parents main.h calcdisplay.h .tmp/hw11.0.0/ && $(COPY_FILE) --parents hw1.cpp main.cpp calcdisplay.cpp .tmp/hw11.0.0/ && (cd `dirname .tmp/hw11.0.0` && $(TAR) hw11.0.0.tar hw11.0.0 && $(COMPRESS) hw11.0.0.tar) && $(MOVE) `dirname .tmp/hw11.0.0`/hw11.0.0.tar.gz . && $(DEL_FILE) -r .tmp/hw11.0.0
 
 
 clean:compiler_clean 
@@ -433,10 +433,10 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_football.cpp
+compiler_moc_header_make_all: moc_calcdisplay.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_football.cpp
-moc_football.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
+	-$(DEL_FILE) moc_calcdisplay.cpp
+moc_calcdisplay.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qgl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopengl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
@@ -583,8 +583,11 @@ moc_football.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
-		football.h
-	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) football.h -o moc_football.cpp
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
+		calcdisplay.h
+	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) calcdisplay.h -o moc_calcdisplay.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1042,16 +1045,27 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qdesktopservices.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvalidator.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtguiversion.h \
-		main.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QGridLayout \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
+		main.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qslider.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractslider.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlabel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcombobox.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemdelegate.h \
@@ -1062,20 +1076,16 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qrubberband.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QBoxLayout \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
 		football.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qgl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglcolormap.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglglobal.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
+		calcdisplay.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-football.o: football.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
+calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGLDepends \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCore \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCoreDepends \
@@ -1522,7 +1532,8 @@ football.o: football.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglpixelbuffer.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglshaderprogram.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglversion.h \
-		football.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
+		calcdisplay.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
@@ -1530,12 +1541,11 @@ football.o: football.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
-		print.c \
-		CSCIx229.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o football.o football.cpp
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o calcdisplay.o calcdisplay.cpp
 
-moc_football.o: moc_football.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_football.o moc_football.cpp
+moc_calcdisplay.o: moc_calcdisplay.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_calcdisplay.o moc_calcdisplay.cpp
 
 ####### Install
 
