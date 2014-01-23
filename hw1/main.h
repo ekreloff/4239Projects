@@ -2,10 +2,12 @@
 #define MAIN_H
 
 #include <QWidget>
-#include <QSlider>
-#include <QLabel>
-#include <QComboBox>
 #include <QBoxLayout>
+#include <QtGui>
+#include <QLCDNumber>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QString>
 
 class Main : public QWidget
 {

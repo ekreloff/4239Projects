@@ -2,13 +2,7 @@
 //  Main Widget
 //
 
-#include <QtGui>
-#include <QLCDNumber>
-#include <QPushButton>
-#include <QGridLayout>
-#include <QString>
 #include "main.h"
-#include "football.h"
 #include "calcdisplay.h"
 
 
@@ -38,6 +32,10 @@ Main::Main()
    QString stringTimes = "*";
    QString stringDivide = "/";
    QString stringEquals = "=";
+   QString stringDec = "Decimal";
+   QString stringBin = "Binary";
+   QString stringHex = "Hexadecimal";
+   QString stringOct = "Octal";
    
    
    
@@ -58,46 +56,36 @@ Main::Main()
    QPushButton *buttonDivide = new QPushButton(stringDivide);
    QPushButton *buttonEquals = new QPushButton(stringEquals);
    QPushButton *buttonClear = new QPushButton(stringClear);
+   QPushButton *buttonDec = new QPushButton(stringDec);
+   QPushButton *buttonHex = new QPushButton(stringHex);
+   QPushButton *buttonBin = new QPushButton(stringBin);
+   QPushButton *buttonOct = new QPushButton(stringOct);
    
    
-   QGridLayout *topLayout = new QGridLayout();
-   
-   QBoxLayout *layout = new QBoxLayout(QBoxLayout::TopToBottom);
-   layout->addWidget(resultDisplay);
-   layout->addWidget(button1);
-   layout->addWidget(button2);
-   layout->addWidget(button3);
-   layout->addWidget(button4);
-   layout->addWidget(button5);
-   layout->addWidget(button6);
-   layout->addWidget(button7);
-   layout->addWidget(button8);
-   layout->addWidget(button9);
-   layout->addWidget(button0);
-   layout->addWidget(buttonPlus);
-   layout->addWidget(buttonMinus);
-   layout->addWidget(buttonTimes);
-   layout->addWidget(buttonDivide);
-   layout->addWidget(buttonEquals);
-   layout->addWidget(buttonClear);
-   topLayout->addWidget(resultDisplay, 0,3, Qt::AlignRight);
-   topLayout->addWidget(button1,1,0);
-   topLayout->addWidget(button2,1,1);
-   topLayout->addWidget(button3,1,2);
-   topLayout->addWidget(button4,2,0);
-   topLayout->addWidget(button5,2,1);
-   topLayout->addWidget(button6,2,2);
-   topLayout->addWidget(button7,3,0);
-   topLayout->addWidget(button8,3,1);
-   topLayout->addWidget(button9,3,2);
-   topLayout->addWidget(button0,4,1);
-   topLayout->addWidget(buttonPlus,1,3);
-   topLayout->addWidget(buttonMinus,2,3);
-   topLayout->addWidget(buttonTimes,3,3);
-   topLayout->addWidget(buttonDivide,4,3);
-   topLayout->addWidget(buttonEquals,5,3);
-   topLayout->addWidget(buttonClear,5,1);
-   //topLayout->addLayout(layout, 1, 4);
+   QGridLayout *gridLayout = new QGridLayout();
+   QBoxLayout *topLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+   topLayout->addWidget(resultDisplay);
+   gridLayout->addWidget(button1,1,0);
+   gridLayout->addWidget(button2,1,1);
+   gridLayout->addWidget(button3,1,2);
+   gridLayout->addWidget(button4,2,0);
+   gridLayout->addWidget(button5,2,1);
+   gridLayout->addWidget(button6,2,2);
+   gridLayout->addWidget(button7,3,0);
+   gridLayout->addWidget(button8,3,1);
+   gridLayout->addWidget(button9,3,2);
+   gridLayout->addWidget(button0,4,1);
+   gridLayout->addWidget(buttonPlus,1,3);
+   gridLayout->addWidget(buttonMinus,2,3);
+   gridLayout->addWidget(buttonTimes,3,3);
+   gridLayout->addWidget(buttonDivide,4,3);
+   gridLayout->addWidget(buttonEquals,5,3);
+   gridLayout->addWidget(buttonClear,5,0);
+   gridLayout->addWidget(buttonDec,6,0);
+   gridLayout->addWidget(buttonHex,6,1);
+   gridLayout->addWidget(buttonBin,6,2);
+   gridLayout->addWidget(buttonOct,6,3);	
+   topLayout->addLayout(gridLayout);
    setLayout(topLayout);
    
    connect(button1, SIGNAL(clicked()) , resultDisplay , SLOT(button1Click()));
@@ -116,42 +104,8 @@ Main::Main()
    connect(buttonDivide, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDivideClick()));
    connect(buttonEquals, SIGNAL(clicked()) , resultDisplay , SLOT(buttonEqualsClick()));
    connect(buttonClear, SIGNAL(clicked()) , resultDisplay , SLOT(buttonClearClick()));
-   
-   //  Connect valueChanged() signal of slider to setTheta slot of triangle
-   //connect(verticalSlider, SIGNAL(valueChanged(int)) , football , SLOT(setPan(int)));
-   
-   /*//  Create new Triangle widget
-   Triangle* triangle = new Triangle;
-
-   //  Create slider and set range to 0-360 (degrees)
-   QSlider* slider = new QSlider(Qt::Vertical);
-   slider->setRange(0,360);
-   
-
-   //  Create label to show angle
-   QLabel* label = new QLabel;
-   
-   //  Eye candy - set tick interval for display
-   slider->setTickInterval(30);
-   slider->setTickPosition(QSlider::TicksBelow);
-
-   //  Create toggle
-   QComboBox* combo = new QComboBox();
-   combo->addItem("Pastel Colors");
-   combo->addItem("Texture");
-
-   //  Set layout of child widgets
-   QVBoxLayout* layout = new QVBoxLayout;
-   layout->addWidget(combo);
-   layout->addWidget(slider);
-   layout->addWidget(triangle);
-   layout->addWidget(label);
-   setLayout(layout);
-
-   //  Connect valueChanged() signal of slider to setTheta slot of triangle
-   connect(slider, SIGNAL(valueChanged(int)) , triangle , SLOT(setTheta(int)));
-   //  Connect toggled() signal of pushbutton to setTexture slot of triangle
-   connect(combo, SIGNAL(currentIndexChanged(QString)) , triangle , SLOT(setType(QString)));
-   //  Connect message() signal of triangle to setText slot of label
-   connect(triangle, SIGNAL(message(QString)) , label , SLOT(setText(QString)));*/
+   connect(buttonDec, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDecClick()));
+   connect(buttonHex, SIGNAL(clicked()) , resultDisplay , SLOT(buttonHexClick()));
+   connect(buttonBin, SIGNAL(clicked()) , resultDisplay , SLOT(buttonBinClick()));
+   connect(buttonOct, SIGNAL(clicked()) , resultDisplay , SLOT(buttonOctClick()));
 }

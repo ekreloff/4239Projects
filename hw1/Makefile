@@ -586,6 +586,9 @@ moc_calcdisplay.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbitarray.h \
 		calcdisplay.h
 	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) calcdisplay.h -o moc_calcdisplay.cpp
 
@@ -1532,7 +1535,6 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglpixelbuffer.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglshaderprogram.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglversion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
 		calcdisplay.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
@@ -1541,7 +1543,8 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o calcdisplay.o calcdisplay.cpp
 
 moc_calcdisplay.o: moc_calcdisplay.cpp 
