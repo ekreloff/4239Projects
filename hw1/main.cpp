@@ -35,7 +35,7 @@ Main::Main()
    QString stringClear = "Clear";
    QString stringPlus = "+";
    QString stringMinus = "-";
-   QString stringTimes = "X";
+   QString stringTimes = "*";
    QString stringDivide = "/";
    QString stringEquals = "=";
    
@@ -59,17 +59,6 @@ Main::Main()
    QPushButton *buttonEquals = new QPushButton(stringEquals);
    QPushButton *buttonClear = new QPushButton(stringClear);
    
-   /*
-   QSlider *verticalSlider, *horizontalSlider;
-   verticalSlider = new QSlider(Qt::Vertical);
-   //horizontalSlider = new QSlider(Qt::Horizontal);
-   
-   verticalSlider->setRange(-10, 10);
-   verticalSlider->setTickInterval(1);
-   verticalSlider->setTickPosition(QSlider::TicksBelow);
-   
-   Football *football = new Football;
-   */
    
    QGridLayout *topLayout = new QGridLayout();
    
@@ -91,9 +80,6 @@ Main::Main()
    layout->addWidget(buttonDivide);
    layout->addWidget(buttonEquals);
    layout->addWidget(buttonClear);
-   //layout->addWidget(verticalSlider);
-   //layout->addWidget(football);
-   //layout->addWidget(horizontalSlider);
    topLayout->addWidget(resultDisplay, 0,3, Qt::AlignRight);
    topLayout->addWidget(button1,1,0);
    topLayout->addWidget(button2,1,1);
@@ -114,7 +100,22 @@ Main::Main()
    //topLayout->addLayout(layout, 1, 4);
    setLayout(topLayout);
    
-   connect(button1, SIGNAL(clicked(bool)) , resultDisplay , SLOT(display(int)));
+   connect(button1, SIGNAL(clicked()) , resultDisplay , SLOT(button1Click()));
+   connect(button2, SIGNAL(clicked()) , resultDisplay , SLOT(button2Click()));
+   connect(button3, SIGNAL(clicked()) , resultDisplay , SLOT(button3Click()));
+   connect(button4, SIGNAL(clicked()) , resultDisplay , SLOT(button4Click()));
+   connect(button5, SIGNAL(clicked()) , resultDisplay , SLOT(button5Click()));
+   connect(button6, SIGNAL(clicked()) , resultDisplay , SLOT(button6Click()));
+   connect(button7, SIGNAL(clicked()) , resultDisplay , SLOT(button7Click()));
+   connect(button8, SIGNAL(clicked()) , resultDisplay , SLOT(button8Click()));
+   connect(button9, SIGNAL(clicked()) , resultDisplay , SLOT(button9Click()));
+   connect(button0, SIGNAL(clicked()) , resultDisplay , SLOT(button0Click()));
+   connect(buttonPlus, SIGNAL(clicked()) , resultDisplay , SLOT(buttonPlusClick()));
+   connect(buttonMinus, SIGNAL(clicked()) , resultDisplay , SLOT(buttonMinusClick()));
+   connect(buttonTimes, SIGNAL(clicked()) , resultDisplay , SLOT(buttonTimesClick()));
+   connect(buttonDivide, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDivideClick()));
+   connect(buttonEquals, SIGNAL(clicked()) , resultDisplay , SLOT(buttonEqualsClick()));
+   connect(buttonClear, SIGNAL(clicked()) , resultDisplay , SLOT(buttonClearClick()));
    
    //  Connect valueChanged() signal of slider to setTheta slot of triangle
    //connect(verticalSlider, SIGNAL(valueChanged(int)) , football , SLOT(setPan(int)));

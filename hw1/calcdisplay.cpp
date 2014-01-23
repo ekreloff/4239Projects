@@ -13,14 +13,93 @@ CalcDisplay::CalcDisplay(QWidget* parent)
 {
 	firstButton = false;
 	secondButton = false;
+	/*
 	this->display(5);	
 	this->display(this->value() + 1);
+	*/
 }
 
-/*void CalcDisplay::button1Click()
+void CalcDisplay::button1Click()
 {
+	this->display(1);
+}
+
+
+void CalcDisplay::button2Click()
+{
+	this->display(2);
+}
+
+void CalcDisplay::button3Click()
+{
+	this->display(3);
+}
 	
-}*/
+void CalcDisplay::button4Click()
+{
+	this->display(4);
+}
+
+void CalcDisplay::button5Click()
+{
+	this->display(5);
+}
+	
+void CalcDisplay::button6Click()
+{
+	this->display(6);
+}
+
+void CalcDisplay::button7Click()
+{
+	this->display(7);
+}
+
+void CalcDisplay::button8Click()
+{
+	this->display(8);
+}
+
+void CalcDisplay::button9Click()
+{
+	this->display(9);
+}
+
+void CalcDisplay::button0Click()
+{
+	this->display(0);
+}
+
+void CalcDisplay::buttonPlusClick()
+{
+	this->display(19203);
+}
+
+void CalcDisplay::buttonMinusClick()
+{
+	this->display(1);
+}
+
+void CalcDisplay::buttonTimesClick()
+{
+	this->display(1);
+}
+
+void CalcDisplay::buttonDivideClick()
+{
+	this->display(1);
+}
+
+void CalcDisplay::buttonEqualsClick()
+{
+	this->display(1);
+}
+
+void CalcDisplay::buttonClearClick()
+{
+	this->display(1);
+}
+	
 
 
 

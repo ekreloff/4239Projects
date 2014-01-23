@@ -45,15 +45,22 @@ public slots:
 */
 
 	//void setPan(int distance);
-	//void button1Click();
-	/*
 	void button1Click();
-	void button1Click();
-	void button1Click();
-	void button1Click();
-	void button1Click();
-	void button1Click();
-	void button1Click();*/
+	void button2Click();
+	void button3Click();
+	void button4Click();
+	void button5Click();
+	void button6Click();
+	void button7Click();
+	void button8Click();
+	void button9Click();
+	void button0Click();
+	void buttonPlusClick();
+	void buttonMinusClick();
+	void buttonTimesClick();
+	void buttonDivideClick();
+	void buttonEqualsClick();
+	void buttonClearClick();
 	
 signals:
 /*
