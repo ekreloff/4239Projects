@@ -1,5 +1,9 @@
 //
-//  OpenGL Triangle Widget
+//  Created By Ethan Kreloff January 21st, 2014
+//
+
+//
+//  Calculator Display widget
 //
 
 #ifndef CACLDISPLAY_H
@@ -50,7 +54,7 @@ public slots:
 	void buttonOctClick();
 	
 signals:
-
+	double currentValue(double number);
 protected:
 
 };

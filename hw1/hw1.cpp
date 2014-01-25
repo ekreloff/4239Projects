@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
    //  Create the application
    QApplication app(argc,argv);
-   //  Create and show Hello widget
+   //  Create and show calculator 
    Main mainWidget;
    mainWidget.show();
    //  Main loop for application

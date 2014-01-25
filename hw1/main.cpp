@@ -1,9 +1,14 @@
 //
+//  Created By Ethan Kreloff January 21st, 2014
+//
+
+//
 //  Main Widget
 //
 
 #include "main.h"
 #include "calcdisplay.h"
+#include "visual.h"
 
 
 //
@@ -15,7 +20,9 @@ Main::Main()
    setWindowTitle(tr("Homework 1 - Ethan Kreloff"));
 
    CalcDisplay *resultDisplay = new CalcDisplay();
+   Visual *calcVisual = new Visual();
    
+   // Text inside calculator butons
    QString string1 = "1";
    QString string2 = "2";
    QString string3 = "3";
@@ -39,7 +46,7 @@ Main::Main()
    
    
    
-   
+   // Calculator Buttons
    QPushButton *button1 = new QPushButton(string1);
    QPushButton *button2 = new QPushButton(string2);
    QPushButton *button3 = new QPushButton(string3);
@@ -62,9 +69,11 @@ Main::Main()
    QPushButton *buttonOct = new QPushButton(stringOct);
    
    
+   // Layout
    QGridLayout *gridLayout = new QGridLayout();
    QBoxLayout *topLayout = new QBoxLayout(QBoxLayout::TopToBottom);
    topLayout->addWidget(resultDisplay);
+   topLayout->addWidget(calcVisual);
    gridLayout->addWidget(button1,1,0);
    gridLayout->addWidget(button2,1,1);
    gridLayout->addWidget(button3,1,2);
@@ -88,6 +97,13 @@ Main::Main()
    topLayout->addLayout(gridLayout);
    setLayout(topLayout);
    
+   // Timer idle calls
+   
+   QTimer *timer = new QTimer(this);
+   connect(timer, SIGNAL(timeout()) , resultDisplay , SIGNAL(currentValue()));
+   connect(resultDisplay, SIGNAL(currentValue(double)) , calcVisual , SLOT(setNumber(double))); 
+   timer->start(100);
+   // Button click calls
    connect(button1, SIGNAL(clicked()) , resultDisplay , SLOT(button1Click()));
    connect(button2, SIGNAL(clicked()) , resultDisplay , SLOT(button2Click()));
    connect(button3, SIGNAL(clicked()) , resultDisplay , SLOT(button3Click()));

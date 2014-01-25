@@ -1,6 +1,7 @@
 //
-//  OpenGL Triangle widget
+//  Created By Ethan Kreloff January 21st, 2014
 //
+
 
 #include "calcdisplay.h"
 
@@ -155,5 +156,12 @@ void CalcDisplay::buttonHexClick()
 void CalcDisplay::buttonOctClick()
 {
 	this->setOctMode();
+}
+
+//Signal Functions
+
+double CalcDisplay::currentValue(double number)
+{
+	return this->value();
 }
 

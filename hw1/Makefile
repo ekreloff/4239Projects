@@ -47,11 +47,15 @@ OBJECTS_DIR   = ./
 
 SOURCES       = hw1.cpp \
 		main.cpp \
-		calcdisplay.cpp moc_calcdisplay.cpp
+		calcdisplay.cpp \
+		visual.cpp moc_calcdisplay.cpp \
+		moc_visual.cpp
 OBJECTS       = hw1.o \
 		main.o \
 		calcdisplay.o \
-		moc_calcdisplay.o
+		visual.o \
+		moc_calcdisplay.o \
+		moc_visual.o
 DIST          = /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/common/shell-unix.conf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/common/unix.conf \
@@ -410,7 +414,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/hw11.0.0 || mkdir -p .tmp/hw11.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/hw11.0.0/ && $(COPY_FILE) --parents main.h calcdisplay.h .tmp/hw11.0.0/ && $(COPY_FILE) --parents hw1.cpp main.cpp calcdisplay.cpp .tmp/hw11.0.0/ && (cd `dirname .tmp/hw11.0.0` && $(TAR) hw11.0.0.tar hw11.0.0 && $(COMPRESS) hw11.0.0.tar) && $(MOVE) `dirname .tmp/hw11.0.0`/hw11.0.0.tar.gz . && $(DEL_FILE) -r .tmp/hw11.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/hw11.0.0/ && $(COPY_FILE) --parents main.h calcdisplay.h visual.h .tmp/hw11.0.0/ && $(COPY_FILE) --parents hw1.cpp main.cpp calcdisplay.cpp visual.cpp .tmp/hw11.0.0/ && (cd `dirname .tmp/hw11.0.0` && $(TAR) hw11.0.0.tar hw11.0.0 && $(COMPRESS) hw11.0.0.tar) && $(MOVE) `dirname .tmp/hw11.0.0`/hw11.0.0.tar.gz . && $(DEL_FILE) -r .tmp/hw11.0.0
 
 
 clean:compiler_clean 
@@ -433,10 +437,124 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_calcdisplay.cpp
+compiler_moc_header_make_all: moc_calcdisplay.cpp moc_visual.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_calcdisplay.cpp
-moc_calcdisplay.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
+	-$(DEL_FILE) moc_calcdisplay.cpp moc_visual.cpp
+moc_calcdisplay.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qconfig.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfeatures.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_integrity.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qoldbasicatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_vxworks.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_power.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_alpha.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bfin.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_s390.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sh4a.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sparc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmutex.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlogging.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qflags.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypetraits.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsysinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnamespace.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstring.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qchar.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbytearray.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrefcount.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qarraydata.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlist.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qalgorithms.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiterator.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcoreevent.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmetatype.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qisenum.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmargins.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrect.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsize.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpoint.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpaintdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpalette.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcolor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrgb.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringlist.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatastream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiodevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpair.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregexp.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbrush.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvector.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qmatrix.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpolygon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qregion.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qline.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtransform.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainterpath.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qimage.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qshareddata.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qhash.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontmetrics.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qkeysequence.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qevent.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariant.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdebug.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextstream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlocale.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qset.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurlquery.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfile.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfiledevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbitarray.h \
+		calcdisplay.h
+	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) calcdisplay.h -o moc_calcdisplay.cpp
+
+moc_visual.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qgl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopengl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
@@ -557,40 +675,8 @@ moc_calcdisplay.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglglobal.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QSurfaceFormat \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qsurfaceformat.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlabel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcombobox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvalidator.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregularexpression.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qrubberband.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractitemmodel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbitarray.h \
-		calcdisplay.h
-	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) calcdisplay.h -o moc_calcdisplay.cpp
+		visual.h
+	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) visual.h -o moc_visual.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -722,129 +808,31 @@ hw1.o: hw1.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QApplication \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qinputmethod.h \
 		main.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlabel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcombobox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvalidator.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregularexpression.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qrubberband.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QBoxLayout \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hw1.o hw1.cpp
-
-main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGuiDepends \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCore \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCoreDepends \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractanimation.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnamespace.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qconfig.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfeatures.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsystemdetection.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qprocessordetection.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcompilerdetection.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobalstatic.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbasicatomic.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bootstrap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qgenericatomic.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_msvc.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_integrity.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qoldbasicatomic.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_vxworks.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_power.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_alpha.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv7.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv6.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv5.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bfin.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_ia64.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_mips.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_s390.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sh4a.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sparc.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_x86.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_cxx11.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_gcc.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_unix.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmutex.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlogging.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qflags.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypeinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypetraits.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsysinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs_impl.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstring.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qchar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbytearray.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrefcount.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qarraydata.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringbuilder.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlist.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qalgorithms.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiterator.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcoreevent.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qscopedpointer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmetatype.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvarlengtharray.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontainerfwd.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qisenum.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject_impl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qparallelanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpauseanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpropertyanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariantanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qeasingcurve.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvector.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpoint.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariant.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpair.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdebug.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qhash.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextstream.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiodevice.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlocale.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qshareddata.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qset.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontiguouscache.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringlist.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatastream.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregexp.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringmatcher.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsequentialanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextcodec.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qendian.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlibraryinfo.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatetime.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer_impl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnumeric.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbuffer.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdir.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfile.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfiledevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdiriterator.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileselector.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QObject \
@@ -860,8 +848,6 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtemporarydir.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QScopedPointer \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtemporaryfile.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurl.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurlquery.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractproxymodel.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qidentityproxymodel.h \
@@ -873,10 +859,8 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qjsondocument.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qjsonobject.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstracteventdispatcher.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qeventloop.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractnativeeventfilter.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbasictimer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcoreapplication.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmath.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmetaobject.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmimedata.h \
@@ -927,11 +911,7 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcommandlineparser.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcryptographichash.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qelapsedtimer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qline.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlinkedlist.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmargins.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrect.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsize.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmessageauthenticationcode.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qqueue.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregularexpression.h \
@@ -943,26 +923,10 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qxmlstream.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtcoreversion.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessible.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcolor.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrgb.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qevent.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qregion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qkeysequence.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessiblebridge.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessibleobject.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessibleplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbitmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpaintdevice.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qimage.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtransform.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qmatrix.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpolygon.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainterpath.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qiconengine.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qiconengineplugin.h \
@@ -974,15 +938,10 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpictureformatplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmapcache.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qstandarditemmodel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbrush.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfont.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qclipboard.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcursor.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qdrag.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qgenericplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qgenericpluginfactory.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qguiapplication.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qinputmethod.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qoffscreensurface.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qsurface.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qsurfaceformat.h \
@@ -993,7 +952,6 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopengles2ext.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopenglext.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopenglversionfunctions.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpalette.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qscreen.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QList \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QRect \
@@ -1027,8 +985,6 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainter.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextoption.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpen.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontmetrics.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpdfwriter.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qabstracttextdocumentlayout.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextlayout.h \
@@ -1051,51 +1007,17 @@ main.o: main.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QGridLayout \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
-		main.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlabel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcombobox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qrubberband.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QBoxLayout \
-		football.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qgl.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglcolormap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglglobal.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
-		calcdisplay.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hw1.o hw1.cpp
 
-calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGLDepends \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCore \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCoreDepends \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractanimation.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnamespace.h \
+main.o: main.cpp main.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qconfig.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfeatures.h \
@@ -1132,7 +1054,11 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypeinfo.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypetraits.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsysinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnamespace.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstring.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qchar.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbytearray.h \
@@ -1149,42 +1075,79 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontainerfwd.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qisenum.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmargins.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrect.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsize.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpoint.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpaintdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpalette.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcolor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrgb.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringlist.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatastream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiodevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpair.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregexp.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbrush.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvector.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qmatrix.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpolygon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qregion.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qline.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtransform.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainterpath.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qimage.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qshareddata.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qhash.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontmetrics.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qkeysequence.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qevent.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariant.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdebug.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextstream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlocale.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qset.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurlquery.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfile.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfiledevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QBoxLayout \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGuiDepends \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCore \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QtCoreDepends \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qparallelanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpauseanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpropertyanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariantanimation.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qeasingcurve.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvector.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpoint.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariant.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpair.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdebug.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qhash.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextstream.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiodevice.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlocale.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qshareddata.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qset.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontiguouscache.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringlist.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatastream.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregexp.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringmatcher.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsequentialanimationgroup.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextcodec.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qendian.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlibraryinfo.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatetime.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer_impl.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnumeric.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbuffer.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdir.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfile.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfiledevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdiriterator.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileselector.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QObject \
@@ -1200,8 +1163,6 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtemporarydir.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QScopedPointer \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtemporaryfile.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurl.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurlquery.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qabstractproxymodel.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qidentityproxymodel.h \
@@ -1267,11 +1228,7 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcommandlineparser.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcryptographichash.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qelapsedtimer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qline.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlinkedlist.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmargins.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrect.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsize.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmessageauthenticationcode.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qqueue.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregularexpression.h \
@@ -1282,29 +1239,11 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtimezone.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qxmlstream.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtcoreversion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGui \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QtGuiDepends \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessible.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcolor.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrgb.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qevent.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qregion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qkeysequence.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessiblebridge.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessibleobject.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qaccessibleplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbitmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpaintdevice.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qimage.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtransform.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qmatrix.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpolygon.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainterpath.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qiconengine.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qiconengineplugin.h \
@@ -1316,10 +1255,7 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpictureformatplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmapcache.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qstandarditemmodel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbrush.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfont.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qclipboard.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcursor.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qdrag.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qgenericplugin.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qgenericpluginfactory.h \
@@ -1335,7 +1271,6 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopengles2ext.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopenglext.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qopenglversionfunctions.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpalette.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qscreen.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QList \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QRect \
@@ -1369,8 +1304,6 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainter.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextoption.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpen.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontinfo.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontmetrics.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpdfwriter.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qabstracttextdocumentlayout.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextlayout.h \
@@ -1390,165 +1323,139 @@ calcdisplay.o: calcdisplay.cpp /opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QtOpenGL 
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qdesktopservices.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvalidator.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtguiversion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QtWidgets \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QtWidgetsDepends \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qaccessiblewidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcolordialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qerrormessage.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfiledialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfilesystemmodel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfontdialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qinputdialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlineedit.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmessagebox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qprogressdialog.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwizard.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicseffect.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsanchorlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicslayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicslayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsgridlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsitemanimation.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicslinearlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsproxywidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicswidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsscene.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicssceneevent.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicstransform.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QVector3D \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QMatrix4x4 \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgraphicsview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qscrollarea.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractscrollarea.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleoption.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractspinbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractslider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qrubberband.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractitemview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcolumnview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdatawidgetmapper.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdirmodel.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfileiconprovider.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qheaderview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qitemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qitemeditorfactory.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlistview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlistwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleditemdelegate.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtableview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtablewidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtreeview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtreewidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtreewidgetitemiterator.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qaction.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qactiongroup.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qapplication.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdesktopwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qboxlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlayoutitem.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgridlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qformlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLayout \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgesture.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgesturerecognizer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qshortcut.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstackedlayout.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtooltip.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwhatsthis.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidgetaction.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qkeyeventtransition.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmouseeventtransition.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcommonstyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdrawutil.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qproxystyle.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QCommonStyle \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstylefactory.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstylepainter.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstyleplugin.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcolormap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcompleter.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qscroller.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QPointF \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QScrollerProperties \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qscrollerproperties.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QMetaType \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QVariant \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsystemtrayicon.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qundogroup.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qundostack.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qundoview.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qbuttongroup.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcalendarwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcheckbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcombobox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qcommandlinkbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdatetimeedit.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdial.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdialogbuttonbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdockwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfocusframe.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfontcombobox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qgroupbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qkeysequenceedit.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlabel.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmainwindow.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmdiarea.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmdisubwindow.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenu.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenubar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qplaintextedit.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtextedit.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qprogressbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qradiobutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qscrollbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizegrip.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qspinbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsplashscreen.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsplitter.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstackedwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qstatusbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtextbrowser.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbar.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbox.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbutton.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtwidgetsversion.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qgl.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglcolormap.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglglobal.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglbuffer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglframebufferobject.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglfunctions.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglpixelbuffer.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/qtopenglversion.h \
-		calcdisplay.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtOpenGL/QGLWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QWidget \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QSlider \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLabel \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QComboBox \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QVBoxLayout \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPushButton \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qpushbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QGridLayout \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QString \
+		calcdisplay.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+calcdisplay.o: calcdisplay.cpp calcdisplay.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QLCDNumber \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qlcdnumber.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qwidget.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobal.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qconfig.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfeatures.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_integrity.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qoldbasicatomic.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_vxworks.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_power.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_alpha.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv7.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv6.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_armv5.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_bfin.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_ia64.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_mips.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_s390.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sh4a.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_sparc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_x86.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_gcc.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qatomic_unix.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmutex.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlogging.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qflags.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtypetraits.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsysinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qnamespace.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstring.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qchar.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbytearray.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrefcount.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qarraydata.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlist.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qalgorithms.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiterator.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcoreevent.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmetatype.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qisenum.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qobject_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmargins.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qrect.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsize.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpoint.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpaintdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpalette.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcolor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrgb.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringlist.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdatastream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qiodevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qpair.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qregexp.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qbrush.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvector.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qmatrix.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpolygon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qregion.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qline.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtransform.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpainterpath.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qimage.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpixmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qshareddata.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qhash.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontmetrics.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qkeysequence.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qevent.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qvariant.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qmap.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdebug.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qtextstream.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qlocale.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qset.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurl.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qurlquery.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfile.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfiledevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qbitarray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o calcdisplay.o calcdisplay.cpp
+
+visual.o: visual.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o visual.o visual.cpp
 
 moc_calcdisplay.o: moc_calcdisplay.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_calcdisplay.o moc_calcdisplay.cpp
+
+moc_visual.o: moc_visual.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_visual.o moc_visual.cpp
 
 ####### Install
 

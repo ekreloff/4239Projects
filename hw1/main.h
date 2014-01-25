@@ -1,3 +1,7 @@
+//
+//  Created By Ethan Kreloff January 21st, 2014
+//
+
 #ifndef MAIN_H
 #define MAIN_H
 
@@ -8,6 +12,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QString>
+#include <QTimer>
 
 class Main : public QWidget
 {
