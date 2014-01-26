@@ -74,6 +74,7 @@ void CalcDisplay::button9Click()
 void CalcDisplay::button0Click()
 {
 	this->display(this->value()*10);
+	emit currentValue((double)(this->value())); //try integervalue
 }
 
 void CalcDisplay::buttonPlusClick()
@@ -163,10 +164,4 @@ void CalcDisplay::buttonOctClick()
 	setOctMode();
 }
 
-//Signal Functions
-/*
-double CalcDisplay::currentValue(double number)
-{
-	return this->value();
-}
-*/
+

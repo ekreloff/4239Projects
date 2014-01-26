@@ -19,11 +19,14 @@
 #include <QGridLayout>
 #include <QString>
 #include <QTimer>
+#include <QSignalMapper>
 
 class Main : public QWidget
 {
 public:
     Main();
+private:
+	//QSignalMapper *signalMapper;
 };
 
 #endif

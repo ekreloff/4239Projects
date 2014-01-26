@@ -15,14 +15,10 @@
 
 Visual::Visual(QWidget* parent) 
 {
+	(void) parent; //unused
+	
 	// Set instance variables
-	firstNumber = 0;
-}
-
-void Visual::setNumber(double number)
-{
-	// Slot
-	firstNumber = number;
+	firstOperand = secondOperand = result = 0;
 }
 
 void Visual::initializeGL()
@@ -71,9 +67,9 @@ void Visual::paintGL()
 		glEnd();
 	}*/
     //int scaleX = 
-    cube(-35, -15, 0, 1, 30, 1);
-    cube(-10, -15, 0, 1, 30, 1);
-    cube(+30, -15, 0, 1, 30, 1);
+    cube(-35, -15, 0, 0, firstOperand, 0);
+    cube(-10, -15, 0, 0, secondOperand, 0);
+    cube(+30, -15, 0, 0, result, 0);
 }
 
 void Visual::cube(int x, int y, int z, 
@@ -87,7 +83,7 @@ void Visual::cube(int x, int y, int z,
    glColor3f(0,0,1);
    glBegin(GL_QUADS);
    glNormal3f( 0, 0,+1);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,+1);
+   glTexCoord2f(0,0); glVertex3f(-1+sx,-1,+1+sz);
    glTexCoord2f(1,0); glVertex3f(+1,-1,+1);
    glTexCoord2f(1,1); glVertex3f(+1,+1+sy,+1);
    glTexCoord2f(0,1); glVertex3f(-1,+1+sy,+1);
@@ -137,4 +133,9 @@ void Visual::cube(int x, int y, int z,
    glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
    glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
    glEnd();
+}
+
+void Visual::setNumber(double number){
+	firstOperand = number;
+	updateGL();
 }
