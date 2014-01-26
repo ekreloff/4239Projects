@@ -17,8 +17,12 @@ class Visual : public QGLWidget
 {
 	Q_OBJECT
 	private:
-		double firstNumber;
+		int firstOperand;
+		int secondOperand;
+		int result;
 		
+		void cube(int x, int y, int z, 
+				  int sx, int sy, int sz);
 	public:
 		Visual(QWidget* parent=0);                      //  Constructor
 		QSize sizeHint() const {return QSize(1000,1000);}   //  Default size of widget

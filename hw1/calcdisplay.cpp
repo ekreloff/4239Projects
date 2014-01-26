@@ -1,7 +1,13 @@
-//
-//  Created By Ethan Kreloff January 21st, 2014
-//
-
+/* *******************************************************
+ * Created By Ethan Kreloff January 21, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Displays numbers as a qlcdnumber
+ * *******************************************************
+ * calcdisplay.cpp
+ * ******************************************************/
 
 #include "calcdisplay.h"
 
@@ -22,7 +28,6 @@ CalcDisplay::CalcDisplay(QWidget* parent)
 //
 void CalcDisplay::button1Click()
 {	
-	
 	this->display(this->value()*10 + 1);
 }
 
@@ -155,13 +160,13 @@ void CalcDisplay::buttonHexClick()
 }
 void CalcDisplay::buttonOctClick()
 {
-	this->setOctMode();
+	setOctMode();
 }
 
 //Signal Functions
-
+/*
 double CalcDisplay::currentValue(double number)
 {
 	return this->value();
 }
-
+*/

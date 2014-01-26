@@ -1,10 +1,13 @@
-//
-//  Created By Ethan Kreloff January 21st, 2014
-//
-
-//
-//  Main Widget
-//
+/* *******************************************************
+ * Created By Ethan Kreloff January 21, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Where all the calculator pieces are assembeled.
+ * *******************************************************
+ * main.cpp
+ * ******************************************************/
 
 #include "main.h"
 #include "calcdisplay.h"
@@ -100,9 +103,9 @@ Main::Main()
    // Timer idle calls
    
    QTimer *timer = new QTimer(this);
-   connect(timer, SIGNAL(timeout()) , resultDisplay , SIGNAL(currentValue()));
-   connect(resultDisplay, SIGNAL(currentValue(double)) , calcVisual , SLOT(setNumber(double))); 
-   timer->start(100);
+   //connect(timer, SIGNAL(timeout()) , resultDisplay , SIGNAL(currentValue()));
+   //connect(resultDisplay, SIGNAL(currentValue(double)) , calcVisual , SLOT(setNumber(double))); 
+   //timer->start(100);
    // Button click calls
    connect(button1, SIGNAL(clicked()) , resultDisplay , SLOT(button1Click()));
    connect(button2, SIGNAL(clicked()) , resultDisplay , SLOT(button2Click()));

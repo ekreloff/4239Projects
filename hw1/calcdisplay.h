@@ -1,11 +1,13 @@
-//
-//  Created By Ethan Kreloff January 21st, 2014
-//
-
-//
-//  Calculator Display widget
-//
-
+/* *******************************************************
+ * Created By Ethan Kreloff January 21, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Displays numbers as a qlcdnumber
+ * *******************************************************
+ * calcdisplay.h
+ * ******************************************************/
 #ifndef CACLDISPLAY_H
 #define CALCDISPLAY_H
 
@@ -54,7 +56,7 @@ public slots:
 	void buttonOctClick();
 	
 signals:
-	double currentValue(double number);
+	void currentValue(double number);
 protected:
 
 };

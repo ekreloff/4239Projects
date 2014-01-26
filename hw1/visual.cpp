@@ -33,8 +33,6 @@ void Visual::initializeGL()
 
 void Visual::resizeGL(int width, int height)
 {
-	// Resize code
-	
 	//  Window aspect ration
    float asp= height ? width / (float)height : 1;
 
@@ -45,7 +43,7 @@ void Visual::resizeGL(int width, int height)
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    glOrtho(-25.0*asp, +25.0*asp, -25.0, +25.0, -25.0, +25.0);
-
+   //glFrustum(-1.0/*asp*/, +1.0/*asp*/, -1.0, +1.0, -1.0, +1.0);
    //  Back to model view
    glMatrixMode(GL_MODELVIEW);
 }
@@ -60,17 +58,83 @@ void Visual::paintGL()
     
     //glFrustum(-1.0, 1.0, -1.0, 100.0, 0.0, 300.0);
     QSize viewSize = sizeHint();
-    glOrtho( -1.0, +1.0, -1.0, +1.0, -1.0, 1.0 );
+    //glOrtho( -1.0, +1.0, -1.0, +1.0, -1.0, 1.0 );
     //glOrtho(-(viewSize.width()/2), (viewSize.width()/2), -(viewSize.height()/2), (viewSize.height()/2), -1.0, 1.0 );
     
     //  Draw RGB triangle
-    for(int i = firstNumber; i > 0; i--){
+    /*
+    for(int i = 50; i > 0; i--){
 		glBegin(GL_TRIANGLES);
 		glColor3f(1,0,0); glVertex3d(-35, -20+i*.1,5.0);
 		glColor3f(0,1,1); glVertex3d(-45,-24+i*.1,0);
 		glColor3f(1,0,1); glVertex3d(-25,-24+i*.1,0);
 		glEnd();
-	}
-    
-    
+	}*/
+    //int scaleX = 
+    cube(-35, -15, 0, 1, 30, 1);
+    cube(-10, -15, 0, 1, 30, 1);
+    cube(+30, -15, 0, 1, 30, 1);
+}
+
+void Visual::cube(int x, int y, int z, 
+				  int sx, int sy, int sz)
+{
+   //  Front
+   glLoadIdentity();
+   glTranslated(x, y, z);
+   glRotated(45,1,0,0);
+   glRotated(45,0,1,0);
+   glColor3f(0,0,1);
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0,+1);
+   glTexCoord2f(0,0); glVertex3f(-1,-1,+1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1,+1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1+sy,+1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1+sy,+1);
+   glEnd();
+   //  Back
+   glColor3f(1,0,0);
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0,-1);
+   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(-1,+1+sy,-1);
+   glTexCoord2f(0,1); glVertex3f(+1,+1+sy,-1);
+   glEnd();
+   //  Right
+   glColor3f(1,0,0);
+   glBegin(GL_QUADS);
+   glNormal3f(+1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1+sy,-1);
+   glTexCoord2f(0,1); glVertex3f(+1,+1+sy,+1);
+   glEnd();
+   //  Left
+   glColor3f(0,0,1);
+   glBegin(GL_QUADS);
+   glNormal3f(-1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
+   glTexCoord2f(1,1); glVertex3f(-1,+1+sy,+1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1+sy,-1);
+   glEnd();
+   //  Top
+   glColor3f(1,0,0);
+   glBegin(GL_QUADS);
+   glNormal3f( 0,+1, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,+1+sy,+1);
+   glTexCoord2f(1,0); glVertex3f(+1,+1+sy,+1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1+sy,-1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1+sy,-1);
+   glEnd();
+   //  Bottom
+   glColor3f(1,0,0);
+   glBegin(GL_QUADS);
+   glNormal3f( 0,-1, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
+   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
+   glEnd();
 }

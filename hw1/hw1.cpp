@@ -1,13 +1,16 @@
-//
-//  Created By Ethan Kreloff January 21st, 2014
-//
-
+/* *******************************************************
+ * Created By Ethan Kreloff January 21, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Main C++ function that calls the Qt wrapper.
+ * *******************************************************
+ * hw1.cpp
+ * ******************************************************/
 #include <QApplication>
 #include "main.h"
 
-//
-//  Main function
-//
 int main(int argc, char *argv[])
 {
    //  Create the application

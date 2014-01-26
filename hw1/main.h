@@ -1,7 +1,13 @@
-//
-//  Created By Ethan Kreloff January 21st, 2014
-//
-
+/* *******************************************************
+ * Created By Ethan Kreloff January 21, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Where all the calculator pieces are assembeled.
+ * *******************************************************
+ * main.h
+ * ******************************************************/
 #ifndef MAIN_H
 #define MAIN_H
 
