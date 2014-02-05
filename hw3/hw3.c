@@ -27,13 +27,17 @@ int th=0;         //  Azimuth of view angle
 int ph=0;         //  Elevation of view angle
 int fov=55;       //  Field of view (for perspective)
 int axes = 1;     //  Display axes
-double asp=1;     //  Aspect ratio
+double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
-double X  = 0;   //  Location
-double Y  = 0;   //  Location
-double Z  = 0;   //  Location
-double zoom = 1;  //Scaling factor
-int shader[] = {0,0};
+double X  = 0.0;   //  Location
+double Y  = 0.0;   //  Location
+double Z  = 0.0;   //  Location
+double zoom = 1.0;  //Scaling factor
+int shader[] = {0,0}; //Shaders
+
+// Lighting Variables
+int lth = 90; // Lighting Azimuth
+int YLight = 3; // Y component of light
 
 
 
@@ -228,24 +232,67 @@ void Bomber(){
 void display()
 {
    
+   //  Light position and colors
+   float Emission[]  = {0.0,0.0,0.0,1.0};
+   float Ambient[]   = {0.3,0.3,0.3,1.0};
+   float Diffuse[]   = {1.0,1.0,1.0,1.0};
+   float Specular[]  = {1.0,1.0,1.0,1.0};
+   float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
+   float Shinyness[] = {16};
+   
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
    //  Enable Z-buffering in OpenGL
    glEnable(GL_DEPTH_TEST);
    //  Undo previous transformations
    glLoadIdentity();
+   
+   
    //  Perspective - set eye position
     double Ex = -2*dim*Sin(th)*Cos(ph);
     double Ey = +2*dim        *Sin(ph);
     double Ez = +2*dim*Cos(th)*Cos(ph);
-    gluLookAt(Ex+X,Ey+Y,Ez+Z , X,Y,Z , 0,Cos(ph),0);
+    gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
+    
+    
+   //  Draw light position as sphere (still no lighting here)
+   glColor3f(1,1,1);
+   glPushMatrix();
+   glTranslated(Position[0],Position[1],Position[2]);
+   glutSolidSphere(0.03,10,10);
+   glPopMatrix();
+   //  OpenGL should normalize normal vectors
+   glEnable(GL_NORMALIZE);
+   //  Enable lighting
+   glEnable(GL_LIGHTING);
+   //  glColor sets ambient and diffuse color materials
+   glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+   glEnable(GL_COLOR_MATERIAL);
+   //  Enable light 0
+   glEnable(GL_LIGHT0);
+   //  Set ambient, diffuse, specular components and position of light 0
+   glLightfv(GL_LIGHT0,GL_AMBIENT ,Ambient);
+   glLightfv(GL_LIGHT0,GL_DIFFUSE ,Diffuse);
+   glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
+   glLightfv(GL_LIGHT0,GL_POSITION,Position);
+   //  Set materials
+   glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,Shinyness);
+   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,Specular);
+   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
     
     //  Select shader (0 => no shader)
     glUseProgram(shader[shadeMode]);
+    
+    if (shadeMode>0)
+   {
+      int id;
+      id = glGetUniformLocation(shader[shadeMode],"loc");
+      if (id>=0) glUniform3f(id,X,Y,Z);
+   }
+
  
     //Draw Bomber
     glPushMatrix();
-    glTranslated(X,Y,Z);
     glColor3f(1,1,0);
     glScaled(zoom,zoom,zoom);
     Bomber();
@@ -331,16 +378,31 @@ void key(unsigned char ch,int x,int y)
       exit(0);
    //  Reset view angle
    if (ch == 'x'){
-      th = ph = X = Y = Z = 0;
+      th = ph = 0;
        zoom = 1;
    }
    //  Change field of view angle
-   if (ch == '-' && ch>1)
+   if (ch == '9' && ch>1)
       fov--;
-   if (ch == '+' && ch<179)
+   if (ch == '0' && ch<179)
       fov++;
    if (ch == 'm' || ch == 'M')
       shadeMode = (shadeMode+1)%2;
+    
+      //  Light elevation
+   if (ch == '=') YLight += 0.1;
+   if (ch == '-') YLight -= 0.1;
+   //  Light position
+   if (ch == '[') lth--;
+   if (ch == ']') lth++;
+   
+      //  Mandelbrot
+   if (ch == 'x') X += 0.01*Z;
+   if (ch == 'z') X -= 0.01*Z;
+   if (ch == 's') Y += 0.01*Z;
+   if (ch == 'a') Y -= 0.01*Z;
+   if (ch == 'w') Z *= 0.9;
+   if (ch == 'q') Z *= 1.1;
     
     //Zoom
    if (ch == 'i')
@@ -391,7 +453,7 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
     
    //  Create Shader Prog
-   shader[1] = CreateShaderProg("shader1.vert",NULL);
+   shader[1] = CreateShaderProg("shader1.vert","shader1.frag");
 
    //  Pass control to GLUT so it can interact with the user
    glutMainLoop();
