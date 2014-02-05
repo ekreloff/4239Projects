@@ -1,0 +1,13 @@
+Simple Calculator - Ethan Kreloff
+HW1 CSCI 4239  
+
+Took 10 hours to complete.
+
+Sorry I had to resubmit this, I got behind trying to get Qt and OpenGL installed. 
+
+You can use it like a real calculator, however there are a couple caveats:
+
+1. Only the first operation button you press will take effect.
+2. You can change what base is used to display the number, however it will stay that way until you change it back to decimal even if you press clear.
+3. Since calculators represent such a broad range of numbers, I had to limit the maximum number so that the opengl display would change with smaller increments. Numbers over 100 and less than 1000 are the best to see the visualization.
+4. You must clear before starting a new calculation if you want the OpenGL visualization for the new claculation.

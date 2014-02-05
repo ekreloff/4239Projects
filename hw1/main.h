@@ -2,7 +2,8 @@
  * Created By Ethan Kreloff January 21, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
- * Graphics at the University of Colorado, Boulder.
+ * Graphics at the University of Colorado, Boulder and 
+ * examples from qt-project.org.
  * *******************************************************
  * Where all the calculator pieces are assembeled.
  * *******************************************************
@@ -25,8 +26,6 @@ class Main : public QWidget
 {
 public:
     Main();
-private:
-	//QSignalMapper *signalMapper;
 };
 
 #endif

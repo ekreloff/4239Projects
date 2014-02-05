@@ -2,7 +2,8 @@
  * Created By Ethan Kreloff January 21, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
- * Graphics at the University of Colorado, Boulder.
+ * Graphics at the University of Colorado, Boulder and 
+ * examples from qt-project.org.
  * *******************************************************
  * OpenGL display for visual calculation. 
  * *******************************************************
@@ -21,6 +22,8 @@ class Visual : public QGLWidget
 		int secondOperand;
 		int result;
 		
+		//bool op;
+		
 		void cube(int x, int y, int z, 
 				  int sx, int sy, int sz);
 	public:
@@ -28,7 +31,7 @@ class Visual : public QGLWidget
 		QSize sizeHint() const {return QSize(1000,1000);}   //  Default size of widget
 
 	public slots:
-		void setNumber(double number);
+		void setNumber(int number, int operation);
 	signals:
 
 	protected:

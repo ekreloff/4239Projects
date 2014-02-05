@@ -2,7 +2,8 @@
  * Created By Ethan Kreloff January 21, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
- * Graphics at the University of Colorado, Boulder.
+ * Graphics at the University of Colorado, Boulder and 
+ * examples from qt-project.org.
  * *******************************************************
  * Where all the calculator pieces are assembeled.
  * *******************************************************
@@ -43,6 +44,7 @@ Main::Main()
    QString stringTimes = "*";
    QString stringDivide = "/";
    QString stringEquals = "=";
+   QString stringDelete = "Delete";
    QString stringDec = "Decimal";
    QString stringBin = "Binary";
    QString stringHex = "Hexadecimal";
@@ -67,6 +69,7 @@ Main::Main()
    QPushButton *buttonDivide = new QPushButton(stringDivide);
    QPushButton *buttonEquals = new QPushButton(stringEquals);
    QPushButton *buttonClear = new QPushButton(stringClear);
+   QPushButton *buttonDelete = new QPushButton(stringDelete);
    QPushButton *buttonDec = new QPushButton(stringDec);
    QPushButton *buttonHex = new QPushButton(stringHex);
    QPushButton *buttonBin = new QPushButton(stringBin);
@@ -94,6 +97,7 @@ Main::Main()
    gridLayout->addWidget(buttonDivide,4,3);
    gridLayout->addWidget(buttonEquals,5,3);
    gridLayout->addWidget(buttonClear,5,0);
+   gridLayout->addWidget(buttonDelete,4,0);
    gridLayout->addWidget(buttonDec,6,0);
    gridLayout->addWidget(buttonHex,6,1);
    gridLayout->addWidget(buttonBin,6,2);
@@ -101,12 +105,6 @@ Main::Main()
    topLayout->addLayout(gridLayout);
    setLayout(topLayout);
    
-   // Timer idle calls
-   
-   //QTimer *timer = new QTimer(this);
-   //connect(timer, SIGNAL(timeout()) , resultDisplay , SIGNAL(currentValue()));
-   //connect(resultDisplay, SIGNAL(currentValue(double)) , calcVisual , SLOT(setNumber(double))); 
-   //timer->start(100);
    // Button click calls
    connect(button1, SIGNAL(clicked()) , resultDisplay , SLOT(button1Click()));
    connect(button2, SIGNAL(clicked()) , resultDisplay , SLOT(button2Click()));
@@ -124,56 +122,14 @@ Main::Main()
    connect(buttonDivide, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDivideClick()));
    connect(buttonEquals, SIGNAL(clicked()) , resultDisplay , SLOT(buttonEqualsClick()));
    connect(buttonClear, SIGNAL(clicked()) , resultDisplay , SLOT(buttonClearClick()));
+   connect(buttonDelete, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDeleteClick()));
    connect(buttonDec, SIGNAL(clicked()) , resultDisplay , SLOT(buttonDecClick()));
    connect(buttonHex, SIGNAL(clicked()) , resultDisplay , SLOT(buttonHexClick()));
    connect(buttonBin, SIGNAL(clicked()) , resultDisplay , SLOT(buttonBinClick()));
    connect(buttonOct, SIGNAL(clicked()) , resultDisplay , SLOT(buttonOctClick()));
    
-   connect(resultDisplay, SIGNAL(currentValue(double)), calcVisual, SLOT(setNumber(double)));
-   
-   // Setup signal with variable passing to for OpenGL
-   /*
+   connect(resultDisplay, SIGNAL(currentValue(int, int)), calcVisual, SLOT(setNumber(int, int)));
    
    
-   signalMapper = new QSignalMapper(this);
-   connect(button1, SIGNAL(clicked()), signalMapper, SLOT(map()));
-   connect(button1, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button2, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button3, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button4, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button5, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button6, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button7, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button8, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button9, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(button0, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonPlus, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonMinus, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonTimes, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonDivide, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonEquals, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   connect(buttonClear, SIGNAL(clicked()) , signalMapper, SLOT(map()));
-   
-	//add Qstring ouput to each function
-   signalMapper->setMapping(button1, texts[i]);
-   signalMapper->setMapping(button2, texts[i]);
-   signalMapper->setMapping(button3, texts[i]);
-   signalMapper->setMapping(button4, texts[i]);
-   signalMapper->setMapping(button5, texts[i]);
-   signalMapper->setMapping(button6, texts[i]);
-   signalMapper->setMapping(button7, texts[i]);
-   signalMapper->setMapping(button8, texts[i]);
-   signalMapper->setMapping(button9, texts[i]);
-   signalMapper->setMapping(button0, texts[i]);
-   signalMapper->setMapping(buttonPlus, texts[i]);
-   signalMapper->setMapping(buttonMinus, texts[i]);
-   signalMapper->setMapping(buttonTimes, texts[i]);
-   signalMapper->setMapping(buttonDivide, texts[i]);
-   signalMapper->setMapping(buttonEquals, texts[i]);
-   signalMapper->setMapping(buttonClear, texts[i]);
-   
-    
-   connect(signalMapper, SIGNAL(mapped(const QString &)),
-             this, SIGNAL(clicked(const QString &)));*/
 
 }

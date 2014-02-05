@@ -2,7 +2,8 @@
  * Created By Ethan Kreloff January 21, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
- * Graphics at the University of Colorado, Boulder.
+ * Graphics at the University of Colorado, Boulder and 
+ * examples from qt-project.org.
  * *******************************************************
  * Displays numbers as a qlcdnumber
  * *******************************************************
@@ -16,10 +17,11 @@
 //
 CalcDisplay::CalcDisplay(QWidget* parent)
 {
+	(void) parent; //unused
 	operation = false;
 	
 	this->setSegmentStyle(QLCDNumber::Flat);
-	this->setDigitCount(15);
+	this->setDigitCount(99);
 }
 
 
@@ -28,53 +30,82 @@ CalcDisplay::CalcDisplay(QWidget* parent)
 //
 void CalcDisplay::button1Click()
 {	
-	this->display(this->value()*10 + 1);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 1);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button2Click()
 {
-	this->display(this->value()*10 + 2);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 2);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button3Click()
 {
-	this->display(this->value()*10 + 3);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 3);
+	}
+	emit currentValue(intValue(), operation);
 }
 	
 void CalcDisplay::button4Click()
 {
-	this->display(this->value()*10 + 4);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 4);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button5Click()
 {
-	this->display(this->value()*10 + 5);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 5);
+	}
+	emit currentValue(intValue(), operation);
 }
 	
 void CalcDisplay::button6Click()
 {
-	this->display(this->value()*10 + 6);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 6);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button7Click()
 {
-	this->display(this->value()*10 + 7);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 7);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button8Click()
 {
-	this->display(this->value()*10 + 8);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 8);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button9Click()
 {
-	this->display(this->value()*10 + 9);
+	if(intValue() < MAXNUM){
+		display(value()*10 + 9);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::button0Click()
 {
-	this->display(this->value()*10);
-	emit currentValue((double)(this->value())); //try integervalue
+	if(intValue() < MAXNUM){
+		display(value()*10);
+	}
+	emit currentValue(intValue(), operation);
 }
 
 void CalcDisplay::buttonPlusClick()
@@ -82,8 +113,8 @@ void CalcDisplay::buttonPlusClick()
 	if(!operation){
 		operation = true;
 		opType = '+';
-		previousVal = this->value();
-		this->display(0);
+		previousVal = value();
+		display(0);
 	}
 	
 }
@@ -93,8 +124,8 @@ void CalcDisplay::buttonMinusClick()
 	if(!operation){
 		operation = true;
 		opType = '-';
-		previousVal = this->value();
-		this->display(0);
+		previousVal = value();
+		display(0);
 	}
 }
 
@@ -103,8 +134,8 @@ void CalcDisplay::buttonTimesClick()
 	if(!operation){
 		operation = true;
 		opType = '*';
-		previousVal = this->value();
-		this->display(0);
+		previousVal = value();
+		display(0);
 	}
 }
 
@@ -113,8 +144,8 @@ void CalcDisplay::buttonDivideClick()
 	if(!operation){
 		operation = true;
 		opType = '/';
-		previousVal = this->value();
-		this->display(0);
+		previousVal = value();
+		display(0);
 	}
 }
 
@@ -123,19 +154,19 @@ void CalcDisplay::buttonEqualsClick()
 	if(operation){
 		switch(opType){
 			case '+':
-				this->display(previousVal + this->value());
+				display(previousVal + value());
 				break;
 			case '-':
-				this->display(previousVal - this->value());
+				display(previousVal - value());
 				break;
 			case '*':
-				this->display(previousVal * this->value());
+				display(previousVal * value());
 				break;
 			case '/':
-				this->display(previousVal / this->value());
+				display(previousVal / value());
 				break;
 		}
-		operation = false;
+		emit currentValue(intValue(), 2);
 		
 	}
 }
@@ -144,7 +175,18 @@ void CalcDisplay::buttonClearClick()
 {
 	operation = false;
 	previousVal = 0;
-	this->display(0);
+	display(0);
+	emit currentValue(0, 0);
+	emit currentValue(0, 1);
+	emit currentValue(0, 2);
+}
+
+void CalcDisplay::buttonDeleteClick()
+{	
+	int newNum = (intValue() - (intValue()%10))/10;
+	display(newNum);
+	emit currentValue(intValue(), operation);
+	
 }
 
 void CalcDisplay::buttonBinClick()

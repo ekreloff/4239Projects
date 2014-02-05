@@ -1,0 +1,27 @@
+README
+
+hw3
+
+Created by Ethan Kreloff for University of Colorado CSCI4239
+Febuary 2th, 2014
+
+TIME SPENT: 
+
+
+This program 
+
+
+Arrow Keys: Control rotation of the scene up/down left/right
+
+‘m’	: Change shading mode
+
+'i'/'o' : Zooms in/out by increasing/decreasing scale factor by one quarter. 
+
+'x' 	: Resets all values above back to default.
+
+‘z’     : turn axes on and off
+
+‘+’/‘-‘ : Increases/decreases the field of view by 1.
+
+'esc'	: Hit escape to quit.
+

@@ -2,7 +2,8 @@
  * Created By Ethan Kreloff January 21, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
- * Graphics at the University of Colorado, Boulder.
+ * Graphics at the University of Colorado, Boulder and 
+ * examples from qt-project.org.
  * *******************************************************
  * Displays numbers as a qlcdnumber
  * *******************************************************
@@ -13,6 +14,8 @@
 
 #include <QLCDNumber>
 
+#define MAXNUM 1000
+
 class CalcDisplay : public QLCDNumber
 {
 Q_OBJECT
@@ -20,7 +23,7 @@ Q_OBJECT
 private:
 
 	// How to tell if the button click is the first or after another one
-	bool operation;
+	int operation;
 	
 	// Type of operation
 	char opType;
@@ -50,13 +53,14 @@ public slots:
 	void buttonDivideClick();
 	void buttonEqualsClick();
 	void buttonClearClick();
+	void buttonDeleteClick();
 	void buttonBinClick();
 	void buttonDecClick();
 	void buttonHexClick();
 	void buttonOctClick();
 	
 signals:
-	void currentValue(double number);
+	void currentValue(int number, int operation);
 protected:
 
 };
