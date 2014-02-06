@@ -1,32 +1,36 @@
-// Fragment shader for drawing the Mandelbrot set
-// Adapted from Orange book
+//  Brick fragment shader
+//  Derived from Orange Book Chapter 6 by Charles Gruenwald
 
-varying vec2  ModelPos;
+//Stripes
+const vec2 StripeSize = vec2(.1,.1);
+
+
+// BBall Colors
+const vec3 OrangeColor = vec3(1.0, 0.45, 0.0);
+const vec3 BlackColor = vec3(0.0, 0.0, 0.0);
+//  Model coordinates and light from vertex shader
 varying float LightIntensity;
-
-// Maximum number of iterations
-const int   MaxIter = 100;
-// Beyond this the sequence always diverges
-const float MaxR2   = 4.0;
-
-// Colors
-const vec3  In   = vec3(0,0,0);
-const vec3  Out1 = vec3(1,0,0);
-const vec3  Out2 = vec3(0,1,0);
+varying vec2  ModelPos;
+uniform float time;
 
 void main()
 {
-   //  Iterate z = z^2 + c;
-   int   iter;
-   vec2  z  = vec2(0,0);
-   float r2 = 0.0;
-   for (iter=0 ; iter<MaxIter && r2<MaxR2 ; iter++)
-   {
-       z  = vec2(z.x*z.x-z.y*z.y , 2.0*z.x*z.y) + ModelPos;
-       r2 = z.x*z.x+z.y*z.y;
-   }
-
-   // Base the color on the number of iterations
-   vec3 color = (r2<MaxR2) ? In : mix(Out1,Out2,float(iter)/float(MaxIter));
-   gl_FragColor = vec4(color*LightIntensity , 1);
+   //float current = (cos(time*10.0)+1.0)/2.0;
+   //vec3 currentVec = vec3(current*.9, current*.8, current*.7);
+   vec2 OrangePct = vec2(.9,.9); //Percent to be orange
+   //Normalized Position based on texture
+   vec2 position = ModelPos/StripeSize;
+   //position = position*scale;
+   position = fract(position);
+   // Determine wether or not to paint orange or black
+   vec2 useOrange = step(position,OrangePct);
+   // Determine what color to use
+   vec3 color  = mix(OrangeColor, BlackColor, useOrange.x*useOrange.y);
+   //  Adjust color intensity for lighting (interpolated from vertex shader values)
+   color *= LightIntensity;
+   // adjust color over time
+   //color += currentVec;
+   // Uses positioning and stripes to determine final color
+   gl_FragColor = vec4(color,1.0)*gl_Color; 
+   
 }

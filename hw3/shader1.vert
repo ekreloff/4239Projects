@@ -5,8 +5,6 @@
 varying float LightIntensity;
 varying vec2  ModelPos;
 
-// Center and zoom (for Mandelbrot set)
-uniform vec3 loc;
 
 //  Phong lighting intensity only
 float phong()
@@ -43,7 +41,9 @@ void main()
    //  Scalar light intensity (for fragment shader)
    LightIntensity = phong();
    //  Save model coordinates (for fragment shader)
-   ModelPos = loc.z*gl_Vertex.xy - loc.xy;
+   ModelPos = gl_Vertex.xy;
    //  Return fixed transform coordinates for this vertex
    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+   // Set color by position
+   gl_FrontColor = 0.5*(gl_Position/gl_Position[3] + 1.0);
 }

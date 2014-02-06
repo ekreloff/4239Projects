@@ -5,10 +5,12 @@ hw3
 Created by Ethan Kreloff for University of Colorado CSCI4239
 Febuary 2th, 2014
 
-TIME SPENT: 
+TIME SPENT: 6
 
 
-This program 
+This program demonstrates a very simple procedural shader on a sphere. 
+It draws lines on the sphere while also tinting the spheres color based 
+on its position in space. 
 
 
 Arrow Keys: Control rotation of the scene up/down left/right

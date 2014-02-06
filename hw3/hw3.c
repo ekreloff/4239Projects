@@ -32,12 +32,43 @@ double dim=5.0;   //  Size of world
 double X  = 0.0;   //  Location
 double Y  = 0.0;   //  Location
 double Z  = 0.0;   //  Location
-double zoom = 1.0;  //Scaling factor
+double zoom = 2.0;  //Scaling factor
 int shader[] = {0,0}; //Shaders
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
 int YLight = 3; // Y component of light
+
+
+/*
+ *  Draw vertex in polar coordinates
+ */
+static void Vertex(int th,int ph)
+{
+   double x = -Sin(th)*Cos(ph);
+   double y =  Cos(th)*Cos(ph);
+   double z =          Sin(ph);
+   glNormal3d(x,y,z);
+   glTexCoord2d(th/360.0,ph/180.0+0.5);
+   glVertex3d(x,y,z);
+}
+
+void Sphere()
+{
+   int th,ph;
+   //  Latitude bands
+   glColor3f(1,1,1);
+   for (ph=-90;ph<90;ph+=5)
+   {
+      glBegin(GL_QUAD_STRIP);
+      for (th=0;th<=360;th+=5)
+      {
+         Vertex(th,ph);
+         Vertex(th,ph+5);
+      }
+      glEnd();
+   }
+}
 
 
 
@@ -282,20 +313,22 @@ void display()
     
     //  Select shader (0 => no shader)
     glUseProgram(shader[shadeMode]);
+   
     
-    if (shadeMode>0)
+   if (shadeMode>0)
    {
       int id;
-      id = glGetUniformLocation(shader[shadeMode],"loc");
-      if (id>=0) glUniform3f(id,X,Y,Z);
+      float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
+      id = glGetUniformLocation(shader[shadeMode],"time");
+      if (id>=0) glUniform1f(id,time);
    }
+   
 
  
-    //Draw Bomber
+    //Draw Bball
     glPushMatrix();
-    glColor3f(1,1,0);
     glScaled(zoom,zoom,zoom);
-    Bomber();
+    Sphere();
     glPopMatrix();
     
     //  No shader for axes
@@ -335,6 +368,13 @@ void display()
    glFlush();
    glutSwapBuffers();
 }
+
+void idle()
+{
+   //  Tell GLUT it is necessary to redisplay the scene
+   glutPostRedisplay();
+}
+
 
 /*
  *  GLUT calls this routine when an arrow key is pressed
