@@ -1,12 +1,12 @@
 /* *******************************************************
- * Created By Ethan Kreloff February 2, 2014.
+ * Created By Ethan Kreloff February 9, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
  * Graphics at the University of Colorado, Boulder.
  * *******************************************************
  * Calls glut and gl functions to a sphere
  * *******************************************************
- * hw3.c
+ * hw4.c
  * ******************************************************/
 
 
@@ -30,6 +30,13 @@ enum{
 	DILLO = 2,
 	SPHERE = 3
 };
+
+enum{
+	DEFAULT = 1,
+	INT = 2,
+	IF = 3,
+	FUNC = 4
+};
 	
 
 /*
@@ -47,6 +54,7 @@ double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
 double zoom = 2.0;  //Scaling factor
 int shader[] = {0,0,0,0,0,0,0}; //Shaders
+char *shaderText[] = {"None", "Default", "Int", "If", "Func"};
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
@@ -138,8 +146,20 @@ void display()
    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
     
     //  Select shader (0 => no shader)
-    glUseProgram(shader[shadeMode]);
-   
+    switch(shadeMode){
+		case DEFAULT:
+			glUseProgram(shader[DEFAULT]);
+			break;
+		case INT:
+			glUseProgram(shader[INT]);
+			break;
+		case IF:
+			glUseProgram(shader[IF]);
+			break;
+		case FUNC:
+			glUseProgram(shader[FUNC]);
+			break;
+		}
     
    if (shadeMode>0)
    {
@@ -234,7 +254,7 @@ void display()
    }
    //  Display parameters
    glWindowPos2i(5,5);
-   Print("Angle=%d,%d FPS: %d",th,ph,FramesPerSecond());
+   Print("Angle=%d,%d FPS: %d Shader Mode: %s",th,ph,FramesPerSecond(), shaderText[shadeMode]);
    //  Render the scene and make it visible
    glFlush();
    glutSwapBuffers();
@@ -287,7 +307,7 @@ void key(unsigned char ch,int x,int y)
    }
    
    // Change shader mode
-   if (ch == 'm' || ch == 'M') shadeMode = (shadeMode+1)%2;
+   if (ch == 'm' || ch == 'M') shadeMode = (shadeMode+1)%5;
    
    // Change object displayed
    if (ch == 'p' || ch == 'P') object = (object+1)%4;
@@ -350,7 +370,10 @@ int main(int argc,char* argv[])
    glutIdleFunc(idle);
     
    //  Create Shader Prog
-   shader[1] = CreateShaderProg("shader1.vert","shader1.frag");
+   shader[DEFAULT] = CreateShaderProg("default.vert","default.frag");
+   shader[INT] = CreateShaderProg("int.vert","int.frag");
+   shader[IF] = CreateShaderProg("if.vert","if.frag");
+   shader[FUNC] = CreateShaderProg("func.vert","func.frag");
    
    //  Load object
    modelID[DINO] = LoadOBJ("tyra.obj");

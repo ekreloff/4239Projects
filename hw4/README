@@ -5,10 +5,47 @@ hw4
 Created by Ethan Kreloff for University of Colorado CSCI4239
 Febuary 9th, 2014
 
-TIME SPENT: 
+TIME SPENT: 6 hours
 
 
-This program demonstrates .............
+This program demonstrates the different effects of code layout and semantics
+on performance in GLSL. To test the effects I used FPS as the measurement
+tool, and used a baseline default shader to get a standarad to compare against. 
+
+The baseline results were as follows:
+
+NO shader
+Dinosaur Model  : 68-71 FPS
+Armadillo Model :  65-67 FPS
+Bunny Model     : 154-158 FPS
+
+DEFAULT shader
+Dinosaur Model  : 58-61 FPS
+Armadillo Model : 58-60 FPS
+Bunny Model     : 130-133 FPS
+
+Then I used shaders that used integers instead of floats, used 
+ifs and switch statements during the shader, and finally used a shader 
+heavy in function calls.
+
+INT shader
+Dinosaur Model  : 58-61 FPS
+Armadillo Model : 53-55 FPS
+Bunny Model     : 124-127 FPS
+
+IF shader
+Dinosaur Model  : 52-55 FPS
+Armadillo Model : 56-58 FPS
+Bunny Model     : 122-125 FPS
+
+FUNC shader
+Dinosaur Model  : 54-58 FPS
+Armadillo Model : 59-61 FPS
+Bunny Model     : 128-131 FPS
+
+Through these results I can draw the conclusion that it s important to optimize,
+even with small details when you are programming shaders. This is
+because the shaders run on specialized hardware that does specialized calculations.
 
 
 Arrow Keys: Control rotation of the scene up/down left/right
