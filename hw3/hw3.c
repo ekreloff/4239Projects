@@ -1,12 +1,12 @@
 /* *******************************************************
- * Created By Ethan Kreloff January 27, 2014.
+ * Created By Ethan Kreloff February 2, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
  * Graphics at the University of Colorado, Boulder.
  * *******************************************************
- * Calls glut and gl functions to draw bomber
+ * Calls glut and gl functions to a sphere
  * *******************************************************
- * hw2.c
+ * hw3.c
  * ******************************************************/
 
 
@@ -70,191 +70,6 @@ void Sphere()
    }
 }
 
-
-
-void Bomber(){
-    
-    //  Base
-    glBegin(GL_POLYGON);
-    
-    glColor3f(.2,.2,.2);
-    
-    glVertex3f(5,0,0);
-    glVertex3f(1,0,-2);
-    glVertex3f(-2,0,-1.5);
-    glVertex3f(-3,0,0);
-    glVertex3f(-2,0,1.5);
-    glVertex3f(1,0,2);
-    
-    glEnd();
-    
-    //  Left Wing
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(1,0,-2);
-    glVertex3f(-2.8,0,-4);
-    glVertex3f(-3.1,0,-4);
-    glVertex3f(-3.3,0,-3.3);
-    glVertex3f(.3,0,0);
-    
-    glEnd();
-    
-    //  Right Wing
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(1,0,2);
-    glVertex3f(.3,0,0);
-    glVertex3f(-3.3,0,3.3);
-    glVertex3f(-3.1,0,4);
-    glVertex3f(-2.8,0,4);
-    
-    glEnd();
-    
-    
-    //  Front feature 1 right
-    glBegin(GL_POLYGON);
-    
-    glColor3f(0,1,0);
-    
-    glVertex3f(5,0,0);
-    glVertex3f(3,.65,0);
-    glVertex3f(4.5,0,.25);
-    
-    glEnd();
-    
-    //  Front feature 1 left
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(5,0,0);
-    glVertex3f(3,.65,0);
-    glVertex3f(4.5,0,-.25);
-    
-    glEnd();
-    
-    //Front feature 2 right
-    glBegin(GL_POLYGON);
-    
-    glColor3f(1,1,0);
-    
-    glVertex3f(2.5,1.1,0);
-    glVertex3f(4.5,0,.25);
-    glVertex3f(4,0,.5);
-    
-    glEnd();
-    
-    //Front feature 2 left
-    glBegin(GL_POLYGON);
-    
-    glColor3f(1,1,0);
-    
-    glVertex3f(2.5,1.1,0);
-    glVertex3f(4.5,0,-.25);
-    glVertex3f(4,0,-.5);
-    
-    glEnd();
-    
-    //Front feature 2 middle
-    glBegin(GL_POLYGON);
-    
-    glColor3f(.8,.8,0);
-    
-    glVertex3f(2.5,1.1,0);
-    glVertex3f(4.5,0,.25);
-    glVertex3f(4.5,0,-.25);
-    
-    glEnd();
-    
-    //side feature right
-    glBegin(GL_POLYGON);
-    
-    glColor3f(0,0,1);
-    
-    glVertex3f(4,0,.5);
-    glVertex3f(-1.6,0,1.7);
-    glVertex3f(-1,.3,1.35);
-    glVertex3f(2.5,1.1,0);
-    
-    glEnd();
-    
-    //side feature left
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(4,0,-.5);
-    glVertex3f(-1.6,0,-1.7);
-    glVertex3f(-1,.3,-1.35);
-    glVertex3f(2.5,1.1,0);
-    
-    glEnd();
-    
-    //top feature left
-    glBegin(GL_POLYGON);
-    
-    glColor3f(0,1,1);
-    
-    glVertex3f(2.5,1.1,0);
-    glVertex3f(-3,.6,0);
-    glVertex3f(-1,.3,-1.35);
-    
-    glEnd();
-    
-    //top feature right
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(2.5,1.1,0);
-    glVertex3f(-3,.6,0);
-    glVertex3f(-1,.3,1.35);
-    
-    glEnd();
-    
-    //back feature right
-    glBegin(GL_POLYGON);
-    
-    glColor3f(1,0,1);
-    
-    glVertex3f(-3,.6,0);
-    glVertex3f(-3,0,0);
-    glVertex3f(-2,0,1.5);
-    glVertex3f(-1.6,0,1.7);
-    glVertex3f(-1,.3,1.35);
-    
-    glEnd();
-    
-    //back feature left
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(-3,.6,0);
-    glVertex3f(-3,0,0);
-    glVertex3f(-2,0,-1.5);
-    glVertex3f(-1.6,0,-1.7);
-    glVertex3f(-1,.3,-1.35);
-    
-    glEnd();
-    
-    
-    //wing left
-    glBegin(GL_POLYGON);
-    
-    glColor3f(.2,.2,.2);
-    
-    glVertex3f(-3,.6,0);
-    glVertex3f(-2,.4,-.2);
-    glVertex3f(-3,2.2,-1);
-    glVertex3f(-3.5,2.5,-.8);
-    
-    glEnd();
-    
-    //wing right
-    glBegin(GL_POLYGON);
-    
-    glVertex3f(-3,.6,0);
-    glVertex3f(-2,.4,.2);
-    glVertex3f(-3,2.2,1);
-    glVertex3f(-3.5,2.5,.8);
-    
-    glEnd();
-    
-    
-}
 
 
 /*
@@ -419,7 +234,7 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    if (ch == 'x'){
       th = ph = 0;
-       zoom = 1;
+       zoom = 2;
    }
    //  Change field of view angle
    if (ch == '9' && ch>1)
@@ -430,7 +245,7 @@ void key(unsigned char ch,int x,int y)
       shadeMode = (shadeMode+1)%2;
     
       //  Light elevation
-   if (ch == '=') YLight += 0.1;
+   if (ch == '+') YLight += 0.1;
    if (ch == '-') YLight -= 0.1;
    //  Light position
    if (ch == '[') lth--;

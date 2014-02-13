@@ -1,4 +1,3 @@
-// Vertex shader for brick and mandelbrot shaders
 // Derived from Orange Book Chapter 6
 
 //  Light intensity and model position required by fragment shader

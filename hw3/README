@@ -5,7 +5,7 @@ hw3
 Created by Ethan Kreloff for University of Colorado CSCI4239
 Febuary 2th, 2014
 
-TIME SPENT: 6
+TIME SPENT: 6 hours
 
 
 This program demonstrates a very simple procedural shader on a sphere. 
@@ -23,7 +23,7 @@ Arrow Keys: Control rotation of the scene up/down left/right
 
 ‘z’     : turn axes on and off
 
-‘+’/‘-‘ : Increases/decreases the field of view by 1.
+'['/']' : Move light left or right.
 
 'esc'	: Hit escape to quit.
 

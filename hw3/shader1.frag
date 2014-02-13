@@ -1,4 +1,3 @@
-//  Brick fragment shader
 //  Derived from Orange Book Chapter 6 by Charles Gruenwald
 
 //Stripes
