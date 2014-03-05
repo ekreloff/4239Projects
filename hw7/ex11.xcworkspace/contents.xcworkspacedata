@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "Compilation/Execution">
+      <FileRef
+         location = "group:ex11">
+      </FileRef>
+      <FileRef
+         location = "group:Makefile">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Assets">
+      <FileRef
+         location = "group:crate.bmp">
+      </FileRef>
+      <FileRef
+         location = "group:cruiser.bmp">
+      </FileRef>
+      <FileRef
+         location = "group:cruiser.mtl">
+      </FileRef>
+      <FileRef
+         location = "group:cruiser.obj">
+      </FileRef>
+      <FileRef
+         location = "group:tyra.obj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Headers">
+      <FileRef
+         location = "group:CSCIx239.h">
+      </FileRef>
+      <FileRef
+         location = "group:elapsed.c">
+      </FileRef>
+      <FileRef
+         location = "group:errcheck.c">
+      </FileRef>
+      <FileRef
+         location = "group:fatal.c">
+      </FileRef>
+      <FileRef
+         location = "group:fps.c">
+      </FileRef>
+      <FileRef
+         location = "group:loadtexbmp.c">
+      </FileRef>
+      <FileRef
+         location = "group:noise.c">
+      </FileRef>
+      <FileRef
+         location = "group:object.c">
+      </FileRef>
+      <FileRef
+         location = "group:print.c">
+      </FileRef>
+      <FileRef
+         location = "group:project.c">
+      </FileRef>
+      <FileRef
+         location = "group:shader.c">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Shaders">
+      <FileRef
+         location = "group:blackwhite.frag">
+      </FileRef>
+      <FileRef
+         location = "group:greyscale.frag">
+      </FileRef>
+      <FileRef
+         location = "group:blur.frag">
+      </FileRef>
+      <FileRef
+         location = "group:copy.frag">
+      </FileRef>
+      <FileRef
+         location = "group:dilation.frag">
+      </FileRef>
+      <FileRef
+         location = "group:erosion.frag">
+      </FileRef>
+      <FileRef
+         location = "group:laplacian.frag">
+      </FileRef>
+      <FileRef
+         location = "group:prewitt.frag">
+      </FileRef>
+      <FileRef
+         location = "group:sharpen.frag">
+      </FileRef>
+      <FileRef
+         location = "group:redscale.frag">
+      </FileRef>
+      <FileRef
+         location = "group:sobel.frag">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:ex11.c">
+   </FileRef>
+</Workspace>
