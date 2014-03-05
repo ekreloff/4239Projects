@@ -80,6 +80,9 @@
          location = "group:blur.frag">
       </FileRef>
       <FileRef
+         location = "group:colorscale.frag">
+      </FileRef>
+      <FileRef
          location = "group:copy.frag">
       </FileRef>
       <FileRef
@@ -98,10 +101,16 @@
          location = "group:sharpen.frag">
       </FileRef>
       <FileRef
-         location = "group:redscale.frag">
+         location = "group:pixelate.frag">
+      </FileRef>
+      <FileRef
+         location = "group:sepia.frag">
       </FileRef>
       <FileRef
          location = "group:sobel.frag">
+      </FileRef>
+      <FileRef
+         location = "group:negative.frag">
       </FileRef>
    </Group>
    <FileRef

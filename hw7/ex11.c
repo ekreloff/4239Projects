@@ -33,6 +33,7 @@ int ph=0;           //  Elevation of view angle
 int fov=55;         //  Field of view (for perspective)
 double asp=1;       //  Aspect ratio
 double dim=3.0;     //  Size of world
+double scale = 1.0; //  Scale factor
 int zh=90;          //  Light azimuth
 float Ylight=2;     //  Light elevation
 int cruiser;        //  Cruiser model
@@ -44,15 +45,18 @@ int W,H;            //  Texture dimensions
 int N=1;            //  Texture passes
 int MaxTexSize;     //  Maximum texture size
 float dX,dY;        //  Image pixel offset
-float edgenum = .65;
-#define MODE 4
+int colornum = 0;
+#define MODE 7
 int shader[MODE] = {0}; //  Shader programs
-char* text[] = {"No Shader","Black and White","Gray Scale","Color Scale","Erosion","Dilation","Laplacian Edge Detection","Prewitt Edge Detection","Sobel Edge Detection"};
+char* text[] = {"No Shader","Black and White","Gray Scale","Color Scale","Pixelate","Sepia","Negative","Prewitt Edge Detection","Sobel Edge Detection"};
 
 enum {
     BLACKWHITE = 1,
     GRAY = 2,
-    COLOR = 3
+    COLOR = 3,
+    PIXEL = 4,
+    SEPIA = 5,
+    NEGATIVE = 6
 };
 
 /*
@@ -191,7 +195,7 @@ void display()
    glColor3f(0.54,0.27,0.07);
    glPushMatrix();
     //glTranslated(1,-1,0);
-   glScaled(0.6,0.6,0.6);
+   glScaled(scale,scale,scale);
    glRotated(180,0,1,0);
    glCallList(tyra);
    glPopMatrix();
@@ -251,8 +255,8 @@ void display()
       if (id>=0) glUniform1f(id,dX);
       id = glGetUniformLocation(shader[mode],"dY");
       if (id>=0) glUniform1f(id,dY);
-      id = glGetUniformLocation(shader[mode],"edgenum");
-      if (id>=0) glUniform1f(id,edgenum);
+      id = glGetUniformLocation(shader[mode],"colornum");
+      if (id>=0) glUniform1f(id,colornum);
 
       //  Disable depth
       glDisable(GL_DEPTH_TEST);
@@ -287,6 +291,7 @@ void display()
    }
 
    //  Display parameters
+    glColor3f(.8,.6,.4);
    glWindowPos2i(5,5);
    Print("FPS=%d Dim=%.1f Projection=%s Mode=%s Passes=%d",
      FramesPerSecond(),dim,proj?"Perpective":"Orthogonal",text[mode],N);
@@ -344,18 +349,19 @@ void special(int key,int x,int y)
 void key(unsigned char ch,int x,int y)
 {
     
-    //edgnum = or minus -
-    if (ch == 'e') {
-        edgenum += 0.5;
-    }
-    if (ch == 'd') {
-        edgenum -= 0.5;
+    //colornum toggle
+    if (ch == '.') {
+        colornum++;
+        if (colornum == 6)colornum = 0;
+        colornum %= 6;
     }
     //Scale
-    /*
     if (ch == 'i') {
-        scale +=
-    }*/
+        scale += .25;
+    }
+    if (ch == 'o') {
+        scale -= .25;
+    }
    //  Exit on ESC
    if (ch == 27)
       exit(0);
@@ -450,7 +456,10 @@ int main(int argc,char* argv[])
    //  Create Shader Programs
    shader[BLACKWHITE] = CreateShaderProg(NULL,"blackwhite.frag");
    shader[GRAY] = CreateShaderProg(NULL,"greyscale.frag");
-   shader[COLOR] = CreateShaderProg(NULL,"redscale.frag");
+   shader[COLOR] = CreateShaderProg(NULL,"colorscale.frag");
+   shader[PIXEL] = CreateShaderProg(NULL,"pixelate.frag");
+   shader[SEPIA] = CreateShaderProg(NULL,"sepia.frag");
+   shader[NEGATIVE] = CreateShaderProg(NULL,"negative.frag");
     /*
    shader[2] = CreateShaderProg(NULL,"sharpen.frag");
    shader[3] = CreateShaderProg(NULL,"blur.frag");

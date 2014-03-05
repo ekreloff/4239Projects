@@ -21,6 +21,5 @@ void main()
     vec3 wbvec = vec3(float(whiteorblack), float(whiteorblack), float(whiteorblack));
     vec3 color = wbvec*avgcolor;
     
-    
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4((color * vec3(1.2, 1.0, 0.8)), 1.0);
 }
