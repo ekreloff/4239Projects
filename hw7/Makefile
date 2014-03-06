@@ -1,4 +1,4 @@
-HW=ex11
+HW=hw7
 all: $(HW)
 
 #  Unix/Linux

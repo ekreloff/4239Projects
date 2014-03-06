@@ -1,19 +1,15 @@
-/*
- *  Image Processing
- *
- *  Based on the examples in OpenGL SuperBible Chapter 17
- *
- *  'm' to switch filters
- *  'n' to change number of passes
- *  'p' to switch projections
- *  's' to start/stop light
- *  'l' light on/off
- *  'a' to toggle axes
- *  '0' snaps angles to 0,0
- *  arrows to rotate the world
- *  PgUp/PgDn zooms in/out
- *  -/+    change light elevation
- */
+/* *******************************************************
+ * Created By Ethan Kreloff February 29, 2014.
+ * *******************************************************
+ * Based off of code from CSCI 5239/4239 Advanced Computer
+ * Graphics at the University of Colorado, Boulder.
+ * *******************************************************
+ * Calls glut and gl functions to draw a dinosaur, and 
+ * then process the image with a filter using shaders.
+ * *******************************************************
+ * hw7.c
+ * ******************************************************/
+
 #include "CSCIx239.h"
 #include "print.c"
 #include "project.c"
@@ -46,83 +42,19 @@ int N=1;            //  Texture passes
 int MaxTexSize;     //  Maximum texture size
 float dX,dY;        //  Image pixel offset
 int colornum = 0;
-#define MODE 7
+#define MODE 8
 int shader[MODE] = {0}; //  Shader programs
-char* text[] = {"No Shader","Black and White","Gray Scale","Color Scale","Pixelate","Sepia","Negative","Prewitt Edge Detection","Sobel Edge Detection"};
+char* text[] = {"No Shader","Black and White","Gray Scale","Sepia","Color Scale","Negative","Emboss","Edge Detect"};
 
 enum {
     BLACKWHITE = 1,
     GRAY = 2,
-    COLOR = 3,
-    PIXEL = 4,
-    SEPIA = 5,
-    NEGATIVE = 6
+    SEPIA = 3,
+    COLOR = 4,
+    NEGATIVE = 5,
+    EMBOSS = 6,
+    EDGE = 7
 };
-
-/*
- *  Draw a cube
- 
-static void Cube(void)
-{
-   if (tex) glEnable(GL_TEXTURE_2D);
-   glBindTexture(GL_TEXTURE_2D,crate);
-   //  Front
-   glColor3f(1,0,0);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0,+1);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,+1);
-   glEnd();
-   //  Back
-   glColor3f(0,0,1);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0,-1);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
-   glEnd();
-   //  Right
-   glColor3f(1,1,0);
-   glBegin(GL_QUADS);
-   glNormal3f(+1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
-   glEnd();
-   //  Left
-   glColor3f(0,1,0);
-   glBegin(GL_QUADS);
-   glNormal3f(-1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Top
-   glColor3f(0,1,1);
-   glBegin(GL_QUADS);
-   glNormal3f( 0,+1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Bottom
-   glColor3f(1,0,1);
-   glBegin(GL_QUADS);
-   glNormal3f( 0,-1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
-   glEnd();
-   if (tex) glDisable(GL_TEXTURE_2D);
-}
- */
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -200,25 +132,6 @@ void display()
    glCallList(tyra);
    glPopMatrix();
     
-    /*
-    //  Draw the cruiser
-    glColor3f(1,1,1);
-    glPushMatrix();
-    glTranslated(1,1,0);
-    glCallList(cruiser);
-    glPopMatrix();
-   //  Draw teapot
-   glPushMatrix();
-   glTranslated(-1,-1,0);
-   glColor3f(1,1,0);
-   glutSolidTeapot(0.5);
-   glPopMatrix();
-   //  Draw cube
-   glPushMatrix();
-   glTranslated(-1,1,0);
-   glScaled(0.5,0.5,0.5);
-   Cube();
-   glPopMatrix();*/
 
    //  Draw axes - no lighting from here on
    glDisable(GL_LIGHTING);
@@ -360,7 +273,7 @@ void key(unsigned char ch,int x,int y)
         scale += .25;
     }
     if (ch == 'o') {
-        scale -= .25;
+        if(scale > .25)scale -= .25;
     }
    //  Exit on ESC
    if (ch == 27)
@@ -437,7 +350,7 @@ int main(int argc,char* argv[])
    //  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    glutInitWindowSize(600,600);
-   glutCreateWindow("Image Processing");
+   glutCreateWindow("Assignment 7 - Ethan Kreloff");
    //  Set callbacks
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
@@ -448,27 +361,17 @@ int main(int argc,char* argv[])
    glGetIntegerv(GL_MAX_TEXTURE_SIZE,&MaxTexSize);
    //  Background color
    glClearColor(0.5,0.2,0.1,1.0);
-   //  Load crate texture
-   crate = LoadTexBMP("crate.bmp");
-   //  Load object
-   cruiser = LoadOBJ("cruiser.obj");
+    // Load tyrranosaurus model
    tyra    = LoadOBJ("tyra.obj");
    //  Create Shader Programs
    shader[BLACKWHITE] = CreateShaderProg(NULL,"blackwhite.frag");
    shader[GRAY] = CreateShaderProg(NULL,"greyscale.frag");
    shader[COLOR] = CreateShaderProg(NULL,"colorscale.frag");
-   shader[PIXEL] = CreateShaderProg(NULL,"pixelate.frag");
    shader[SEPIA] = CreateShaderProg(NULL,"sepia.frag");
    shader[NEGATIVE] = CreateShaderProg(NULL,"negative.frag");
-    /*
-   shader[2] = CreateShaderProg(NULL,"sharpen.frag");
-   shader[3] = CreateShaderProg(NULL,"blur.frag");
-   shader[4] = CreateShaderProg(NULL,"erosion.frag");
-   shader[5] = CreateShaderProg(NULL,"dilation.frag");
-   shader[6] = CreateShaderProg(NULL,"laplacian.frag");
-   shader[7] = CreateShaderProg(NULL,"prewitt.frag");
-   shader[8] = CreateShaderProg(NULL,"sobel.frag");
-     */
+   shader[EMBOSS] = CreateShaderProg(NULL,"emboss.frag");
+   shader[EDGE] = CreateShaderProg(NULL,"edge.frag");
+    
    //  Image texture
    glGenTextures(1,&img);
    glBindTexture(GL_TEXTURE_2D,img);
