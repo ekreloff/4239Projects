@@ -1,0 +1,15 @@
+README
+
+hw5
+
+Created by Ethan Kreloff for University of Colorado CSCI4239
+February 16, 2014
+
+TIME SPENT: 4 hours
+
+This program demonstrates the use of OpenGL ES in a browser. It draws a simple pyramid object and does simple shading across its surface.
+
+Mouse Click and Drag moves the scenes view around. 
+
+
+
