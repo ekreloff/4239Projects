@@ -141,8 +141,8 @@ function webGLStart()
    ProjectionMatrix.ortho(-2.5,+2.5,-2.5,+2.5,-2.5,+2.5);
 
    //  Vertex array count
-   var n = 12;
-   //  Triangle vertex coordinates
+   var n = 18;
+   //  pyramid vertex coordinates
    var xyz = 
    [
       // Front face
@@ -160,7 +160,17 @@ function webGLStart()
         // Left face
          0.0,  1.25,  0.0,
         -1.25, -1.25, -1.25,
-        -1.25, -1.25,  1.25
+        -1.25, -1.25,  1.25,
+        // Bottom 1
+        -1.25, -1.25, -1.25,
+        -1.25, -1.25, 1.25,
+        1.25, -1.25, 1.25,
+        // Bottom 2
+        1.25, -1.25, 1.25,
+        1.25, -1.25, -1.25,
+        -1.25, -1.25, -1.25
+        
+        
       
    ];
    var verts = gl.createBuffer();
@@ -172,6 +182,7 @@ function webGLStart()
    [
       .4,0,0, .6,0,0, .8,0,0,    1,0,.4, 1,0,.6, 1,0,.8,
       0,0,.4, 0,0,.6, 0,0,.8,    0,.4,1, 0,.6,1, 0,.8,1,
+      .2,.5,0, .3,.4,0, .4,.3,0, .4,.3,0, .3,.4,0, .2,.5,0
 
    ];
    var color = gl.createBuffer();

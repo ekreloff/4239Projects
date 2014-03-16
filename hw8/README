@@ -3,9 +3,24 @@ README
 hw8
 
 Created by Ethan Kreloff for University of Colorado CSCI4239
-Febuary 9th, 2014
+February 9th, 2014
 
-TIME SPENT:
+TIME SPENT: 16 hours
 
 
-This program demonstrates 
+This program demonstrates the use of stored textures on a cube. The granite texture uses noise to create the effect as does the marble. 
+
+This was my backup plan after trying for hours to get a bump map going. I was having trouble getting the correct tangent vectors and so the whole thing looked really bad. I will try to get it working at some point because I want to use bump maps in my final project, but for now this is what I have. 
+
+
+Arrow Keys: Control rotation of the scene up/down left/right
+
+‘m’  	: Change shading mode
+
+‘[‘ ‘]’ : Moves light around cube
+
+'i'/'o' : Zooms in/out by increasing/decreasing scale factor by one quarter. 
+
+‘z’     : turn axes on and off
+
+'esc'	: Hit escape to quit.

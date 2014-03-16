@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "Supporting Files">
+      <FileRef
+         location = "group:CSCIx239.h">
+      </FileRef>
+      <FileRef
+         location = "group:elapsed.c">
+      </FileRef>
+      <FileRef
+         location = "group:errcheck.c">
+      </FileRef>
+      <FileRef
+         location = "group:fatal.c">
+      </FileRef>
+      <FileRef
+         location = "group:fps.c">
+      </FileRef>
+      <FileRef
+         location = "group:loadtexbmp.c">
+      </FileRef>
+      <FileRef
+         location = "group:noise.c">
+      </FileRef>
+      <FileRef
+         location = "group:object.c">
+      </FileRef>
+      <FileRef
+         location = "group:print.c">
+      </FileRef>
+      <FileRef
+         location = "group:project.c">
+      </FileRef>
+      <FileRef
+         location = "group:shader.c">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Compilation/Execution">
+      <FileRef
+         location = "group:Makefile">
+      </FileRef>
+      <FileRef
+         location = "group:README">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Shaders">
+      <FileRef
+         location = "group:marble.frag">
+      </FileRef>
+      <FileRef
+         location = "group:noise.vert">
+      </FileRef>
+      <FileRef
+         location = "group:granite.frag">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:hw8.c">
+   </FileRef>
+</Workspace>

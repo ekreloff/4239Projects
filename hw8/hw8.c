@@ -16,6 +16,14 @@
 #include "project.c"
 #include "fatal.c"
 #include "shader.c"
+#include "elapsed.c"
+#include "errcheck.c"
+#include "fps.c"
+#include "loadtexbmp.c"
+#include "noise.c"
+
+#define MODE 3
+
 
 
 /*
@@ -32,8 +40,10 @@ double dim=5.0;   //  Size of world
 double X  = 0.0;   //  Location
 double Y  = 0.0;   //  Location
 double Z  = 0.0;   //  Location
-double zoom = 2.0;  //Scaling factor
-int shader[] = {0,0}; //Shaders
+double zoom = 1.0;  //Scaling factor
+int shader[MODE] = {0}; //Shaders
+int crate;          //  Crate texture
+unsigned int img;   //  Image texture
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
@@ -70,6 +80,66 @@ void Sphere()
    }
 }
 
+/*
+ *  Draw a cube
+ */
+static void Cube(void)
+{
+    //  Front
+    glColor3f(1,0,0);
+    glBegin(GL_QUADS);
+    glNormal3f( 0, 0,+1);
+    glTexCoord2f(0,0); glVertex3f(-1,-1,+1);
+    glTexCoord2f(1,0); glVertex3f(+1,-1,+1);
+    glTexCoord2f(1,1); glVertex3f(+1,+1,+1);
+    glTexCoord2f(0,1); glVertex3f(-1,+1,+1);
+    glEnd();
+    //  Back
+    glColor3f(0,0,1);
+    glBegin(GL_QUADS);
+    glNormal3f( 0, 0,-1);
+    glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
+    glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
+    glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
+    glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
+    glEnd();
+    //  Right
+    glColor3f(1,1,0);
+    glBegin(GL_QUADS);
+    glNormal3f(+1, 0, 0);
+    glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
+    glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+    glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
+    glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
+    glEnd();
+    //  Left
+    glColor3f(0,1,0);
+    glBegin(GL_QUADS);
+    glNormal3f(-1, 0, 0);
+    glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+    glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
+    glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
+    glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+    glEnd();
+    //  Top
+    glColor3f(0,1,1);
+    glBegin(GL_QUADS);
+    glNormal3f( 0,+1, 0);
+    glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
+    glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
+    glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
+    glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+    glEnd();
+    //  Bottom
+    glColor3f(1,0,1);
+    glBegin(GL_QUADS);
+    glNormal3f( 0,-1, 0);
+    glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+    glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+    glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
+    glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
+    glEnd();
+}
 
 
 /*
@@ -132,18 +202,18 @@ void display()
     
    if (shadeMode>0)
    {
-      int id;
-      float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
-      id = glGetUniformLocation(shader[shadeMode],"time");
-      if (id>=0) glUniform1f(id,time);
+       int id;
+       glUseProgram(shader[shadeMode]);
+       id = glGetUniformLocation(shader[shadeMode],"Noise3D");
+       if (id>=0) glUniform1i(id,1);
    }
    
 
  
-    //Draw Bball
+    //Draw cube
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
-    Sphere();
+    Cube();
     glPopMatrix();
     
     //  No shader for axes
@@ -242,7 +312,7 @@ void key(unsigned char ch,int x,int y)
    if (ch == '0' && ch<179)
       fov++;
    if (ch == 'm' || ch == 'M')
-      shadeMode = (shadeMode+1)%2;
+      shadeMode = (shadeMode+1)%MODE;
     
       //  Light elevation
    if (ch == '+') YLight += 0.1;
@@ -308,7 +378,11 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
     
    //  Create Shader Prog
-   shader[1] = CreateShaderProg("shader1.vert","shader1.frag");
+   shader[1] = CreateShaderProg("noise.vert","granite.frag");
+   shader[2] = CreateShaderProg("noise.vert","marble.frag");
+    
+    //  Load random texture
+    CreateNoise3D(GL_TEXTURE1);
 
    //  Pass control to GLUT so it can interact with the user
    glutMainLoop();
