@@ -331,6 +331,9 @@ int main(int argc,char* argv[])
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
     
+    //  Star texture
+    LoadTexBMP("star.bmp");
+    
    //  Create Shader Prog
    shader = CreateShaderProgGeom();
 
