@@ -5,6 +5,9 @@
       location = "container:"
       name = "Headers">
       <FileRef
+         location = "group:shader.c">
+      </FileRef>
+      <FileRef
          location = "group:CSCIx239.h">
       </FileRef>
       <FileRef
@@ -34,13 +37,13 @@
       <FileRef
          location = "group:project.c">
       </FileRef>
-      <FileRef
-         location = "group:shader.c">
-      </FileRef>
    </Group>
    <Group
       location = "container:"
       name = "Technicals">
+      <FileRef
+         location = "group:final">
+      </FileRef>
       <FileRef
          location = "group:Makefile">
       </FileRef>
@@ -52,10 +55,13 @@
       location = "container:"
       name = "Shaders">
       <FileRef
+         location = "group:shader1.frag">
+      </FileRef>
+      <FileRef
          location = "group:shader1.vert">
       </FileRef>
    </Group>
    <FileRef
-      location = "group:hw9.c">
+      location = "group:final.c">
    </FileRef>
 </Workspace>
