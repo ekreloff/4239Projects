@@ -9,7 +9,10 @@
  * hw3.c
  * ******************************************************/
 
-
+// OpenGL 2.0 is deprecated in Mavericks
+#ifdef __APPLE__
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 #include "CSCIx239.h"
 #include "print.c"
@@ -24,10 +27,13 @@
 #include "object.c"
 
 
+#define MODE 3
+
 
 /*
  *  Global variables 
  */
+
 
 int shadeMode = 0; //Shader Mode
 int th=0;         //  Azimuth of view angle
@@ -36,12 +42,21 @@ int fov=55;       //  Field of view (for perspective)
 int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
-double zoom = 2.0;  //Scaling factor
-int shader[] = {0,0}; //Shaders
+double zoom = 1.0;  //Scaling factor
+int shader[MODE] = {0}; //Shaders
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
 int YLight = 3; // Y component of light
+
+// Tweaking shaders
+float RingFreq         = 4.0;
+float LightGrains      = 1.0;
+float DarkGrains       = 0.0;
+float GrainThreshold   = 0.5;
+float Noisiness        = 3.0;
+float GrainScale       = 27.0;
+float Scale = 1.0;
 
 
 /*
@@ -77,8 +92,8 @@ void Sphere()
 void Floor(){
     double i, j;
     int offset = 0;
-    for(i = 1; i <= 50; i += 2.005){
-        for (j = 1; j <= 28; j += 0.127) {
+    for(i = 1; i <= 50; i += /*2.005*/3.0){
+        for (j = 1; j <= 28; j += /*0.127*/.5) {
             glColor3f(.5,.5,.5);
             glBegin(GL_QUADS);
             glNormal3d(0.0, 1.0, 0.0);
@@ -97,6 +112,19 @@ void Floor(){
     
 }
 
+void Floortest(){
+    
+            glColor3f(.5,.5,.5);
+            glBegin(GL_QUADS);
+            glNormal3d(0.0, 1.0, 0.0);
+            glVertex3d(-23.5, -0.5, -12.5);
+            glVertex3d(-23.5, -0.5, -1.38);
+            glVertex3d(-2.5, -0.5, -1.38);
+            glVertex3d(-2.5, -0.5, -12.5);
+            glEnd();
+    
+    
+}
 
 
 /*
@@ -153,14 +181,42 @@ void display()
    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,Specular);
    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
     
-    //  Select shader (0 => no shader)
-    glUseProgram(shader[shadeMode]);
+    //  Select shader (0 => no shader), set uniforms
+    if (shadeMode>0)
+    {
+        int id;
+        glUseProgram(shader[shadeMode]);
+        id = glGetUniformLocation(shader[shadeMode],"Noise3D");
+        if (id>=0) glUniform1i(id,1);
+        
+        id = glGetUniformLocation(shader[shadeMode],"RingFreq");
+        if (id>=0) glUniform1f(id,RingFreq);
+        
+        id = glGetUniformLocation(shader[shadeMode],"LightGrains");
+        if (id>=0) glUniform1f(id,LightGrains);
+        
+        id = glGetUniformLocation(shader[shadeMode],"DarkGrains");
+        if (id>=0) glUniform1f(id,DarkGrains);
+        
+        id = glGetUniformLocation(shader[shadeMode],"GrainThreshold");
+        if (id>=0) glUniform1f(id,GrainThreshold);
+        
+        id = glGetUniformLocation(shader[shadeMode],"Noisiness");
+        if (id>=0) glUniform1f(id,Noisiness);
+        
+        id = glGetUniformLocation(shader[shadeMode],"GrainScale");
+        if (id>=0) glUniform1f(id,GrainScale);
+        
+        id = glGetUniformLocation(shader[shadeMode],"Scale");
+        if (id>=0) glUniform1f(id,Scale);
+    }
  
     //Draw Bball
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
     Sphere();
-    Floor();
+    //Floor();
+    Floortest();
     glPopMatrix();
     
     //  No shader for axes
@@ -251,7 +307,14 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    if (ch == 'x'){
       th = ph = 0;
-       zoom = 2;
+      RingFreq         = 4.0;
+      LightGrains      = 1.0;
+      DarkGrains       = 0.0;
+      GrainThreshold   = 0.5;
+      Noisiness        = 3.0;
+      GrainScale       = 27.0;
+      Scale = 1.0;
+      zoom = 1;
    }
    //  Change field of view angle
    if (ch == '9' && ch>1)
@@ -259,7 +322,7 @@ void key(unsigned char ch,int x,int y)
    if (ch == '0' && ch<179)
       fov++;
    if (ch == 'm' || ch == 'M')
-      shadeMode = (shadeMode+1)%2;
+      shadeMode = (shadeMode+1)%MODE;
     
       //  Light elevation
    if (ch == '+') YLight += 0.1;
@@ -279,6 +342,38 @@ void key(unsigned char ch,int x,int y)
     
     //Change axis on and off
     if (ch == 'z') axes = !axes;
+    
+    //Texture Properties
+    /*
+    float RingFreq         = 4.0;
+    float LightGrains      = 1.0;
+    float DarkGrains       = 0.0;
+    float GrainThreshold   = 0.5;
+    float Noisiness        = 3.0;
+    float GrainScale       = 27.0;
+    float Scale = 1.0;*/
+    
+    if (ch == 'q') RingFreq++;
+    if (ch == 'Q') RingFreq--;
+    
+    if (ch == 'w') LightGrains += 0.1;
+    if (ch == 'W') LightGrains -= 0.1;
+    
+    if (ch == 'e') DarkGrains += 0.1;
+    if (ch == 'E') DarkGrains -= 0.1;
+    
+    if (ch == 'r') GrainThreshold += 0.1;
+    if (ch == 'R') GrainThreshold -= 0.1;
+    
+    if (ch == 't') Noisiness++;
+    if (ch == 'T') Noisiness--;
+    
+    if (ch == 'y') GrainScale++;
+    if (ch == 'Y') GrainScale--;
+    
+    if (ch == 'u') Scale++;
+    if (ch == 'U') Scale--;
+    
     
     
    //  Reproject
@@ -318,7 +413,12 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
     
    //  Create Shader Prog
-   shader[1] = CreateShaderProg("shader1.vert","shader1.frag");
+   shader[1] = CreateShaderProg("noise.vert","wood.frag");
+   shader[2] = CreateShaderProg("noise.vert","marble.frag");
+    
+
+   //  Load random texture
+   CreateNoise3D(GL_TEXTURE1);
 
    //  Pass control to GLUT so it can interact with the user
    glutMainLoop();

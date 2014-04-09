@@ -55,6 +55,18 @@
       location = "container:"
       name = "Shaders">
       <FileRef
+         location = "group:wood.frag">
+      </FileRef>
+      <FileRef
+         location = "group:granite.frag">
+      </FileRef>
+      <FileRef
+         location = "group:marble.frag">
+      </FileRef>
+      <FileRef
+         location = "group:noise.vert">
+      </FileRef>
+      <FileRef
          location = "group:shader1.frag">
       </FileRef>
       <FileRef
