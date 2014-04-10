@@ -1,0 +1,14 @@
+README
+
+hw10
+
+Created by Ethan Kreloff for University of Colorado CSCI4239
+April 4th, 2014
+
+TIME SPENT: 18 hours
+
+This program demonstrates the differences between a brute force search done sequentially on the CPU and a brute force search done in parallel on the GPU. The parallel brute force method splits the operation up into multiple searches. 
+
+My program compiles, however I did not get a chance to do many tests before the deadline, and I want to do more tests in CSEL later. It seems to me that there was not much of a speed up with the parallel algorithm, probably because the data set was not big enough. I wanted to try to create a larger data set, but I realized I needed to create or find a "Big Integer" library to expand beyond the max int limit. All in all, I could've used more time for this assignment because I started it a bit late, but what I have so far has been a good learning experience.
+
+Usage: [-v] <number to search for> <length of list>
