@@ -28,6 +28,7 @@
 
 
 #define MODE 3
+#define FLOATCOLOR 255
 
 
 /*
@@ -42,22 +43,25 @@ int fov=55;       //  Field of view (for perspective)
 int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
-double zoom = 1.0;  //Scaling factor
+double zoom = .25;  //Scaling factor
 int shader[MODE] = {0}; //Shaders
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
-int YLight = 3; // Y component of light
+int YLight = 5; // Y component of light
 
 // Tweaking shaders
-float RingFreq         = 4.0;
-float LightGrains      = 1.0;
+float RingFreq         = -34.0;
+float LightGrains      = 0.1;
 float DarkGrains       = 0.0;
-float GrainThreshold   = 0.5;
-float Noisiness        = 3.0;
-float GrainScale       = 27.0;
-float Scale = 1.0;
+float GrainThreshold   = 0.2;
+float Noisiness        = -27.0;
+float GrainScale       = 0.0;
+float Scale = 0.8;
 
+float LightWood[3]  = {0.905,0.784,0.603};
+float DarkWood[3]   = {0.646,0.426,0.226};
+float NoiseScale[3] = {0.5,0.1,0.1};
 
 /*
  *  Draw vertex in polar coordinates
@@ -89,11 +93,70 @@ void Sphere()
    }
 }
 
+void FloorBounds(){
+    glColor3f(.5,.75,.75);
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, -13.5);
+    glVertex3d(25.62, -0.499, -10.47);
+    glVertex3d(-24.5, -0.499, -10.47);
+    glVertex3d(-24.5, -0.499, -13.5);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, 17.5);
+    glVertex3d(25.62, -0.499, 14.47);
+    glVertex3d(-24.5, -0.499, 14.47);
+    glVertex3d(-24.5, -0.499, 17.5);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(-24.5, -0.499, -13.5);
+    glVertex3d(-27.5, -0.499, -13.5);
+    glVertex3d(-27.5, -0.499, 17.5);
+    glVertex3d(-24.5, -0.499, 17.5);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, -13.5);
+    glVertex3d(25.62, -0.499, 17.5);
+    glVertex3d(28.62, -0.499, 17.5);
+    glVertex3d(28.62, -0.499, -13.5);
+    glEnd();
+}
+
+
 void Floor(){
     double i, j;
     int offset = 0;
     for(i = 1; i <= 50; i += /*2.005*/3.0){
         for (j = 1; j <= 28; j += /*0.127*/.5) {
+            glColor3f(.5,.5,.5);
+            glBegin(GL_QUADS);
+            glNormal3d(0.0, 1.0, 0.0);
+            double off;
+            if(offset)off = 1.0;
+            else off = 0.0;
+            glVertex3d(-23.5+i, -0.5, -12.5+j+off);
+            glVertex3d(-23.5+i, -0.5, -12.38+j+off);
+            glVertex3d(-25.5+i, -0.5, -12.38+j+off);
+            glVertex3d(-25.5+i, -0.5, -12.5+j+off);
+            glEnd();
+            offset = !offset;
+        }
+    }
+    
+    
+}
+
+void Floor2(){
+    double i, j;
+    int offset = 0;
+    for(i = 1; i <= 50; i += 2.005){
+        for (j = 1; j <= 28; j += 0.127) {
             glColor3f(.5,.5,.5);
             glBegin(GL_QUADS);
             glNormal3d(0.0, 1.0, 0.0);
@@ -209,6 +272,15 @@ void display()
         
         id = glGetUniformLocation(shader[shadeMode],"Scale");
         if (id>=0) glUniform1f(id,Scale);
+        
+        id = glGetUniformLocation(shader[shadeMode],"LightWood");
+        if (id>=0) glUniform3f(id,LightWood[0],LightWood[1],LightWood[2]);
+        
+        id = glGetUniformLocation(shader[shadeMode],"DarkWood");
+        if (id>=0) glUniform3f(id,DarkWood[0],DarkWood[1],DarkWood[2]);
+        
+        id = glGetUniformLocation(shader[shadeMode],"NoiseScale");
+        if (id>=0) glUniform3f(id,NoiseScale[0],NoiseScale[1],NoiseScale[2]);
     }
  
     //Draw Bball
@@ -216,12 +288,15 @@ void display()
     glScaled(zoom,zoom,zoom);
     Sphere();
     //Floor();
-    Floortest();
+    Floor2();
+    //Floortest();
+    //  No shader for what follows
+    glUseProgram(0);
+    FloorBounds();
     glPopMatrix();
     
-    //  No shader for axes
-    glUseProgram(0);
     
+   
     
     //  Draw axes
    
@@ -251,7 +326,9 @@ void display()
    }
    //  Display parameters
    glWindowPos2i(5,5);
-   Print("Angle=%d,%d  Dim=%.1f FOV=%d ",th,ph,dim,fov);
+   Print("RingFreq=%.4f    LightGrains=%.4f    DarkGrains=%.4f\
+             GrainThreshold=%.4f    Noisiness=%.4f    GrainScale=%.4f\
+             Scale=%.4f    NoiseScale=%.4f,%.4f,%.4f",RingFreq,LightGrains,DarkGrains,GrainThreshold,Noisiness,GrainScale,Scale,NoiseScale[0],NoiseScale[1],NoiseScale[2]);
    //  Render the scene and make it visible
    glFlush();
    glutSwapBuffers();
@@ -325,8 +402,8 @@ void key(unsigned char ch,int x,int y)
       shadeMode = (shadeMode+1)%MODE;
     
       //  Light elevation
-   if (ch == '+') YLight += 0.1;
-   if (ch == '-') YLight -= 0.1;
+   if (ch == '1') YLight += 0.5;
+   if (ch == '2') YLight -= 0.5;
    //  Light position
    if (ch == '[') lth--;
    if (ch == ']') lth++;
@@ -351,7 +428,11 @@ void key(unsigned char ch,int x,int y)
     float GrainThreshold   = 0.5;
     float Noisiness        = 3.0;
     float GrainScale       = 27.0;
-    float Scale = 1.0;*/
+    float Scale = 1.0;
+    float LightWood[3]  = {0.6,0.3,0.1};
+    float DarkWood[3]   = {0.4,0.2,0.07};
+    float NoiseScale[3] = {0.5,0.1,0.1};
+     */
     
     if (ch == 'q') RingFreq++;
     if (ch == 'Q') RingFreq--;
@@ -368,12 +449,38 @@ void key(unsigned char ch,int x,int y)
     if (ch == 't') Noisiness++;
     if (ch == 'T') Noisiness--;
     
-    if (ch == 'y') GrainScale++;
-    if (ch == 'Y') GrainScale--;
+    if (ch == 'y') GrainScale += 0.05;
+    if (ch == 'Y') GrainScale -= 0.05;
     
-    if (ch == 'u') Scale++;
-    if (ch == 'U') Scale--;
+    if (ch == 'u') Scale += 0.1;
+    if (ch == 'U') Scale -= 0.1;
     
+    if (ch == 'a') DarkWood[0] += 0.05;
+    if (ch == 'A') DarkWood[0] -= 0.05;
+    
+    if (ch == 's') DarkWood[1] += 0.05;
+    if (ch == 'S') DarkWood[1] -= 0.05;
+    
+    if (ch == 'd') DarkWood[2] += 0.05;
+    if (ch == 'D') DarkWood[2] -= 0.05;
+    
+    if (ch == 'f') LightWood[0] += 0.05;
+    if (ch == 'F') LightWood[0] -= 0.05;
+    
+    if (ch == 'g') LightWood[1] += 0.05;
+    if (ch == 'G') LightWood[1] -= 0.05;
+    
+    if (ch == 'h') LightWood[2] += 0.05;
+    if (ch == 'H') LightWood[2] -= 0.05;
+    
+    if (ch == 'j') NoiseScale[0] += 0.05;
+    if (ch == 'J') NoiseScale[0] -= 0.05;
+    
+    if (ch == 'k') NoiseScale[1] += 0.05;
+    if (ch == 'K') NoiseScale[1] -= 0.05;
+    
+    if (ch == 'l') NoiseScale[2] += 0.05;
+    if (ch == 'L') NoiseScale[2] -= 0.05;
     
     
    //  Reproject
@@ -404,7 +511,7 @@ int main(int argc,char* argv[])
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-   glutInitWindowSize(600,600);
+   glutInitWindowSize(1700,1100);
    glutCreateWindow("Final Project: Ethan Kreloff");
    //  Set callbacks
    glutDisplayFunc(display);
