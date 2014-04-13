@@ -26,14 +26,14 @@ void main(void)
     vec3 MCposition = Scale*gl_TexCoord[0].xyz;
     vec3 noisev = vec3(texture3D(Noise3D,MCposition * NoiseScale) * Noisiness);
     vec3 location = MCposition + noisev;
-    float dist = sqrt(location.x*location.x + location.z*location.z);
+    float dist = sqrt(/*location.x*location.x + */location.z*location.z);
     dist *= RingFreq;
     float r = fract(dist + noisev[0] + noisev[1] + noisev[2])*2.0;
     if(r > 1.0){
         r = 2.0 - r;
     }
     vec3 color =  mix(LightWood, DarkWood, r);
-    r = fract((MCposition.x + MCposition.z)*GrainScale + 0.5)/*GrainScale*/;
+    r = fract((/*MCposition.x +*/ MCposition.z)*GrainScale + 0.5)/*GrainScale*/;
     noisev[2] *= r;
     if (r < GrainThreshold) {
         color += LightWood * LightGrains * noisev[2];

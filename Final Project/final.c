@@ -43,7 +43,7 @@ int fov=55;       //  Field of view (for perspective)
 int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
-double zoom = .25;  //Scaling factor
+double zoom = .75;  //Scaling factor
 int shader[MODE] = {0}; //Shaders
 
 // Lighting Variables
@@ -51,17 +51,17 @@ int lth = 90; // Lighting Azimuth
 int YLight = 5; // Y component of light
 
 // Tweaking shaders
-float RingFreq         = -34.0;
-float LightGrains      = 0.1;
-float DarkGrains       = 0.0;
-float GrainThreshold   = 0.2;
-float Noisiness        = -27.0;
-float GrainScale       = 0.0;
-float Scale = 0.8;
+float RingFreq         = 0.0;
+float LightGrains      = 0.8;
+float DarkGrains       = -1.2;
+float GrainThreshold   = 0.4;
+float Noisiness        = -1.0;
+float GrainScale       = -0.6;
+float Scale = 11.0;
 
-float LightWood[3]  = {0.905,0.784,0.603};
-float DarkWood[3]   = {0.646,0.426,0.226};
-float NoiseScale[3] = {0.5,0.1,0.1};
+float LightWood[3]  = {1.0,0.894,0.628};
+float DarkWood[3]   = {0.561,0.366,0.15};
+float NoiseScale[3] = {0.15,1.3,1.15};
 
 /*
  *  Draw vertex in polar coordinates
@@ -216,7 +216,7 @@ void display()
     double Ex = -2*dim*Sin(th)*Cos(ph);
     double Ey = +2*dim        *Sin(ph);
     double Ez = +2*dim*Cos(th)*Cos(ph);
-    gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
+    gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
     
     
    //  Draw light position as sphere (still no lighting here)
@@ -348,16 +348,16 @@ void special(int key,int x,int y)
 {
    //  Right arrow key - increase angle by 5 degrees
    if (key == GLUT_KEY_RIGHT)
-      th += 5;
+      th += 1;
    //  Left arrow key - decrease angle by 5 degrees
    else if (key == GLUT_KEY_LEFT)
-      th -= 5;
+      th -= 1;
    //  Up arrow key - increase elevation by 5 degrees
    else if (key == GLUT_KEY_UP)
-      ph += 5;
+      ph += 1;
    //  Down arrow key - decrease elevation by 5 degrees
    else if (key == GLUT_KEY_DOWN)
-      ph -= 5;
+      ph -= 1;
    //  PageUp key - increase dim
    else if (key == GLUT_KEY_PAGE_UP)
       dim += 0.1;
@@ -384,13 +384,13 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    if (ch == 'x'){
       th = ph = 0;
-      RingFreq         = 4.0;
-      LightGrains      = 1.0;
-      DarkGrains       = 0.0;
-      GrainThreshold   = 0.5;
-      Noisiness        = 3.0;
-      GrainScale       = 27.0;
-      Scale = 1.0;
+       RingFreq         = 0.0;
+       LightGrains      = 0.8;
+       DarkGrains       = -1.2;
+       GrainThreshold   = 0.4;
+       Noisiness        = -1.0;
+       GrainScale       = -0.6;
+       Scale = 11.0;
       zoom = 1;
    }
    //  Change field of view angle
