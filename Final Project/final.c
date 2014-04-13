@@ -55,13 +55,52 @@ float RingFreq         = 0.0;
 float LightGrains      = 0.8;
 float DarkGrains       = -1.2;
 float GrainThreshold   = 0.4;
-float Noisiness        = -1.0;
-float GrainScale       = -0.6;
-float Scale = 11.0;
+float Noisiness        = 1.0;
+float GrainScale       = -10.25;
+float Scale = 3.6;
 
 float LightWood[3]  = {1.0,0.894,0.628};
 float DarkWood[3]   = {0.561,0.366,0.15};
-float NoiseScale[3] = {0.15,1.3,1.15};
+float NoiseScale[3] = {0.1,1.25,0.9};
+
+
+/*
+ void Floortest(){
+ 
+ glColor3f(.5,.5,.5);
+ glBegin(GL_QUADS);
+ glNormal3d(0.0, 1.0, 0.0);
+ glVertex3d(-23.5, -0.5, -12.5);
+ glVertex3d(-23.5, -0.5, -1.38);
+ glVertex3d(-2.5, -0.5, -1.38);
+ glVertex3d(-2.5, -0.5, -12.5);
+ glEnd();
+ 
+ 
+ }
+ 
+ void Floor2(){
+ double i, j;
+ int offset = 0;
+ for(i = 1; i <= 50; i += //2.005// 3.0){
+ for (j = 1; j <= 28; j += //0.127// .5) {
+ glColor3f(.5,.5,.5);
+ glBegin(GL_QUADS);
+ glNormal3d(0.0, 1.0, 0.0);
+ double off;
+ if(offset)off = 1.0;
+ else off = 0.0;
+ glVertex3d(-23.5+i, -0.5, -12.5+j+off);
+ glVertex3d(-23.5+i, -0.5, -12.38+j+off);
+ glVertex3d(-25.5+i, -0.5, -12.38+j+off);
+ glVertex3d(-25.5+i, -0.5, -12.5+j+off);
+ glEnd();
+ offset = !offset;
+ }
+ }
+ 
+ }*/
+
 
 /*
  *  Draw vertex in polar coordinates
@@ -94,69 +133,45 @@ void Sphere()
 }
 
 void FloorBounds(){
-    glColor3f(.5,.75,.75);
+    glColor3f(0.043,0.224,0.416);
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.5);
+    glVertex3d(25.62, -0.499, -13.0);
     glVertex3d(25.62, -0.499, -10.47);
     glVertex3d(-24.5, -0.499, -10.47);
-    glVertex3d(-24.5, -0.499, -13.5);
+    glVertex3d(-24.5, -0.499, -13.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, 17.5);
-    glVertex3d(25.62, -0.499, 14.47);
-    glVertex3d(-24.5, -0.499, 14.47);
-    glVertex3d(-24.5, -0.499, 17.5);
+    glVertex3d(25.62, -0.499, 17.0);
+    glVertex3d(25.62, -0.499, 14.42);
+    glVertex3d(-24.5, -0.499, 14.42);
+    glVertex3d(-24.5, -0.499, 17.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(-24.5, -0.499, -13.5);
-    glVertex3d(-27.5, -0.499, -13.5);
-    glVertex3d(-27.5, -0.499, 17.5);
-    glVertex3d(-24.5, -0.499, 17.5);
+    glVertex3d(-24.5, -0.499, -13.0);
+    glVertex3d(-28.5, -0.499, -13.0);
+    glVertex3d(-28.5, -0.499, 17.0);
+    glVertex3d(-24.5, -0.499, 17.0);
     glEnd();
 
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.5);
-    glVertex3d(25.62, -0.499, 17.5);
-    glVertex3d(28.62, -0.499, 17.5);
-    glVertex3d(28.62, -0.499, -13.5);
+    glVertex3d(25.62, -0.499, -13.0);
+    glVertex3d(25.62, -0.499, 17.0);
+    glVertex3d(29.62, -0.499, 17.0);
+    glVertex3d(29.62, -0.499, -13.0);
     glEnd();
 }
-
 
 void Floor(){
     double i, j;
     int offset = 0;
-    for(i = 1; i <= 50; i += /*2.005*/3.0){
-        for (j = 1; j <= 28; j += /*0.127*/.5) {
-            glColor3f(.5,.5,.5);
-            glBegin(GL_QUADS);
-            glNormal3d(0.0, 1.0, 0.0);
-            double off;
-            if(offset)off = 1.0;
-            else off = 0.0;
-            glVertex3d(-23.5+i, -0.5, -12.5+j+off);
-            glVertex3d(-23.5+i, -0.5, -12.38+j+off);
-            glVertex3d(-25.5+i, -0.5, -12.38+j+off);
-            glVertex3d(-25.5+i, -0.5, -12.5+j+off);
-            glEnd();
-            offset = !offset;
-        }
-    }
-    
-    
-}
-
-void Floor2(){
-    double i, j;
-    int offset = 0;
     for(i = 1; i <= 50; i += 2.005){
-        for (j = 1; j <= 28; j += 0.127) {
+        for (j = 1; j <= 28; j += 0.126) {
             glColor3f(.5,.5,.5);
             glBegin(GL_QUADS);
             glNormal3d(0.0, 1.0, 0.0);
@@ -171,23 +186,9 @@ void Floor2(){
             offset = !offset;
         }
     }
-    
-    
 }
 
-void Floortest(){
-    
-            glColor3f(.5,.5,.5);
-            glBegin(GL_QUADS);
-            glNormal3d(0.0, 1.0, 0.0);
-            glVertex3d(-23.5, -0.5, -12.5);
-            glVertex3d(-23.5, -0.5, -1.38);
-            glVertex3d(-2.5, -0.5, -1.38);
-            glVertex3d(-2.5, -0.5, -12.5);
-            glEnd();
-    
-    
-}
+
 
 
 /*
@@ -287,9 +288,7 @@ void display()
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
     Sphere();
-    //Floor();
-    Floor2();
-    //Floortest();
+    Floor();
     //  No shader for what follows
     glUseProgram(0);
     FloorBounds();

@@ -33,7 +33,7 @@ void main(void)
         r = 2.0 - r;
     }
     vec3 color =  mix(LightWood, DarkWood, r);
-    r = fract((/*MCposition.x +*/ MCposition.z)*GrainScale + 0.5)/*GrainScale*/;
+    r = fract((/*MCposition.x +*/ MCposition.z)*GrainScale + 0.5);
     noisev[2] *= r;
     if (r < GrainThreshold) {
         color += LightWood * LightGrains * noisev[2];
