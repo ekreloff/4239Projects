@@ -28,7 +28,7 @@
 
 
 #define MODE 3
-#define FLOATCOLOR 255
+#define TEXTURES 1
 
 
 /*
@@ -45,6 +45,7 @@ double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
 double zoom = .75;  //Scaling factor
 int shader[MODE] = {0}; //Shaders
+int texture[TEXTURES]; //Textures
 
 // Lighting Variables
 int lth = 90; // Lighting Azimuth
@@ -245,6 +246,10 @@ void display()
    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,Specular);
    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
     
+    //  Texture binding
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,texture[0]);
+    
     //  Select shader (0 => no shader), set uniforms
     if (shadeMode>0)
     {
@@ -252,6 +257,9 @@ void display()
         glUseProgram(shader[shadeMode]);
         id = glGetUniformLocation(shader[shadeMode],"Noise3D");
         if (id>=0) glUniform1i(id,1);
+        
+        id = glGetUniformLocation(shader[shadeMode],"CourtTex0");
+        if (id>=0) glUniform1i(id,0);
         
         id = glGetUniformLocation(shader[shadeMode],"RingFreq");
         if (id>=0) glUniform1f(id,RingFreq);
@@ -387,9 +395,13 @@ void key(unsigned char ch,int x,int y)
        LightGrains      = 0.8;
        DarkGrains       = -1.2;
        GrainThreshold   = 0.4;
-       Noisiness        = -1.0;
-       GrainScale       = -0.6;
-       Scale = 11.0;
+       Noisiness        = 1.0;
+       GrainScale       = -10.25;
+       Scale            = 3.6;
+       
+       NoiseScale[0] = 0.1;
+       NoiseScale[1] = 1.25;
+       NoiseScale[2] = 0.9;
       zoom = 1;
    }
    //  Change field of view angle
@@ -517,6 +529,9 @@ int main(int argc,char* argv[])
    glutReshapeFunc(reshape);
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
+    
+   //  Load daytime textures
+   texture[0]  = LoadTexBMP("day.bmp");
     
    //  Create Shader Prog
    shader[1] = CreateShaderProg("noise.vert","wood.frag");
