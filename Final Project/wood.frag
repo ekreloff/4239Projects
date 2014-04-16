@@ -45,6 +45,6 @@ void main(void)
     }
     color *= LightIntensity;
     //  Apply final color
-    gl_FragColor = vec4(color, 1.0) * logo;
+    gl_FragColor = vec4(color, 1.0);
 }
 

@@ -57,12 +57,12 @@ float LightGrains      = 0.8;
 float DarkGrains       = -1.2;
 float GrainThreshold   = 0.4;
 float Noisiness        = 1.0;
-float GrainScale       = -10.25;
-float Scale = 3.6;
+float GrainScale       = -34.01;
+float Scale = 1.2;
 
 float LightWood[3]  = {1.0,0.894,0.628};
 float DarkWood[3]   = {0.561,0.366,0.15};
-float NoiseScale[3] = {0.1,1.25,0.9};
+float NoiseScale[3] = {0.1,1.35,0.6};
 
 
 /*
@@ -121,9 +121,12 @@ void Sphere()
    int th,ph;
    //  Latitude bands
    glColor3f(1,1,1);
+    glPushMatrix();
+    glScaled(0.25, 0.25, 0.25);
    for (ph=-90;ph<90;ph+=5)
    {
       glBegin(GL_QUAD_STRIP);
+      glScaled(0.1, 0.1, 0.1);
       for (th=0;th<=360;th+=5)
       {
          Vertex(th,ph);
@@ -131,6 +134,7 @@ void Sphere()
       }
       glEnd();
    }
+    glPopMatrix();
 }
 
 void FloorBounds(){
@@ -187,6 +191,132 @@ void Floor(){
             offset = !offset;
         }
     }
+}
+
+void Hoop(double x, double y, double z, double yrot){
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glRotated(yrot, 0.0, 1.0, 0.0);
+    glScaled(1.5, 1.3, 1.5);
+    
+    glColor3f(.5,.5,.5);
+    //Backbaord front
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, 1.0);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glEnd();
+    //Backboard sides
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(1.5, 5.0, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glVertex3d(1.5, 5.0, -0.15);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, -1.0, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glEnd();
+    
+    //backboard back
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, -1.0);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(1.5, 5.0, -0.15);
+    glEnd();
+    
+    //Post
+    glColor3f(0.1,0.1,0.1);
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(0.35, 3.8, -0.15);
+    glVertex3d(0.35, 4.05, -0.15);
+    glVertex3d(0.35, 4.05, -0.6);
+    glVertex3d(0.35, 3.8, -0.6);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(0.65, 3.8, -0.15);
+    glVertex3d(0.65, 4.05, -0.15);
+    glVertex3d(0.65, 4.05, -0.6);
+    glVertex3d(0.65, 3.8, -0.6);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, -1.0, 0.0);
+    glVertex3d(0.65, 3.8, -0.15);
+    glVertex3d(0.65, 3.8, -0.6);
+    glVertex3d(0.35, 3.8, -0.6);
+    glVertex3d(0.35, 3.8, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(0.65, 4.05, -0.15);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.35, 4.05, -0.9);
+    glVertex3d(0.35, 4.05, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, -1.0);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.65, .275, -0.9);
+    glVertex3d(0.35, .275, -0.9);
+    glVertex3d(0.35, 4.05, -0.9);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.65, 4.05, -0.6);
+    glVertex3d(0.65, .275, -0.6);
+    glVertex3d(0.65, .275, -0.9);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(0.35, 4.05, -0.9);
+    glVertex3d(0.35, .275, -0.9);
+    glVertex3d(0.35, .275, -0.6);
+    glVertex3d(0.35, 4.05, -0.6);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, 1.0);
+    glVertex3d(0.35, 4.05, -0.6);
+    glVertex3d(0.35, .275, -0.6);
+    glVertex3d(0.65, .275, -0.6);
+    glVertex3d(0.65, 4.05, -0.6);
+    glEnd();
+    
+    glPopMatrix();
 }
 
 
@@ -251,52 +381,55 @@ void display()
     glBindTexture(GL_TEXTURE_2D,texture[0]);
     
     //  Select shader (0 => no shader), set uniforms
-    if (shadeMode>0)
-    {
         int id;
-        glUseProgram(shader[shadeMode]);
-        id = glGetUniformLocation(shader[shadeMode],"Noise3D");
+        glUseProgram(shader[1]);
+        id = glGetUniformLocation(shader[1],"Noise3D");
         if (id>=0) glUniform1i(id,1);
         
         id = glGetUniformLocation(shader[shadeMode],"CourtTex0");
         if (id>=0) glUniform1i(id,0);
         
-        id = glGetUniformLocation(shader[shadeMode],"RingFreq");
+        id = glGetUniformLocation(shader[1],"RingFreq");
         if (id>=0) glUniform1f(id,RingFreq);
         
-        id = glGetUniformLocation(shader[shadeMode],"LightGrains");
+        id = glGetUniformLocation(shader[1],"LightGrains");
         if (id>=0) glUniform1f(id,LightGrains);
         
-        id = glGetUniformLocation(shader[shadeMode],"DarkGrains");
+        id = glGetUniformLocation(shader[1],"DarkGrains");
         if (id>=0) glUniform1f(id,DarkGrains);
         
-        id = glGetUniformLocation(shader[shadeMode],"GrainThreshold");
+        id = glGetUniformLocation(shader[1],"GrainThreshold");
         if (id>=0) glUniform1f(id,GrainThreshold);
         
-        id = glGetUniformLocation(shader[shadeMode],"Noisiness");
+        id = glGetUniformLocation(shader[1],"Noisiness");
         if (id>=0) glUniform1f(id,Noisiness);
         
-        id = glGetUniformLocation(shader[shadeMode],"GrainScale");
+        id = glGetUniformLocation(shader[1],"GrainScale");
         if (id>=0) glUniform1f(id,GrainScale);
         
-        id = glGetUniformLocation(shader[shadeMode],"Scale");
+        id = glGetUniformLocation(shader[1],"Scale");
         if (id>=0) glUniform1f(id,Scale);
         
-        id = glGetUniformLocation(shader[shadeMode],"LightWood");
+        id = glGetUniformLocation(shader[1],"LightWood");
         if (id>=0) glUniform3f(id,LightWood[0],LightWood[1],LightWood[2]);
         
-        id = glGetUniformLocation(shader[shadeMode],"DarkWood");
+        id = glGetUniformLocation(shader[1],"DarkWood");
         if (id>=0) glUniform3f(id,DarkWood[0],DarkWood[1],DarkWood[2]);
         
-        id = glGetUniformLocation(shader[shadeMode],"NoiseScale");
+        id = glGetUniformLocation(shader[1],"NoiseScale");
         if (id>=0) glUniform3f(id,NoiseScale[0],NoiseScale[1],NoiseScale[2]);
-    }
+    
  
     //Draw Bball
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
-    Sphere();
+    glUseProgram(shader[1]);
     Floor();
+    glUseProgram(shader[2]);
+    Sphere();
+    glUseProgram(0);
+    Hoop(-24.0, -.775, 2.2, 90.0);
+    Hoop(25.1, -.775, 1.2, -90.0);
     //  No shader for what follows
     glUseProgram(0);
     FloorBounds();
@@ -355,16 +488,16 @@ void special(int key,int x,int y)
 {
    //  Right arrow key - increase angle by 5 degrees
    if (key == GLUT_KEY_RIGHT)
-      th += 1;
+      th += 5;
    //  Left arrow key - decrease angle by 5 degrees
    else if (key == GLUT_KEY_LEFT)
-      th -= 1;
+      th -= 5;
    //  Up arrow key - increase elevation by 5 degrees
    else if (key == GLUT_KEY_UP)
-      ph += 1;
+      ph += 5;
    //  Down arrow key - decrease elevation by 5 degrees
    else if (key == GLUT_KEY_DOWN)
-      ph -= 1;
+      ph -= 5;
    //  PageUp key - increase dim
    else if (key == GLUT_KEY_PAGE_UP)
       dim += 0.1;
