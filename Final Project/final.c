@@ -51,273 +51,19 @@ int texture[TEXTURES]; //Textures
 int lth = 90; // Lighting Azimuth
 int YLight = 5; // Y component of light
 
-// Tweaking shaders
-float RingFreq         = 0.0;
-float LightGrains      = 0.8;
-float DarkGrains       = -1.2;
-float GrainThreshold   = 0.4;
-float Noisiness        = 1.0;
-float GrainScale       = -34.01;
-float Scale = 1.2;
-
-float LightWood[3]  = {1.0,0.894,0.628};
-float DarkWood[3]   = {0.561,0.366,0.15};
-float NoiseScale[3] = {0.1,1.35,0.6};
 
 
 /*
- void Floortest(){
- 
- glColor3f(.5,.5,.5);
- glBegin(GL_QUADS);
- glNormal3d(0.0, 1.0, 0.0);
- glVertex3d(-23.5, -0.5, -12.5);
- glVertex3d(-23.5, -0.5, -1.38);
- glVertex3d(-2.5, -0.5, -1.38);
- glVertex3d(-2.5, -0.5, -12.5);
- glEnd();
- 
- 
- }
- 
- void Floor2(){
- double i, j;
- int offset = 0;
- for(i = 1; i <= 50; i += //2.005// 3.0){
- for (j = 1; j <= 28; j += //0.127// .5) {
- glColor3f(.5,.5,.5);
- glBegin(GL_QUADS);
- glNormal3d(0.0, 1.0, 0.0);
- double off;
- if(offset)off = 1.0;
- else off = 0.0;
- glVertex3d(-23.5+i, -0.5, -12.5+j+off);
- glVertex3d(-23.5+i, -0.5, -12.38+j+off);
- glVertex3d(-25.5+i, -0.5, -12.38+j+off);
- glVertex3d(-25.5+i, -0.5, -12.5+j+off);
- glEnd();
- offset = !offset;
- }
- }
- 
- }*/
-
-
-/*
- *  Draw vertex in polar coordinates
+ *  Prototypes
  */
-static void Vertex(int th,int ph)
-{
-   double x = -Sin(th)*Cos(ph);
-   double y =  Cos(th)*Cos(ph);
-   double z =          Sin(ph);
-   glNormal3d(x,y,z);
-    //glTexCoord2d(th/360.0,ph/180.0+0.5);
-   glVertex3d(x,y,z);
-}
+static void Vertex(int th,int ph);
+void Sphere();
 
-void Sphere()
-{
-   int th,ph;
-   //  Latitude bands
-   glColor3f(1,1,1);
-    glPushMatrix();
-    glScaled(0.25, 0.25, 0.25);
-   for (ph=-90;ph<90;ph+=5)
-   {
-      glBegin(GL_QUAD_STRIP);
-      glScaled(0.1, 0.1, 0.1);
-      for (th=0;th<=360;th+=5)
-      {
-         Vertex(th,ph);
-         Vertex(th,ph+5);
-      }
-      glEnd();
-   }
-    glPopMatrix();
-}
+void FloorBounds();
 
-void FloorBounds(){
-    glColor3f(0.043,0.224,0.416);
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.0);
-    glVertex3d(25.62, -0.499, -10.47);
-    glVertex3d(-24.5, -0.499, -10.47);
-    glVertex3d(-24.5, -0.499, -13.0);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, 17.0);
-    glVertex3d(25.62, -0.499, 14.42);
-    glVertex3d(-24.5, -0.499, 14.42);
-    glVertex3d(-24.5, -0.499, 17.0);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(-24.5, -0.499, -13.0);
-    glVertex3d(-28.5, -0.499, -13.0);
-    glVertex3d(-28.5, -0.499, 17.0);
-    glVertex3d(-24.5, -0.499, 17.0);
-    glEnd();
+void Floor();
 
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.0);
-    glVertex3d(25.62, -0.499, 17.0);
-    glVertex3d(29.62, -0.499, 17.0);
-    glVertex3d(29.62, -0.499, -13.0);
-    glEnd();
-}
-
-void Floor(){
-    double i, j;
-    int offset = 0;
-    for(i = 1; i <= 50; i += 2.005){
-        for (j = 1; j <= 28; j += 0.126) {
-            glColor3f(.5,.5,.5);
-            glBegin(GL_QUADS);
-            glNormal3d(0.0, 1.0, 0.0);
-            double off;
-            if(offset)off = 1.0;
-            else off = 0.0;
-            glVertex3d(-23.5+i, -0.5, -12.5+j+off);
-            glVertex3d(-23.5+i, -0.5, -12.38+j+off);
-            glVertex3d(-25.5+i, -0.5, -12.38+j+off);
-            glVertex3d(-25.5+i, -0.5, -12.5+j+off);
-            glEnd();
-            offset = !offset;
-        }
-    }
-}
-
-void Hoop(double x, double y, double z, double yrot){
-    glPushMatrix();
-    glTranslated(x, y, z);
-    glRotated(yrot, 0.0, 1.0, 0.0);
-    glScaled(1.5, 1.3, 1.5);
-    
-    glColor3f(.5,.5,.5);
-    //Backbaord front
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 0.0, 1.0);
-    glVertex3d(-0.5, 5.0, 0.0);
-    glVertex3d(-0.5, 3.65, 0.0);
-    glVertex3d(1.5, 3.65, 0.0);
-    glVertex3d(1.5, 5.0, 0.0);
-    glEnd();
-    //Backboard sides
-    glBegin(GL_QUADS);
-    glNormal3d(-1.0, 0.0, 0.0);
-    glVertex3d(-0.5, 5.0, 0.0);
-    glVertex3d(-0.5, 5.0, -0.15);
-    glVertex3d(-0.5, 3.65, -0.15);
-    glVertex3d(-0.5, 3.65, 0.0);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(1.0, 0.0, 0.0);
-    glVertex3d(1.5, 5.0, 0.0);
-    glVertex3d(1.5, 3.65, 0.0);
-    glVertex3d(1.5, 3.65, -0.15);
-    glVertex3d(1.5, 5.0, -0.15);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(1.5, 5.0, 0.0);
-    glVertex3d(1.5, 5.0, -0.15);
-    glVertex3d(-0.5, 5.0, -0.15);
-    glVertex3d(-0.5, 5.0, 0.0);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, -1.0, 0.0);
-    glVertex3d(1.5, 3.65, 0.0);
-    glVertex3d(1.5, 3.65, -0.15);
-    glVertex3d(-0.5, 3.65, -0.15);
-    glVertex3d(-0.5, 3.65, 0.0);
-    glEnd();
-    
-    //backboard back
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 0.0, -1.0);
-    glVertex3d(-0.5, 5.0, -0.15);
-    glVertex3d(-0.5, 3.65, -0.15);
-    glVertex3d(1.5, 3.65, -0.15);
-    glVertex3d(1.5, 5.0, -0.15);
-    glEnd();
-    
-    //Post
-    glColor3f(0.1,0.1,0.1);
-    glBegin(GL_QUADS);
-    glNormal3d(-1.0, 0.0, 0.0);
-    glVertex3d(0.35, 3.8, -0.15);
-    glVertex3d(0.35, 4.05, -0.15);
-    glVertex3d(0.35, 4.05, -0.6);
-    glVertex3d(0.35, 3.8, -0.6);
-    glEnd();
-
-    glBegin(GL_QUADS);
-    glNormal3d(1.0, 0.0, 0.0);
-    glVertex3d(0.65, 3.8, -0.15);
-    glVertex3d(0.65, 4.05, -0.15);
-    glVertex3d(0.65, 4.05, -0.6);
-    glVertex3d(0.65, 3.8, -0.6);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, -1.0, 0.0);
-    glVertex3d(0.65, 3.8, -0.15);
-    glVertex3d(0.65, 3.8, -0.6);
-    glVertex3d(0.35, 3.8, -0.6);
-    glVertex3d(0.35, 3.8, -0.15);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(0.65, 4.05, -0.15);
-    glVertex3d(0.65, 4.05, -0.9);
-    glVertex3d(0.35, 4.05, -0.9);
-    glVertex3d(0.35, 4.05, -0.15);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 0.0, -1.0);
-    glVertex3d(0.65, 4.05, -0.9);
-    glVertex3d(0.65, .275, -0.9);
-    glVertex3d(0.35, .275, -0.9);
-    glVertex3d(0.35, 4.05, -0.9);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(1.0, 0.0, 0.0);
-    glVertex3d(0.65, 4.05, -0.9);
-    glVertex3d(0.65, 4.05, -0.6);
-    glVertex3d(0.65, .275, -0.6);
-    glVertex3d(0.65, .275, -0.9);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(-1.0, 0.0, 0.0);
-    glVertex3d(0.35, 4.05, -0.9);
-    glVertex3d(0.35, .275, -0.9);
-    glVertex3d(0.35, .275, -0.6);
-    glVertex3d(0.35, 4.05, -0.6);
-    glEnd();
-    
-    glBegin(GL_QUADS);
-    glNormal3d(0.0, 0.0, 1.0);
-    glVertex3d(0.35, 4.05, -0.6);
-    glVertex3d(0.35, .275, -0.6);
-    glVertex3d(0.65, .275, -0.6);
-    glVertex3d(0.65, 4.05, -0.6);
-    glEnd();
-    
-    glPopMatrix();
-}
+void Hoop(double x, double y, double z, double yrot);
 
 
 
@@ -381,43 +127,13 @@ void display()
     glBindTexture(GL_TEXTURE_2D,texture[0]);
     
     //  Select shader (0 => no shader), set uniforms
-        int id;
-        glUseProgram(shader[1]);
-        id = glGetUniformLocation(shader[1],"Noise3D");
-        if (id>=0) glUniform1i(id,1);
+    int id;
+    glUseProgram(shader[1]);
+    id = glGetUniformLocation(shader[1],"Noise3D");
+    if (id>=0) glUniform1i(id,1);
         
-        id = glGetUniformLocation(shader[shadeMode],"CourtTex0");
-        if (id>=0) glUniform1i(id,0);
-        
-        id = glGetUniformLocation(shader[1],"RingFreq");
-        if (id>=0) glUniform1f(id,RingFreq);
-        
-        id = glGetUniformLocation(shader[1],"LightGrains");
-        if (id>=0) glUniform1f(id,LightGrains);
-        
-        id = glGetUniformLocation(shader[1],"DarkGrains");
-        if (id>=0) glUniform1f(id,DarkGrains);
-        
-        id = glGetUniformLocation(shader[1],"GrainThreshold");
-        if (id>=0) glUniform1f(id,GrainThreshold);
-        
-        id = glGetUniformLocation(shader[1],"Noisiness");
-        if (id>=0) glUniform1f(id,Noisiness);
-        
-        id = glGetUniformLocation(shader[1],"GrainScale");
-        if (id>=0) glUniform1f(id,GrainScale);
-        
-        id = glGetUniformLocation(shader[1],"Scale");
-        if (id>=0) glUniform1f(id,Scale);
-        
-        id = glGetUniformLocation(shader[1],"LightWood");
-        if (id>=0) glUniform3f(id,LightWood[0],LightWood[1],LightWood[2]);
-        
-        id = glGetUniformLocation(shader[1],"DarkWood");
-        if (id>=0) glUniform3f(id,DarkWood[0],DarkWood[1],DarkWood[2]);
-        
-        id = glGetUniformLocation(shader[1],"NoiseScale");
-        if (id>=0) glUniform3f(id,NoiseScale[0],NoiseScale[1],NoiseScale[2]);
+    id = glGetUniformLocation(shader[shadeMode],"CourtTex0");
+    if (id>=0) glUniform1i(id,0);
     
  
     //Draw Bball
@@ -425,6 +141,7 @@ void display()
     glScaled(zoom,zoom,zoom);
     glUseProgram(shader[1]);
     Floor();
+    FloorBounds();
     glUseProgram(shader[2]);
     Sphere();
     glUseProgram(0);
@@ -432,7 +149,6 @@ void display()
     Hoop(25.1, -.775, 1.2, -90.0);
     //  No shader for what follows
     glUseProgram(0);
-    FloorBounds();
     glPopMatrix();
     
     
@@ -466,9 +182,9 @@ void display()
    }
    //  Display parameters
    glWindowPos2i(5,5);
-   Print("RingFreq=%.4f    LightGrains=%.4f    DarkGrains=%.4f\
+    /*Print("RingFreq=%.4f    LightGrains=%.4f    DarkGrains=%.4f\
              GrainThreshold=%.4f    Noisiness=%.4f    GrainScale=%.4f\
-             Scale=%.4f    NoiseScale=%.4f,%.4f,%.4f",RingFreq,LightGrains,DarkGrains,GrainThreshold,Noisiness,GrainScale,Scale,NoiseScale[0],NoiseScale[1],NoiseScale[2]);
+             Scale=%.4f    NoiseScale=%.4f,%.4f,%.4f",RingFreq,LightGrains,DarkGrains,GrainThreshold,Noisiness,GrainScale,Scale,NoiseScale[0],NoiseScale[1],NoiseScale[2]);*/
    //  Render the scene and make it visible
    glFlush();
    glutSwapBuffers();
@@ -524,17 +240,6 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    if (ch == 'x'){
       th = ph = 0;
-       RingFreq         = 0.0;
-       LightGrains      = 0.8;
-       DarkGrains       = -1.2;
-       GrainThreshold   = 0.4;
-       Noisiness        = 1.0;
-       GrainScale       = -10.25;
-       Scale            = 3.6;
-       
-       NoiseScale[0] = 0.1;
-       NoiseScale[1] = 1.25;
-       NoiseScale[2] = 0.9;
       zoom = 1;
    }
    //  Change field of view angle
@@ -563,69 +268,6 @@ void key(unsigned char ch,int x,int y)
     
     //Change axis on and off
     if (ch == 'z') axes = !axes;
-    
-    //Texture Properties
-    /*
-    float RingFreq         = 4.0;
-    float LightGrains      = 1.0;
-    float DarkGrains       = 0.0;
-    float GrainThreshold   = 0.5;
-    float Noisiness        = 3.0;
-    float GrainScale       = 27.0;
-    float Scale = 1.0;
-    float LightWood[3]  = {0.6,0.3,0.1};
-    float DarkWood[3]   = {0.4,0.2,0.07};
-    float NoiseScale[3] = {0.5,0.1,0.1};
-     */
-    
-    if (ch == 'q') RingFreq++;
-    if (ch == 'Q') RingFreq--;
-    
-    if (ch == 'w') LightGrains += 0.1;
-    if (ch == 'W') LightGrains -= 0.1;
-    
-    if (ch == 'e') DarkGrains += 0.1;
-    if (ch == 'E') DarkGrains -= 0.1;
-    
-    if (ch == 'r') GrainThreshold += 0.1;
-    if (ch == 'R') GrainThreshold -= 0.1;
-    
-    if (ch == 't') Noisiness++;
-    if (ch == 'T') Noisiness--;
-    
-    if (ch == 'y') GrainScale += 0.05;
-    if (ch == 'Y') GrainScale -= 0.05;
-    
-    if (ch == 'u') Scale += 0.1;
-    if (ch == 'U') Scale -= 0.1;
-    
-    if (ch == 'a') DarkWood[0] += 0.05;
-    if (ch == 'A') DarkWood[0] -= 0.05;
-    
-    if (ch == 's') DarkWood[1] += 0.05;
-    if (ch == 'S') DarkWood[1] -= 0.05;
-    
-    if (ch == 'd') DarkWood[2] += 0.05;
-    if (ch == 'D') DarkWood[2] -= 0.05;
-    
-    if (ch == 'f') LightWood[0] += 0.05;
-    if (ch == 'F') LightWood[0] -= 0.05;
-    
-    if (ch == 'g') LightWood[1] += 0.05;
-    if (ch == 'G') LightWood[1] -= 0.05;
-    
-    if (ch == 'h') LightWood[2] += 0.05;
-    if (ch == 'H') LightWood[2] -= 0.05;
-    
-    if (ch == 'j') NoiseScale[0] += 0.05;
-    if (ch == 'J') NoiseScale[0] -= 0.05;
-    
-    if (ch == 'k') NoiseScale[1] += 0.05;
-    if (ch == 'K') NoiseScale[1] -= 0.05;
-    
-    if (ch == 'l') NoiseScale[2] += 0.05;
-    if (ch == 'L') NoiseScale[2] -= 0.05;
-    
     
    //  Reproject
     Project(fov,asp,dim);
@@ -664,7 +306,7 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
     
    //  Load daytime textures
-   texture[0]  = LoadTexBMP("day.bmp");
+   texture[0]  = LoadTexBMP("pepsicenter.bmp");
     
    //  Create Shader Prog
    shader[1] = CreateShaderProg("noise.vert","wood.frag");
@@ -678,3 +320,260 @@ int main(int argc,char* argv[])
    glutMainLoop();
    return 0;
 }
+
+
+
+/*
+ *  Draw vertex in polar coordinates
+ */
+static void Vertex(int th,int ph)
+{
+    double x = -Sin(th)*Cos(ph);
+    double y =  Cos(th)*Cos(ph);
+    double z =          Sin(ph);
+    glNormal3d(x,y,z);
+    //glTexCoord2d(th/360.0,ph/180.0+0.5);
+    glVertex3d(x,y,z);
+}
+
+void Sphere()
+{
+    int th,ph;
+    //  Latitude bands
+    glColor3f(1,1,1);
+    glPushMatrix();
+    glScaled(0.25, 0.25, 0.25);
+    //glTranslated(-50, 12, 0);
+    for (ph=-90;ph<90;ph+=5)
+    {
+        glBegin(GL_QUAD_STRIP);
+        glScaled(0.1, 0.1, 0.1);
+        for (th=0;th<=360;th+=5)
+        {
+            Vertex(th,ph);
+            Vertex(th,ph+5);
+        }
+        glEnd();
+    }
+    glPopMatrix();
+}
+
+void FloorBounds(){
+    glColor3f(0.043,0.224,0.416);
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, -13.0);
+    glVertex3d(25.62, -0.499, -10.47);
+    glVertex3d(-24.5, -0.499, -10.47);
+    glVertex3d(-24.5, -0.499, -13.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, 17.0);
+    glVertex3d(25.62, -0.499, 14.42);
+    glVertex3d(-24.5, -0.499, 14.42);
+    glVertex3d(-24.5, -0.499, 17.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(-24.5, -0.499, -13.0);
+    glVertex3d(-28.5, -0.499, -13.0);
+    glVertex3d(-28.5, -0.499, 17.0);
+    glVertex3d(-24.5, -0.499, 17.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(25.62, -0.499, -13.0);
+    glVertex3d(25.62, -0.499, 17.0);
+    glVertex3d(29.62, -0.499, 17.0);
+    glVertex3d(29.62, -0.499, -13.0);
+    glEnd();
+}
+
+void Floor(){
+    double i, j;
+    int offset = 0;
+    for(i = 1; i <= 50; i += 2.005){
+        for (j = 1; j <= 28; j += 0.126) {
+            glColor3f(.5,.5,.5);
+            glBegin(GL_QUADS);
+            glNormal3d(0.0, 1.0, 0.0);
+            double off;
+            if(offset)off = 1.0;
+            else off = 0.0;
+            glTexCoord2d(0,1); glVertex3d(-23.5+i, -0.5, -12.5+j+off);
+            glTexCoord2d(0,0); glVertex3d(-23.5+i, -0.5, -12.38+j+off);
+            glTexCoord2d(1,0); glVertex3d(-25.5+i, -0.5, -12.38+j+off);
+            glTexCoord2d(1,1); glVertex3d(-25.5+i, -0.5, -12.5+j+off);
+            glEnd();
+            offset = !offset;
+        }
+    }
+}
+
+void Hoop(double x, double y, double z, double yrot){
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glRotated(yrot, 0.0, 1.0, 0.0);
+    glScaled(1.5, 1.3, 1.5);
+    
+    glColor3f(.8,.8,.8);
+    //Backbaord front
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, 1.0);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glEnd();
+    //Backboard sides
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(1.5, 5.0, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(1.5, 5.0, 0.0);
+    glVertex3d(1.5, 5.0, -0.15);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 5.0, 0.0);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, -1.0, 0.0);
+    glVertex3d(1.5, 3.65, 0.0);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(-0.5, 3.65, 0.0);
+    glEnd();
+    
+    //backboard back
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, -1.0);
+    glVertex3d(-0.5, 5.0, -0.15);
+    glVertex3d(-0.5, 3.65, -0.15);
+    glVertex3d(1.5, 3.65, -0.15);
+    glVertex3d(1.5, 5.0, -0.15);
+    glEnd();
+    
+    //Post
+    glColor3f(0.1,0.1,0.1);
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(0.35, 3.8, -0.15);
+    glVertex3d(0.35, 4.05, -0.15);
+    glVertex3d(0.35, 4.05, -0.6);
+    glVertex3d(0.35, 3.8, -0.6);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(0.65, 3.8, -0.15);
+    glVertex3d(0.65, 4.05, -0.15);
+    glVertex3d(0.65, 4.05, -0.6);
+    glVertex3d(0.65, 3.8, -0.6);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, -1.0, 0.0);
+    glVertex3d(0.65, 3.8, -0.15);
+    glVertex3d(0.65, 3.8, -0.6);
+    glVertex3d(0.35, 3.8, -0.6);
+    glVertex3d(0.35, 3.8, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 1.0, 0.0);
+    glVertex3d(0.65, 4.05, -0.15);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.35, 4.05, -0.9);
+    glVertex3d(0.35, 4.05, -0.15);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, -1.0);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.65, .275, -0.9);
+    glVertex3d(0.35, .275, -0.9);
+    glVertex3d(0.35, 4.05, -0.9);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(1.0, 0.0, 0.0);
+    glVertex3d(0.65, 4.05, -0.9);
+    glVertex3d(0.65, 4.05, -0.6);
+    glVertex3d(0.65, .275, -0.6);
+    glVertex3d(0.65, .275, -0.9);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(-1.0, 0.0, 0.0);
+    glVertex3d(0.35, 4.05, -0.9);
+    glVertex3d(0.35, .275, -0.9);
+    glVertex3d(0.35, .275, -0.6);
+    glVertex3d(0.35, 4.05, -0.6);
+    glEnd();
+    
+    glBegin(GL_QUADS);
+    glNormal3d(0.0, 0.0, 1.0);
+    glVertex3d(0.35, 4.05, -0.6);
+    glVertex3d(0.35, .275, -0.6);
+    glVertex3d(0.65, .275, -0.6);
+    glVertex3d(0.65, 4.05, -0.6);
+    glEnd();
+    
+    glPopMatrix();
+}
+
+
+/*
+ void Floortest(){
+ 
+ glColor3f(.5,.5,.5);
+ glBegin(GL_QUADS);
+ glNormal3d(0.0, 1.0, 0.0);
+ glVertex3d(-23.5, -0.5, -12.5);
+ glVertex3d(-23.5, -0.5, -1.38);
+ glVertex3d(-2.5, -0.5, -1.38);
+ glVertex3d(-2.5, -0.5, -12.5);
+ glEnd();
+ 
+ 
+ }
+ 
+ void Floor2(){
+ double i, j;
+ int offset = 0;
+ for(i = 1; i <= 50; i += //2.005// 3.0){
+ for (j = 1; j <= 28; j += //0.127// .5) {
+ glColor3f(.5,.5,.5);
+ glBegin(GL_QUADS);
+ glNormal3d(0.0, 1.0, 0.0);
+ double off;
+ if(offset)off = 1.0;
+ else off = 0.0;
+ glVertex3d(-23.5+i, -0.5, -12.5+j+off);
+ glVertex3d(-23.5+i, -0.5, -12.38+j+off);
+ glVertex3d(-25.5+i, -0.5, -12.38+j+off);
+ glVertex3d(-25.5+i, -0.5, -12.5+j+off);
+ glEnd();
+ offset = !offset;
+ }
+ }
+ 
+ }*/
