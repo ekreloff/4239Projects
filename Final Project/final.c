@@ -145,7 +145,7 @@ void display()
     glUseProgram(shader[2]);
     Sphere();
     glUseProgram(0);
-    Hoop(-24.0, -.775, 2.2, 90.0);
+    Hoop(-24.0, -.775, 3.0, 90.0);
     Hoop(25.1, -.775, 1.2, -90.0);
     //  No shader for what follows
     glUseProgram(0);
@@ -359,7 +359,7 @@ void Sphere()
 }
 
 void FloorBounds(){
-    glColor3f(0.043,0.224,0.416);
+    glColor3f(0.027,0.112,0.208);
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
     glVertex3d(25.62, -0.499, -13.0);

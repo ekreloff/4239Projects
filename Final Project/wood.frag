@@ -1,7 +1,7 @@
 //  Derived from Orange Book Chapter 8 by Charles Gruenwald
 
 varying float LightIntensity;
-varying vec2 texCoord;
+//varying vec2 texCoord;
 
 //  wood frag shader
 
@@ -46,8 +46,11 @@ void main(void)
     }
     color *= LightIntensity;
     //  Apply final color
-    
-    gl_FragColor = vec4(color, 1.0) * logo;
+    if((logo.r + logo.g +logo.b)/3.0 == 1.0){
+        gl_FragColor = vec4(color, 1.0);
+    }else{
+        gl_FragColor = logo;
+    }
     /*
     if (logo.a > 0.5) {
         gl_FragColor = logo;

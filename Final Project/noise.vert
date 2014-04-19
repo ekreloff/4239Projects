@@ -49,7 +49,7 @@ void main()
     gl_TexCoord[0] = gl_Vertex;
     
     //  Texture coordinate for fragment shader
-    texCoord = gl_MultiTexCoord0.xy;
+    //texCoord = gl_MultiTexCoord0.xy;
     
     //  Return fixed transform coordinates for this vertex
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
