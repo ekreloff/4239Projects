@@ -140,7 +140,6 @@ void display()
     glUseProgram(woodShader);
     Floor();
     FloorBounds();
-    glUseProgram(0);
     glPopMatrix();
 
     
@@ -152,20 +151,10 @@ void display()
     
     
 
-    //  Select shader (0 => no shader), set uniforms
-  
-    
-//    glActiveTexture(GL_TEXTURE2);
-//glBindTexture(GL_TEXTURE_2D, texture[2]);
-//glActiveTexture(GL_TEXTURE0);
-//glBindTexture(GL_TEXTURE_2D,texture[2]);
+    glUseProgram(bumpShader);
     id = glGetUniformLocation(bumpShader,"tex1");
     if (id>=0) glUniform1i(id,2);
     
-//    glActiveTexture(GL_TEXTURE1);
-//glBindTexture(GL_TEXTURE_2D, texture[1]);
-//glActiveTexture(GL_TEXTURE0);
-//glBindTexture(GL_TEXTURE_2D,texture[1]);
     id = glGetUniformLocation(bumpShader,"tex0");
     if (id>=0) glUniform1i(id,3);
     
@@ -175,9 +164,6 @@ void display()
     //Draw Bball
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
-    glUseProgram(woodShader);
-    Floor();
-    FloorBounds();
     glUseProgram(bumpShader);
     Sphere();
     glUseProgram(0);
