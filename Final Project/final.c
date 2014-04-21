@@ -28,7 +28,7 @@
 
 
 #define MODE 3
-#define TEXTURES 1
+#define TEXTURES 3
 
 
 /*
@@ -44,7 +44,8 @@ int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
 double zoom = .75;  //Scaling factor
-int shader[MODE] = {0}; //Shaders
+int woodShader = 0; //Shaders
+int bumpShader = 0;
 int texture[TEXTURES]; //Textures
 
 // Lighting Variables
@@ -126,23 +127,58 @@ void display()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,texture[0]);
     
-    //  Select shader (0 => no shader), set uniforms
     int id;
-    glUseProgram(shader[1]);
-    id = glGetUniformLocation(shader[1],"Noise3D");
+    glUseProgram(woodShader);
+    id = glGetUniformLocation(woodShader,"Noise3D");
     if (id>=0) glUniform1i(id,1);
-        
-    id = glGetUniformLocation(shader[shadeMode],"CourtTex0");
+    
+    id = glGetUniformLocation(woodShader,"CourtTex0");
     if (id>=0) glUniform1i(id,0);
+    
+    glPushMatrix();
+    glScaled(zoom,zoom,zoom);
+    glUseProgram(woodShader);
+    Floor();
+    FloorBounds();
+    glUseProgram(0);
+    glPopMatrix();
+
+    
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D,texture[1]);
+    
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D,texture[2]);
+    
+    
+
+    //  Select shader (0 => no shader), set uniforms
+  
+    
+//    glActiveTexture(GL_TEXTURE2);
+//glBindTexture(GL_TEXTURE_2D, texture[2]);
+//glActiveTexture(GL_TEXTURE0);
+//glBindTexture(GL_TEXTURE_2D,texture[2]);
+    id = glGetUniformLocation(bumpShader,"tex1");
+    if (id>=0) glUniform1i(id,2);
+    
+//    glActiveTexture(GL_TEXTURE1);
+//glBindTexture(GL_TEXTURE_2D, texture[1]);
+//glActiveTexture(GL_TEXTURE0);
+//glBindTexture(GL_TEXTURE_2D,texture[1]);
+    id = glGetUniformLocation(bumpShader,"tex0");
+    if (id>=0) glUniform1i(id,3);
+    
+    
     
  
     //Draw Bball
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
-    glUseProgram(shader[1]);
+    glUseProgram(woodShader);
     Floor();
     FloorBounds();
-    glUseProgram(shader[2]);
+    glUseProgram(bumpShader);
     Sphere();
     glUseProgram(0);
     Hoop(-24.0, -.775, 3.0, 90.0);
@@ -293,6 +329,7 @@ void reshape(int width,int height)
  */
 int main(int argc,char* argv[])
 {
+    int n;
    //  Initialize GLUT
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
@@ -305,12 +342,22 @@ int main(int argc,char* argv[])
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
     
-   //  Load daytime textures
+    glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
+    if (n<4) Fatal("Insufficient texture Units %d\n",n);
+    
+   //  Load textures
+   glActiveTexture(GL_TEXTURE0);
    texture[0]  = LoadTexBMP("pepsicenter.bmp");
     
+   glActiveTexture(GL_TEXTURE2);
+   texture[1] = LoadTexBMP("normal.bmp");
+    
+   glActiveTexture(GL_TEXTURE3);
+   texture[2]  = LoadTexBMP("diffuse.bmp");
+    
    //  Create Shader Prog
-   shader[1] = CreateShaderProg("noise.vert","wood.frag");
-   shader[2] = CreateShaderProg("noise.vert","marble.frag");
+   woodShader = CreateShaderProg("noise.vert","wood.frag");
+   bumpShader = CreateShaderProg("bump.vert","bump.frag");
     
 
    //  Load random texture
@@ -332,7 +379,7 @@ static void Vertex(int th,int ph)
     double y =  Cos(th)*Cos(ph);
     double z =          Sin(ph);
     glNormal3d(x,y,z);
-    //glTexCoord2d(th/360.0,ph/180.0+0.5);
+    glTexCoord2d(th/360.0,ph/180.0+0.5);
     glVertex3d(x,y,z);
 }
 

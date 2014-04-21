@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6253DCCE-8815-4E05-A0BF-4AFFB027DB85</string>
+	<key>IDESourceControlProjectName</key>
+	<string>hw8</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>94976007-5DEF-40ED-B5B1-88DEE9FE1103</key>
+		<string>https://github.com/ekreloff/4239Projects</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>hw8/hw8.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>94976007-5DEF-40ED-B5B1-88DEE9FE1103</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ekreloff/4239Projects</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>94976007-5DEF-40ED-B5B1-88DEE9FE1103</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>94976007-5DEF-40ED-B5B1-88DEE9FE1103</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CSCI4239</string>
+		</dict>
+	</array>
+</dict>
+</plist>

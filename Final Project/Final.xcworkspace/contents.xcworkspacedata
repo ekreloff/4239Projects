@@ -55,6 +55,12 @@
       location = "container:"
       name = "Shaders">
       <FileRef
+         location = "group:bump.frag">
+      </FileRef>
+      <FileRef
+         location = "group:bump.vert">
+      </FileRef>
+      <FileRef
          location = "group:wood.frag">
       </FileRef>
       <FileRef

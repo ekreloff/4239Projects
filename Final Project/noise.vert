@@ -18,6 +18,7 @@ vec4 phong()
     LightIntensity = dot(L, N);
     LightIntensity *= 1.5;
     
+    
     //  Emission and ambient color
     vec4 color = gl_FrontMaterial.emission + gl_FrontLightProduct[0].ambient + gl_LightModel.ambient*gl_FrontMaterial.ambient;
     

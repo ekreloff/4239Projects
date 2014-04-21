@@ -1,5 +1,5 @@
 //  Derived from Orange Book Chapter 8 by Charles Gruenwald
-
+/*
 varying float LightIntensity;
 
 
@@ -31,13 +31,12 @@ void main(void)
 
 
 
+*/
 
 
 
 
 
-//FAILED ATTEMPT AT BUMPMAPPING (Damn tangent vectors)
-/*
 const vec4 SurfaceColor = vec4(.7, .6, .18, 1.0);
 const float BumpDensity = 16.0;
 const float BumpSize = .15;
@@ -77,6 +76,7 @@ void main(){
 
 
 //Stripes
+/*
 const vec2 StripeSize = vec2(.1,.1);
 
 
@@ -108,5 +108,5 @@ void main()
    // Uses positioning and stripes to determine final color
    gl_FragColor = vec4(color,1.0)*gl_Color; 
    
-}
- */
+}*/
+

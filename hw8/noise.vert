@@ -1,5 +1,5 @@
 // Derived from CSCI 4239 examples
-
+/*
 varying float LightIntensity;
 
 
@@ -54,11 +54,11 @@ void main()
 
 
 
-
+*/
 
 
 //FAILED ATTEMPT AT BUMPMAPPING (Damn tangent vectors)
-/*
+
 // Uniform inputs
 //uniform vec3 LightPosition;
 //uniform mat4 MVMatrix;
@@ -68,7 +68,8 @@ void main()
 // Attribute inputs
 //attribute vec4 MCVertex;
 //attribute vec3 MCNormal;
-uniform vec3 MCTangent;
+varying vec3 MCTangent;
+varying vec3 MCBinormal
 //uniform sampler2D TexCoord0;
 
 //const vec3 upVec = vec3(0.0, 1.0, 0.0);
@@ -88,8 +89,26 @@ varying vec2  ModelPos;
 
 void main()
 {
+	
+	vec3 c1 = cross(gl_Normal, vec3(0.0, 0.0, 1.0));
+	vec3 c2 = cross(gl_Normal, vec3(0.0, 1.0, 0.0));
+	
+	if(length(c1)>length(c2))
+	{
+		MCTangent = c1;
+	}
+	else
+	{
+		MCTangent = c2;
+	}
+	
+	MCTangent = normalize(MCTangent);
+	
+	MCBinormal = cross(gl_Normal, MCTangent);
+	MCBinormal = normalize(MCBinormal);
+}
     vec3 light = vec3(gl_LightSource[0].position);
-    //vec3 tangent = normalize(cross(upVec, vec3(gl_Normal)));
+//vec3 tangent = normalize(cross(upVec, vec3(gl_Normal)));
     
     
     
@@ -152,4 +171,4 @@ float phong()
         
         //  Vertex intensity
         return length(color);
-    }*/
+    }
