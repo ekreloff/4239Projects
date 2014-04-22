@@ -76,13 +76,25 @@ void display()
 {
    
    //  Light position and colors
-   float Emission[]  = {0.0,0.0,0.0,1.0};
-   float Ambient[]   = {0.3,0.3,0.3,1.0};
-   float Diffuse[]   = {1.0,1.0,1.0,1.0};
-   float Specular[]  = {1.0,1.0,1.0,1.0};
-   float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
-   float Shinyness[] = {16};
-   
+//   float Emission[]  = {0.0,0.0,0.0,1.0};
+//   float Ambient[]   = {0.3,0.3,0.3,1.0};
+//   float Diffuse[]   = {1.0,1.0,1.0,1.0};
+//   float Specular[]  = {1.0,1.0,1.0,1.0};
+//   float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
+//   float Shinyness[] = {36};
+    
+//    GLfloat ambient_light[] =
+//    GLfloat diffuse_light[] =
+//    GLfloat specular_light[] =
+//    GLfloat position_light[] = { 0.0f, 0.0f, -1.0f, 0.0f };
+
+    float Emission[]  = {0.0,0.0,0.0,1.0};
+    float Ambient[]   = { 0.2f, 0.2f, 0.2f, 1.0f };
+    float Diffuse[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float Specular[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
+    float Shinyness[] = {.6};
+    
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
    //  Enable Z-buffering in OpenGL
@@ -339,7 +351,7 @@ int main(int argc,char* argv[])
    texture[1] = LoadTexBMP("normal.bmp");
     
    glActiveTexture(GL_TEXTURE3);
-   texture[2]  = LoadTexBMP("diffuse.bmp");
+   texture[2]  = LoadTexBMP("leather.bmp");
     
    //  Create Shader Prog
    woodShader = CreateShaderProg("noise.vert","wood.frag");

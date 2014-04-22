@@ -44,12 +44,13 @@ void main(void)
     }else{
         color -= LightWood * LightGrains * noisev[2];
     }
-    color *= LightIntensity;
+    //color *= LightIntensity;
+    
     //  Apply final color
     if((logo.r + logo.g +logo.b)/3.0 == 1.0){
-        gl_FragColor = vec4(color, 1.0);
+        gl_FragColor = vec4(color, 1.0) * LightIntensity;
     }else{
-        gl_FragColor = logo;
+        gl_FragColor = logo * vec4(color, 1.0) * LightIntensity;
     }
     /*
     if (logo.a > 0.5) {

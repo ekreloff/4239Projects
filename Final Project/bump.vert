@@ -17,8 +17,7 @@ void main()
     vec4 uv_tiling = vec4(2.0, 2.0, 1.0, 1.0);
     vec3 LightPos = vec3(gl_LightSource[0].position);
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-    gl_TexCoord[0] = gl_MultiTexCoord0 * uv_tiling;
-    //gl_TexCoord[1] = gl_MultiTexCoord1;
+    gl_TexCoord[0] = gl_MultiTexCoord0;
     Vertex_Normal = gl_NormalMatrix * gl_Normal;
     vec4 view_vertex = gl_ModelViewMatrix * gl_Vertex;
     Vertex_LightDir = LightPos.xyz - view_vertex.xyz;
