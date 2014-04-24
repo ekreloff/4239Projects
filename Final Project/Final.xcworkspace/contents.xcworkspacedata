@@ -82,4 +82,7 @@
    <FileRef
       location = "group:final.c">
    </FileRef>
+   <FileRef
+      location = "group:ex32.c">
+   </FileRef>
 </Workspace>

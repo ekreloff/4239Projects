@@ -44,30 +44,42 @@ int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
 double dim=5.0;   //  Size of world
 double zoom = .75;  //Scaling factor
+int n=8;       // Number of slices
 int woodShader = 0; //Shaders
 int bumpShader = 0;
 int texture[TEXTURES]; //Textures
 
-// Lighting Variables
+// Lighting/Shadow Variables
 int lth = 90; // Lighting Azimuth
 int YLight = 5; // Y component of light
 
+
+#define Yfloor -0.49
+#define Dfloor  8
+float Nv[] = {0, -1, 0}; // Normal vector for the plane
+float Ev[] = {0, Yfloor, 0 }; // Point of the plane
+
+double inner = 1.0;
+double outer = 2.0;
+double t1 = 100.0;
+double t2 = 100.0;
 
 
 /*
  *  Prototypes
  */
 static void Vertex(int th,int ph);
-void Sphere();
+void Sphere(int shadow);
 
 void FloorBounds();
 
 void Floor();
 
-void Hoop(double x, double y, double z, double yrot);
+void Hoop(double x, double y, double z, double yrot, int shadow);
 
+void ShadowProjection(float Lv[4], float Ev[4], float Nv[4]);
 
-
+static void Torus(float x,float y,float z , float th,float ph , float S,float r);
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -89,14 +101,14 @@ void display()
 //    GLfloat position_light[] = { 0.0f, 0.0f, -1.0f, 0.0f };
 
     float Emission[]  = {0.0,0.0,0.0,1.0};
-    float Ambient[]   = { 0.2f, 0.2f, 0.2f, 1.0f };
+    float Ambient[]   = { 0.3f, 0.3f, 0.3f, 1.0f };
     float Diffuse[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
     float Specular[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
-    float Shinyness[] = {.6};
+    float Position[]  = {2*Cos(lth)*zoom,YLight*zoom,2*Sin(lth)*zoom,1.0};
+    float Shinyness[] = {36};
     
    //  Erase the window and the depth buffer
-   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
    //  Enable Z-buffering in OpenGL
    glEnable(GL_DEPTH_TEST);
    //  Undo previous transformations
@@ -177,48 +189,44 @@ void display()
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
     glUseProgram(bumpShader);
-    Sphere();
+    Sphere(0);
     glUseProgram(0);
-    Hoop(-24.0, -.775, 3.0, 90.0);
-    Hoop(25.1, -.775, 1.2, -90.0);
+    Hoop(-24.0, -.775, 3.0, 90.0, 0);
+    Hoop(25.1, -.775, 1.2, -90.0, 0);
+    //Hoop(0.0, 0.0, 0.0, 45.0, 0);
     //  No shader for what follows
     glUseProgram(0);
     glPopMatrix();
     
+    //Shadowing
+    glDisable(GL_LIGHTING);
+    //  Draw blended
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(0,0,0,0.4);
+    //  Make Z-buffer read-only
+    glDepthMask(0);
+    //  Draw flattened scene
+    glPushMatrix();
+    glScaled(zoom,zoom,zoom);
+    ShadowProjection(Position,Ev,Nv);
+    //scene();
+    Sphere(1);
+    Hoop(-24.0, -.775, 3.0, 90.0, 1);
+    Hoop(25.1, -.775, 1.2, -90.0, 1);
+    glPopMatrix();
+    //  Make Z-buffer read-write
+    glDepthMask(1);
     
-   
+    //  Undo glEnables
+    glPopAttrib();
     
-    //  Draw axes
-   
-    glColor3f(1,1,1);
-    
-   if (axes)
-   {
-      const double len=5;  //  Length of axes
-       
-       
-       
-      glBegin(GL_LINES);
-      glVertex3d(0.0,0.0,0.0);
-      glVertex3d(len,0.0,0.0);
-      glVertex3d(0.0,0.0,0.0);
-      glVertex3d(0.0,len,0.0);
-      glVertex3d(0.0,0.0,0.0);
-      glVertex3d(0.0,0.0,len);
-      glEnd();
-      //  Label axes
-      glRasterPos3d(len,0.0,0.0);
-      Print("X");
-      glRasterPos3d(0.0,len,0.0);
-      Print("Y");
-      glRasterPos3d(0.0,0.0,len);
-      Print("Z");
-   }
    //  Display parameters
    glWindowPos2i(5,5);
     /*Print("RingFreq=%.4f    LightGrains=%.4f    DarkGrains=%.4f\
              GrainThreshold=%.4f    Noisiness=%.4f    GrainScale=%.4f\
              Scale=%.4f    NoiseScale=%.4f,%.4f,%.4f",RingFreq,LightGrains,DarkGrains,GrainThreshold,Noisiness,GrainScale,Scale,NoiseScale[0],NoiseScale[1],NoiseScale[2]);*/
+    //Print("inner: %f   outer: %f   1: %f   2: %f", inner, outer, t1, t2);
    //  Render the scene and make it visible
    glFlush();
    glutSwapBuffers();
@@ -290,11 +298,23 @@ void key(unsigned char ch,int x,int y)
    //  Light position
    if (ch == '[') lth--;
    if (ch == ']') lth++;
+    
+    
+    
+    if (ch == 'q') inner += .01;
+    if (ch == 'Q') inner -= .01;
+    if (ch == 'w') outer += .01;
+    if (ch == 'W') outer -= .01;
+    if (ch == 'e') t1++;
+    if (ch == 'E') t1--;
+    if (ch == 'r') t2++;
+    if (ch == 'R') t2--;
    
     
     //Zoom
    if (ch == 'i')
         zoom += .1;
+    
    if(ch == 'o')
        if(zoom > .2)
            zoom -= .1;
@@ -366,7 +386,20 @@ int main(int argc,char* argv[])
    return 0;
 }
 
-
+void ShadowProjection(float Lv[4], float Ev[4], float Nv[4])
+{
+    float mat[16];
+    float e = Ev[0]*Nv[0] + Ev[1]*Nv[1] + Ev[2]*Nv[2];
+    float l = Lv[0]*Nv[0] + Lv[1]*Nv[1] + Lv[2]*Nv[2];
+    float c = e - l;
+    //  Create the matrix.
+    mat[0] = Nv[0]*Lv[0]+c; mat[4] = Nv[1]*Lv[0];   mat[8]  = Nv[2]*Lv[0];   mat[12] = -e*Lv[0];
+    mat[1] = Nv[0]*Lv[1];   mat[5] = Nv[1]*Lv[1]+c; mat[9]  = Nv[2]*Lv[1];   mat[13] = -e*Lv[1];
+    mat[2] = Nv[0]*Lv[2];   mat[6] = Nv[1]*Lv[2];   mat[10] = Nv[2]*Lv[2]+c; mat[14] = -e*Lv[2];
+    mat[3] = Nv[0];        mat[7] = Nv[1];        mat[11] = Nv[2];        mat[15] = -l;
+    //  Multiply modelview matrix
+    glMultMatrixf(mat);
+}
 
 /*
  *  Draw vertex in polar coordinates
@@ -381,11 +414,13 @@ static void Vertex(int th,int ph)
     glVertex3d(x,y,z);
 }
 
-void Sphere()
+
+
+void Sphere(int shadow)
 {
     int th,ph;
     //  Latitude bands
-    glColor3f(1,1,1);
+    shadow ? glColor4f(0,0,0,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
     //glTranslated(-50, 12, 0);
@@ -459,13 +494,14 @@ void Floor(){
     }
 }
 
-void Hoop(double x, double y, double z, double yrot){
+void Hoop(double x, double y, double z, double yrot, int shadow){
     glPushMatrix();
     glTranslated(x, y, z);
     glRotated(yrot, 0.0, 1.0, 0.0);
     glScaled(1.5, 1.3, 1.5);
     
-    glColor3f(.8,.8,.8);
+    shadow ? glColor4f(0,0,0,0.4) : glColor3f(.8,.8,.8);
+    
     //Backbaord front
     glBegin(GL_QUADS);
     glNormal3d(0.0, 0.0, 1.0);
@@ -517,7 +553,7 @@ void Hoop(double x, double y, double z, double yrot){
     glEnd();
     
     //Post
-    glColor3f(0.1,0.1,0.1);
+    shadow ? glColor4f(0,0,0,0.4) : glColor3f(0.1,0.1,0.1);;
     glBegin(GL_QUADS);
     glNormal3d(-1.0, 0.0, 0.0);
     glVertex3d(0.35, 3.8, -0.15);
@@ -582,6 +618,12 @@ void Hoop(double x, double y, double z, double yrot){
     glVertex3d(0.65, 4.05, -0.6);
     glEnd();
     
+    //Rim
+    //Torus(0.5, 3.8, 0.2, 0.0, 0.0, 1.0, 0.2);
+    glTranslated(0.5, 4.0, 0.3);
+    glRotated(90.0, 1.0, 0.0, 0.0);
+    glColor3f(0.93725490196, 0.29411764705, 0.15686274509);
+    glutSolidTorus(0.02/*inner*/, /*outer*/.28, 100.0, 100.0);
     glPopMatrix();
 }
 
