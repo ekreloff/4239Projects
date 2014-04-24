@@ -28,7 +28,7 @@
 
 
 #define MODE 3
-#define TEXTURES 3
+#define TEXTURES 4
 
 
 /*
@@ -47,6 +47,7 @@ double zoom = .75;  //Scaling factor
 int n=8;       // Number of slices
 int woodShader = 0; //Shaders
 int bumpShader = 0;
+int maskShader = 0;
 int texture[TEXTURES]; //Textures
 
 // Lighting/Shadow Variables
@@ -79,7 +80,6 @@ void Hoop(double x, double y, double z, double yrot, int shadow);
 
 void ShadowProjection(float Lv[4], float Ev[4], float Nv[4]);
 
-static void Torus(float x,float y,float z , float th,float ph , float S,float r);
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -197,6 +197,14 @@ void display()
     //  No shader for what follows
     glUseProgram(0);
     glPopMatrix();
+    
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D,texture[3]);
+    
+    glUseProgram(maskShader);
+    id = glGetUniformLocation(maskShader, "mask");
+    if (id>=0) glUniform1i(id,4);
+    
     
     //Shadowing
     glDisable(GL_LIGHTING);
@@ -361,7 +369,7 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
     
     glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
-    if (n<4) Fatal("Insufficient texture Units %d\n",n);
+    if (n<6) Fatal("Insufficient texture Units %d\n",n);
     
    //  Load textures
    glActiveTexture(GL_TEXTURE0);
@@ -373,9 +381,13 @@ int main(int argc,char* argv[])
    glActiveTexture(GL_TEXTURE3);
    texture[2]  = LoadTexBMP("leather.bmp");
     
+   glActiveTexture(GL_TEXTURE4);
+   texture[3] = LoadTexBMP("mask.bmp");
+    
    //  Create Shader Prog
    woodShader = CreateShaderProg("noise.vert","wood.frag");
    bumpShader = CreateShaderProg("bump.vert","bump.frag");
+   maskShader = CreateShaderProg(NULL, "mask.frag");
     
 
    //  Load random texture
@@ -420,7 +432,7 @@ void Sphere(int shadow)
 {
     int th,ph;
     //  Latitude bands
-    shadow ? glColor4f(0,0,0,0.2) : glColor3f(1.0,1.0,1.0);
+    shadow ? glColor4f(0.1,0.1,0.1,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
     //glTranslated(-50, 12, 0);
@@ -500,7 +512,7 @@ void Hoop(double x, double y, double z, double yrot, int shadow){
     glRotated(yrot, 0.0, 1.0, 0.0);
     glScaled(1.5, 1.3, 1.5);
     
-    shadow ? glColor4f(0,0,0,0.4) : glColor3f(.8,.8,.8);
+    shadow ? glColor4f(0.1,0.1,0.1,0.4) : glColor3f(.8,.8,.8);
     
     //Backbaord front
     glBegin(GL_QUADS);
@@ -553,7 +565,7 @@ void Hoop(double x, double y, double z, double yrot, int shadow){
     glEnd();
     
     //Post
-    shadow ? glColor4f(0,0,0,0.4) : glColor3f(0.1,0.1,0.1);;
+    shadow ? glColor4f(0.1,0.1,0.1,0.4) : glColor3f(0.1,0.1,0.1);;
     glBegin(GL_QUADS);
     glNormal3d(-1.0, 0.0, 0.0);
     glVertex3d(0.35, 3.8, -0.15);

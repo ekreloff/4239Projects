@@ -55,6 +55,9 @@
       location = "container:"
       name = "Shaders">
       <FileRef
+         location = "group:mask.frag">
+      </FileRef>
+      <FileRef
          location = "group:bump.frag">
       </FileRef>
       <FileRef
