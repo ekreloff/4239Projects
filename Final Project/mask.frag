@@ -2,6 +2,7 @@
 
 //Stripes
 uniform sampler2D mask;
+uniform float alphaDist;
 
 void main()
 {
@@ -12,7 +13,7 @@ void main()
     vec4 maskVec = texture2D(mask, texPosition);
     float alpha = (maskVec.r + maskVec.g + maskVec.b)/3.0;
     vec4 color = maskVec * vec4(0.1,0.1,0.1,(1.0 - alpha));
-    color.a *= 0.65;
+    color.a *= 10.0/(alphaDist + 11.0) - 0.35;
    
     gl_FragColor = color;
 

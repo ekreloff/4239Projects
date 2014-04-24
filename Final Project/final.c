@@ -52,7 +52,8 @@ int texture[TEXTURES]; //Textures
 
 // Lighting/Shadow Variables
 int lth = 90; // Lighting Azimuth
-int YLight = 5; // Y component of light
+int YLight = 25; // Y component of light
+double bounceDist = 5;
 
 
 #define Yfloor -0.49
@@ -204,6 +205,8 @@ void display()
     glUseProgram(maskShader);
     id = glGetUniformLocation(maskShader, "mask");
     if (id>=0) glUniform1i(id,4);
+    id = glGetUniformLocation(maskShader, "alphaDist");
+    if (id>=0) glUniform1f(id,bounceDist);
     
     
     //Shadowing
@@ -217,6 +220,7 @@ void display()
     //  Draw flattened scene
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
+    Position[1] -= zoom*10.0;
     ShadowProjection(Position,Ev,Nv);
     //scene();
     Sphere(1);
@@ -242,6 +246,15 @@ void display()
 
 void idle()
 {
+    //  Elapsed time in seconds
+    double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+    
+    
+    
+    bounceDist = (9.0)*cos(t*3.0) + 7.95;
+    
+    
+    
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -308,7 +321,7 @@ void key(unsigned char ch,int x,int y)
    if (ch == ']') lth++;
     
     
-    
+    /*
     if (ch == 'q') inner += .01;
     if (ch == 'Q') inner -= .01;
     if (ch == 'w') outer += .01;
@@ -316,8 +329,10 @@ void key(unsigned char ch,int x,int y)
     if (ch == 'e') t1++;
     if (ch == 'E') t1--;
     if (ch == 'r') t2++;
-    if (ch == 'R') t2--;
+    if (ch == 'R') t2--;*/
    
+    if (ch == 'q') bounceDist += 0.5;
+    if (ch == 'Q') bounceDist -= 0.5;
     
     //Zoom
    if (ch == 'i')
@@ -367,6 +382,7 @@ int main(int argc,char* argv[])
    glutReshapeFunc(reshape);
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
+   glutIdleFunc(idle);
     
     glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
     if (n<6) Fatal("Insufficient texture Units %d\n",n);
@@ -435,7 +451,7 @@ void Sphere(int shadow)
     shadow ? glColor4f(0.1,0.1,0.1,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
-    //glTranslated(-50, 12, 0);
+    shadow ? glTranslated(0, 0, -bounceDist - 2.0) : glTranslated(0, bounceDist, 0);
     for (ph=-90;ph<90;ph+=5)
     {
         glBegin(GL_QUAD_STRIP);
