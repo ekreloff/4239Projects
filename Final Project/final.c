@@ -39,12 +39,13 @@
 int shadeMode = 0; //Shader Mode
 int th=0;         //  Azimuth of view angle
 int ph=0;         //  Elevation of view angle
-int fov=55;       //  Field of view (for perspective)
+int fov=10;       //  Field of view (for perspective)
 int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
-double dim=5.0;   //  Size of world
-double zoom = .75;  //Scaling factor
+double dim=100.0;   //  Size of world
+double zoom = 1.0;  //Scaling factor
 int n=8;       // Number of slices
+int movement = 1;
 int woodShader = 0; //Shaders
 int bumpShader = 0;
 int maskShader = 0;
@@ -120,7 +121,11 @@ void display()
     double Ex = -2*dim*Sin(th)*Cos(ph);
     double Ey = +2*dim        *Sin(ph);
     double Ez = +2*dim*Cos(th)*Cos(ph);
+    
+    
     gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
+    gluPerspective(360.0f,asp,1.0f,3000000.0f);
+
     
     
    //  Draw light position as sphere (still no lighting here)
@@ -250,9 +255,11 @@ void idle()
     double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
     
     
-    
-    bounceDist = (9.0)*cos(t*3.0) + 7.95;
-    
+    if (movement) {
+        bounceDist = (9.0)*cos(t*3.0) + 7.95;
+    }else{
+        bounceDist = 0.0;
+    }
     
     
    //  Tell GLUT it is necessary to redisplay the scene
@@ -331,20 +338,25 @@ void key(unsigned char ch,int x,int y)
     if (ch == 'r') t2++;
     if (ch == 'R') t2--;*/
    
-    if (ch == 'q') bounceDist += 0.5;
-    if (ch == 'Q') bounceDist -= 0.5;
     
+    //if (ch == 'q') bounceDist += 0.5;
+    //if (ch == 'Q') bounceDist -= 0.5;
+    if (ch == 'q') movement = 1-movement;
     //Zoom
    if (ch == 'i')
-        zoom += .1;
+       if (zoom < 30.0) {
+           zoom += 1.0;
+       }
+    
     
    if(ch == 'o')
-       if(zoom > .2)
-           zoom -= .1;
+       if(zoom  > 1.0){
+           zoom -= 1.0;
+       }
     
     
     //Change axis on and off
-    if (ch == 'z') axes = !axes;
+    //if (ch == 'z') axes = !axes;
     
    //  Reproject
     Project(fov,asp,dim);
