@@ -45,7 +45,7 @@ double asp=1.0;     //  Aspect ratio
 double dim=100.0;   //  Size of world
 double zoom = 1.0;  //Scaling factor
 int n=8;       // Number of slices
-int movement = 1;
+int movement = 0;
 int woodShader = 0; //Shaders
 int bumpShader = 0;
 int maskShader = 0;
@@ -57,7 +57,7 @@ int YLight = 25; // Y component of light
 double bounceDist = 5;
 
 
-#define Yfloor -0.49
+#define Yfloor -0.24
 #define Dfloor  8
 float Nv[] = {0, -1, 0}; // Normal vector for the plane
 float Ev[] = {0, Yfloor, 0 }; // Point of the plane
@@ -224,11 +224,25 @@ void display()
     glDepthMask(0);
     //  Draw flattened scene
     glPushMatrix();
-    glScaled(zoom,zoom,zoom);
-    Position[1] -= zoom*10.0;
+    glScaled(zoom*1.1,zoom,2.5*zoom);
     ShadowProjection(Position,Ev,Nv);
-    //scene();
     Sphere(1);
+    glRotated(180, 0,1,0);
+    Sphere(1);
+
+    glPopMatrix();
+    glPushMatrix();
+    glScaled(zoom*2.5,zoom,zoom*1.1);
+    ShadowProjection(Position,Ev,Nv);
+    glRotated(90, 0,1,0);
+
+    Sphere(1);
+    glRotated(180, 0,1,0);
+
+    Sphere(1);
+    glPopMatrix();
+    glPopMatrix();
+    glScaled(zoom,zoom,zoom);
     Hoop(-24.0, -.775, 3.0, 90.0, 1);
     Hoop(25.1, -.775, 1.2, -90.0, 1);
     glPopMatrix();
@@ -252,13 +266,15 @@ void display()
 void idle()
 {
     //  Elapsed time in seconds
-    double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+    double t;
     
     
     if (movement) {
-        bounceDist = (9.0)*cos(t*3.0) + 7.95;
+        t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+        bounceDist = (9.0)*cos(t*3.0) + 9.0;
     }else{
         bounceDist = 0.0;
+        t = 0;
     }
     
     
@@ -312,7 +328,8 @@ void key(unsigned char ch,int x,int y)
       th = ph = 0;
       zoom = 1;
    }
-   //  Change field of view angle
+   /*
+    //  Change field of view angle
    if (ch == '9' && ch>1)
       fov--;
    if (ch == '0' && ch<179)
@@ -328,7 +345,7 @@ void key(unsigned char ch,int x,int y)
    if (ch == ']') lth++;
     
     
-    /*
+    
     if (ch == 'q') inner += .01;
     if (ch == 'Q') inner -= .01;
     if (ch == 'w') outer += .01;
@@ -463,7 +480,7 @@ void Sphere(int shadow)
     shadow ? glColor4f(0.1,0.1,0.1,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
-    shadow ? glTranslated(0, 0, -bounceDist - 2.0) : glTranslated(0, bounceDist, 0);
+    shadow ? glTranslated(0, 0, -bounceDist - 1.0) : glTranslated(0, bounceDist, 0);
     for (ph=-90;ph<90;ph+=5)
     {
         glBegin(GL_QUAD_STRIP);
@@ -482,34 +499,34 @@ void FloorBounds(){
     glColor3f(0.027,0.112,0.208);
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.0);
-    glVertex3d(25.62, -0.499, -10.47);
-    glVertex3d(-24.5, -0.499, -10.47);
-    glVertex3d(-24.5, -0.499, -13.0);
+    glVertex3d(25.62, -0.24, -13.0);
+    glVertex3d(25.62, -0.24, -10.47);
+    glVertex3d(-24.5, -0.24, -10.47);
+    glVertex3d(-24.5, -0.24, -13.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, 17.0);
-    glVertex3d(25.62, -0.499, 14.42);
-    glVertex3d(-24.5, -0.499, 14.42);
-    glVertex3d(-24.5, -0.499, 17.0);
+    glVertex3d(25.62, -0.24, 17.0);
+    glVertex3d(25.62, -0.24, 14.42);
+    glVertex3d(-24.5, -0.24, 14.42);
+    glVertex3d(-24.5, -0.24, 17.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(-24.5, -0.499, -13.0);
-    glVertex3d(-28.5, -0.499, -13.0);
-    glVertex3d(-28.5, -0.499, 17.0);
-    glVertex3d(-24.5, -0.499, 17.0);
+    glVertex3d(-24.5, -0.24, -13.0);
+    glVertex3d(-28.5, -0.24, -13.0);
+    glVertex3d(-28.5, -0.24, 17.0);
+    glVertex3d(-24.5, -0.24, 17.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.499, -13.0);
-    glVertex3d(25.62, -0.499, 17.0);
-    glVertex3d(29.62, -0.499, 17.0);
-    glVertex3d(29.62, -0.499, -13.0);
+    glVertex3d(25.62, -0.24, -13.0);
+    glVertex3d(25.62, -0.24, 17.0);
+    glVertex3d(29.62, -0.24, 17.0);
+    glVertex3d(29.62, -0.24, -13.0);
     glEnd();
 }
 
@@ -524,10 +541,10 @@ void Floor(){
             double off;
             if(offset)off = 1.0;
             else off = 0.0;
-            glTexCoord2d(0,1); glVertex3d(-23.5+i, -0.5, -12.5+j+off);
-            glTexCoord2d(0,0); glVertex3d(-23.5+i, -0.5, -12.38+j+off);
-            glTexCoord2d(1,0); glVertex3d(-25.5+i, -0.5, -12.38+j+off);
-            glTexCoord2d(1,1); glVertex3d(-25.5+i, -0.5, -12.5+j+off);
+            glTexCoord2d(0,1); glVertex3d(-23.5+i, -0.25, -12.5+j+off);
+            glTexCoord2d(0,0); glVertex3d(-23.5+i, -0.25, -12.38+j+off);
+            glTexCoord2d(1,0); glVertex3d(-25.5+i, -0.25, -12.38+j+off);
+            glTexCoord2d(1,1); glVertex3d(-25.5+i, -0.25, -12.5+j+off);
             glEnd();
             offset = !offset;
         }

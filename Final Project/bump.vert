@@ -14,7 +14,6 @@ varying float material_shininess;
 
 void main()
 {
-    vec4 uv_tiling = vec4(2.0, 2.0, 1.0, 1.0);
     vec3 LightPos = vec3(gl_LightSource[0].position);
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_TexCoord[0] = gl_MultiTexCoord0;
