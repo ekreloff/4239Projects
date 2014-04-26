@@ -134,7 +134,7 @@ void display()
     
     
     gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
-    gluPerspective(360.0f,asp,1.0f,3000000.0f);
+    gluPerspective(360.0f,asp,1.0f,30.0f);
 
    //  OpenGL should normalize normal vectors
    glEnable(GL_NORMALIZE);
