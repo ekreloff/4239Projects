@@ -13,7 +13,7 @@ void main()
     vec4 maskVec = texture2D(mask, texPosition);
     float alpha = (maskVec.r + maskVec.g + maskVec.b)/3.0;
     vec4 color = maskVec * vec4(0.1,0.1,0.1,(1.0 - alpha));
-    color.a *= 6.0/(alphaDist + 6.0) - 0.5;
+    color.a *= 4.0/(alphaDist + 4.0) - 0.5;
    
     gl_FragColor = color;
 

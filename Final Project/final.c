@@ -49,7 +49,14 @@ int movement = 0;
 int woodShader = 0; //Shaders
 int bumpShader = 0;
 int maskShader = 0;
+int dofShader = 0;
+int depthShader = 0;
 int texture[TEXTURES]; //Textures
+unsigned int img;   //  Image texture
+int W,H;            //  Texture dimensions
+int Nt=1;            //  Texture passes
+int MaxTexSize;     //  Maximum texture size
+float dX,dY;        //  Image pixel offset
 
 // Lighting/Shadow Variables
 int lth = 90; // Lighting Azimuth
@@ -110,7 +117,7 @@ void display()
     float Shinyness[] = {36};
     
    //  Erase the window and the depth buffer
-   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
    //  Enable Z-buffering in OpenGL
    glEnable(GL_DEPTH_TEST);
    //  Undo previous transformations
@@ -154,7 +161,7 @@ void display()
    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
     
     //  Texture binding
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D,texture[0]);
     
     int id;
@@ -163,7 +170,7 @@ void display()
     if (id>=0) glUniform1i(id,1);
     
     id = glGetUniformLocation(woodShader,"CourtTex0");
-    if (id>=0) glUniform1i(id,0);
+    if (id>=0) glUniform1i(id,2);
     
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
@@ -173,20 +180,20 @@ void display()
     glPopMatrix();
 
     
-    glActiveTexture(GL_TEXTURE2);
+    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D,texture[1]);
     
-    glActiveTexture(GL_TEXTURE3);
+    glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D,texture[2]);
     
     
 
     glUseProgram(bumpShader);
     id = glGetUniformLocation(bumpShader,"tex1");
-    if (id>=0) glUniform1i(id,2);
+    if (id>=0) glUniform1i(id,3);
     
     id = glGetUniformLocation(bumpShader,"tex0");
-    if (id>=0) glUniform1i(id,3);
+    if (id>=0) glUniform1i(id,4);
     
     
     
@@ -199,17 +206,16 @@ void display()
     glUseProgram(0);
     Hoop(-24.0, -.775, 3.0, 90.0, 0);
     Hoop(25.1, -.775, 1.2, -90.0, 0);
-    //Hoop(0.0, 0.0, 0.0, 45.0, 0);
     //  No shader for what follows
     glUseProgram(0);
     glPopMatrix();
     
-    glActiveTexture(GL_TEXTURE4);
+    glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_2D,texture[3]);
     
     glUseProgram(maskShader);
     id = glGetUniformLocation(maskShader, "mask");
-    if (id>=0) glUniform1i(id,4);
+    if (id>=0) glUniform1i(id,5);
     id = glGetUniformLocation(maskShader, "alphaDist");
     if (id>=0) glUniform1f(id,bounceDist);
     
@@ -224,23 +230,11 @@ void display()
     glDepthMask(0);
     //  Draw flattened scene
     glPushMatrix();
-    glScaled(zoom*1.1,zoom,2.5*zoom);
+    glScaled(zoom*1.1,zoom,2.3*zoom);
     ShadowProjection(Position,Ev,Nv);
     Sphere(1);
     glRotated(180, 0,1,0);
     Sphere(1);
-
-    glPopMatrix();
-    glPushMatrix();
-    glScaled(zoom*2.5,zoom,zoom*1.1);
-    ShadowProjection(Position,Ev,Nv);
-    glRotated(90, 0,1,0);
-
-    Sphere(1);
-    glRotated(180, 0,1,0);
-
-    Sphere(1);
-    glPopMatrix();
     glPopMatrix();
     glScaled(zoom,zoom,zoom);
     Hoop(-24.0, -.775, 3.0, 90.0, 1);
@@ -251,6 +245,47 @@ void display()
     
     //  Undo glEnables
     glPopAttrib();
+    
+   //  Set shader
+    glUseProgram(dofShader);
+    
+    //  Set offsets
+    id = glGetUniformLocation(dofShader,"dX");
+    if (id>=0) glUniform1f(id,dX);
+    id = glGetUniformLocation(dofShader,"dY");
+    if (id>=0) glUniform1f(id,dY);
+    
+    //  Disable depth
+    glDisable(GL_DEPTH_TEST);
+    
+    //  Indentity projections
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    //  Shader passes
+    for (int k=0;k<Nt;k++)
+    {
+        //glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,img);
+        //  Copy original scene to texture
+        glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,0,0,W,H,0);
+        
+        //  Redraw the texture
+        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0,0); glVertex2f(-1,-1);
+        glTexCoord2f(0,1); glVertex2f(-1,+1);
+        glTexCoord2f(1,1); glVertex2f(+1,+1);
+        glTexCoord2f(1,0); glVertex2f(+1,-1);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+    }
+    
+    //  Shader off
+    glUseProgram(0);
     
    //  Display parameters
    glWindowPos2i(5,5);
@@ -268,16 +303,15 @@ void idle()
     //  Elapsed time in seconds
     double t;
     
-    
     if (movement) {
         t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-        bounceDist = (9.0)*cos(t*3.0) + 9.0;
+        bounceDist = 5.0*cos(t*3.0) + 5.0;
     }else{
         bounceDist = 0.0;
         t = 0;
     }
     
-    
+    Project(fov,asp,dim);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -370,13 +404,17 @@ void key(unsigned char ch,int x,int y)
        if(zoom  > 1.0){
            zoom -= 1.0;
        }
-    
+    //  Passes
+       if (ch == 'N' && Nt>1)
+           Nt--;
+       if (ch == 'n')
+           Nt++;
     
     //Change axis on and off
     //if (ch == 'z') axes = !axes;
     
    //  Reproject
-    Project(fov,asp,dim);
+   Project(fov,asp,dim);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -390,8 +428,17 @@ void reshape(int width,int height)
    asp = (height>0) ? (double)width/height : 1;
    //  Set the viewport to the entire window
    glViewport(0,0, width,height);
+    //  Set size of texture
+    W = width;
+    H = height;
+    if (W>MaxTexSize) W = MaxTexSize;
+    if (H>MaxTexSize) H = MaxTexSize;
+    //  Set texture offsets for kernel
+    dX = 1.0/W;
+    dY = 1.0/H;
    //  Set projection
-    Project(fov,asp,dim);
+   Project(fov,asp,dim);
+   glutPostRedisplay();
 }
 
 /*
@@ -415,28 +462,44 @@ int main(int argc,char* argv[])
     
     glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
     if (n<6) Fatal("Insufficient texture Units %d\n",n);
-    
+    //  Maximum texture size
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE,&MaxTexSize);
+    //  Background color
+    //glClearColor(0.5,0.5,0.5,1.0);
    //  Load textures
-   glActiveTexture(GL_TEXTURE0);
+   glActiveTexture(GL_TEXTURE2);
    texture[0]  = LoadTexBMP("pepsicenter.bmp");
     
-   glActiveTexture(GL_TEXTURE2);
+   glActiveTexture(GL_TEXTURE3);
    texture[1] = LoadTexBMP("normal.bmp");
     
-   glActiveTexture(GL_TEXTURE3);
+   glActiveTexture(GL_TEXTURE4);
    texture[2]  = LoadTexBMP("leather.bmp");
     
-   glActiveTexture(GL_TEXTURE4);
+   glActiveTexture(GL_TEXTURE5);
    texture[3] = LoadTexBMP("mask.bmp");
     
    //  Create Shader Prog
    woodShader = CreateShaderProg("noise.vert","wood.frag");
    bumpShader = CreateShaderProg("bump.vert","bump.frag");
    maskShader = CreateShaderProg(NULL, "mask.frag");
+   dofShader = CreateShaderProg(NULL,"blur.frag");
+    //depthShader = CreateShaderProg("depth.vert", "depth.frag");
     
+    //  Load random texture
+    CreateNoise3D(GL_TEXTURE1);
+    
+    //glActiveTexture(GL_TEXTURE0);
+    //  Image texture
+    
+    glGenTextures(1,&img);
+    glBindTexture(GL_TEXTURE_2D,img);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
 
-   //  Load random texture
-   CreateNoise3D(GL_TEXTURE1);
+   
 
    //  Pass control to GLUT so it can interact with the user
    glutMainLoop();
@@ -480,7 +543,7 @@ void Sphere(int shadow)
     shadow ? glColor4f(0.1,0.1,0.1,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
-    shadow ? glTranslated(0, 0, -bounceDist - 1.0) : glTranslated(0, bounceDist, 0);
+    shadow ? glTranslated(0, 0, -bounceDist - 0.9) : glTranslated(0, bounceDist, -0.15);
     for (ph=-90;ph<90;ph+=5)
     {
         glBegin(GL_QUAD_STRIP);
