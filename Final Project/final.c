@@ -29,7 +29,7 @@
 
 #define MODE 3
 #define TEXTURES 4
-
+#define TEST 1
 
 /*
  *  Global variables 
@@ -52,7 +52,9 @@ int maskShader = 0;
 int dofShader = 0;
 int depthShader = 0;
 int texture[TEXTURES]; //Textures
+unsigned int defaultTextures[2];
 unsigned int img;   //  Image texture
+unsigned int depthTexture;
 int W,H;            //  Texture dimensions
 int Nt=1;            //  Texture passes
 int MaxTexSize;     //  Maximum texture size
@@ -95,7 +97,7 @@ void ShadowProjection(float Lv[4], float Ev[4], float Nv[4]);
  */
 void display()
 {
-   
+   /*
    //  Light position and colors
 //   float Emission[]  = {0.0,0.0,0.0,1.0};
 //   float Ambient[]   = {0.3,0.3,0.3,1.0};
@@ -108,6 +110,7 @@ void display()
 //    GLfloat diffuse_light[] =
 //    GLfloat specular_light[] =
 //    GLfloat position_light[] = { 0.0f, 0.0f, -1.0f, 0.0f };
+    */
 
     float Emission[]  = {0.0,0.0,0.0,1.0};
     float Ambient[]   = { 0.3f, 0.3f, 0.3f, 1.0f };
@@ -133,14 +136,6 @@ void display()
     gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
     gluPerspective(360.0f,asp,1.0f,3000000.0f);
 
-    
-    
-   //  Draw light position as sphere (still no lighting here)
-   glColor3f(1,1,1);
-   glPushMatrix();
-   glTranslated(Position[0],Position[1],Position[2]);
-   glutSolidSphere(0.03,10,10);
-   glPopMatrix();
    //  OpenGL should normalize normal vectors
    glEnable(GL_NORMALIZE);
    //  Enable lighting
@@ -246,6 +241,12 @@ void display()
     //  Undo glEnables
     glPopAttrib();
     
+    
+    //GRRAB THE DEPTH BUFFER
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D, defaultTextures[1]);
+    glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT16,0,0,W,H,0);
+   
    //  Set shader
     glUseProgram(dofShader);
     
@@ -254,6 +255,8 @@ void display()
     if (id>=0) glUniform1f(id,dX);
     id = glGetUniformLocation(dofShader,"dY");
     if (id>=0) glUniform1f(id,dY);
+    id = glGetUniformLocation(dofShader,"depthtex");
+    if (id>=0) glUniform1i(id,6);
     
     //  Disable depth
     glDisable(GL_DEPTH_TEST);
@@ -265,10 +268,10 @@ void display()
     glLoadIdentity();
     
     //  Shader passes
-    for (int k=0;k<Nt;k++)
+    for (int k=TEST;k<Nt;k++)
     {
-        //glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,img);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,defaultTextures[0]);
         //  Copy original scene to texture
         glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,0,0,W,H,0);
         
@@ -492,13 +495,20 @@ int main(int argc,char* argv[])
     //glActiveTexture(GL_TEXTURE0);
     //  Image texture
     
-    glGenTextures(1,&img);
-    glBindTexture(GL_TEXTURE_2D,img);
+    glGenTextures(2,defaultTextures);
+    glBindTexture(GL_TEXTURE_2D,defaultTextures[0]);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-
+    
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_2D,defaultTextures[1]);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    
    
 
    //  Pass control to GLUT so it can interact with the user
@@ -605,9 +615,9 @@ void Floor(){
             if(offset)off = 1.0;
             else off = 0.0;
             glTexCoord2d(0,1); glVertex3d(-23.5+i, -0.25, -12.5+j+off);
-            glTexCoord2d(0,0); glVertex3d(-23.5+i, -0.25, -12.38+j+off);
-            glTexCoord2d(1,0); glVertex3d(-25.5+i, -0.25, -12.38+j+off);
-            glTexCoord2d(1,1); glVertex3d(-25.5+i, -0.25, -12.5+j+off);
+            glTexCoord2d(0,0); glVertex3d(-23.5+i, -0.25, -12.36+j+off);
+            glTexCoord2d(1,0); glVertex3d(-25.6+i, -0.25, -12.36+j+off);
+            glTexCoord2d(1,1); glVertex3d(-25.6+i, -0.25, -12.5+j+off);
             glEnd();
             offset = !offset;
         }

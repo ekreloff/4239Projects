@@ -18,7 +18,7 @@ const float Scale            = 1.2;
 
 const vec3 LightWood  = vec3(1.0,0.894,0.628);
 const vec3 DarkWood   = vec3(0.561,0.366,0.15);
-const vec3 NoiseScale = vec3(0.1,1.35,0.6);
+const vec3 NoiseScale = vec3(0.2,1.55,1.8);
 
 
 
@@ -48,7 +48,7 @@ void main(void)
     
     //  Apply final color
     if((logo.r + logo.g +logo.b)/3.0 == 1.0){
-        gl_FragColor = vec4(color, 1.0) * LightIntensity;
+        gl_FragColor = vec4(color, 1.0) * LightIntensity*1.1;
     }else{
         gl_FragColor = logo * vec4(color, 1.0) * LightIntensity;
     }

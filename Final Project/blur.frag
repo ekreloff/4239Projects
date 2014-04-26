@@ -6,10 +6,16 @@
 uniform float dX;
 uniform float dY;
 uniform sampler2D img;
+uniform sampler2D depthtex;
 
 vec4 sample(float dx,float dy)
 {
    return texture2D(img,gl_TexCoord[0].st+vec2(dx,dy));
+}
+
+vec4 sample2(float dx,float dy)
+{
+    return texture2D(depthtex,gl_TexCoord[0].st+vec2(dx,dy));
 }
 
 void main()
@@ -19,4 +25,5 @@ void main()
    gl_FragColor = one*sample(-dX,+dY) + two*sample(0.0,+dY) + one*sample(+dX,+dY)
                 + two*sample(-dX,0.0) + one*sample(0.0,0.0) + two*sample(+dX,0.0)
                 + one*sample(-dX,-dY) + two*sample(0.0,-dY) + one*sample(+dX,-dY);
+    gl_FragColor = sample2(1700.0, 1100.0);
 }
