@@ -76,6 +76,16 @@ double outer = 2.0;
 double t1 = 100.0;
 double t2 = 100.0;
 
+int showFocus = 0;
+float focalLength = 20.0; //focal length in mm
+float fstop = 13.0;//75.0;
+float focalDepth = 3.0;
+
+float ndofstart = 0.3; //near dof blur start
+float ndofdist = 0.4; //near dof blur falloff distance
+float fdofstart = 0.3; //far dof blur start
+float fdofdist = 0.5; //far dof blur falloff distance
+
 
 /*
  *  Prototypes
@@ -246,16 +256,63 @@ void display()
     glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_2D, defaultTextures[1]);
     glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT16,0,0,W,H,0);
+    
+    //Grab scene
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,defaultTextures[0]);
+    //  Copy original scene to texture
+    glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,0,0,W,H,0);
    
    //  Set shader
     glUseProgram(dofShader);
     
     //  Set offsets
+    /*
+    uniform sampler2D bgl_RenderedTexture;
+    uniform sampler2D bgl_DepthTexture;
+    uniform float bgl_RenderedTextureWidth;
+    uniform float bgl_RenderedTextureHeight;
+    uniform float focalDepth;  //focal distance value in meters, but you may use autofocus option below
+    uniform float focalLength; //focal length in mm
+    uniform float fstop; //f-stop value
+    uniform bool showFocus; //show debug focus point and focal range (red = focal point, green = focal range)
+    
+    
+    float ndofstart = 1.0; //near dof blur start
+    float ndofdist = 2.0; //near dof blur falloff distance
+    float fdofstart = 1.0; //far dof blur start
+    float fdofdist = 3.0; //far dof blur falloff distance
+    */
+    
     id = glGetUniformLocation(dofShader,"dX");
     if (id>=0) glUniform1f(id,dX);
     id = glGetUniformLocation(dofShader,"dY");
     if (id>=0) glUniform1f(id,dY);
-    id = glGetUniformLocation(dofShader,"depthtex");
+    id = glGetUniformLocation(dofShader,"bgl_RenderedTextureWidth");
+    if (id>=0) glUniform1f(id,W);
+    id = glGetUniformLocation(dofShader,"bgl_RenderedTextureHeight");
+    if (id>=0) glUniform1f(id,H);
+    id = glGetUniformLocation(dofShader,"focalDepth");
+    if (id>=0) glUniform1f(id,focalDepth);
+    id = glGetUniformLocation(dofShader,"focalLength");
+    if (id>=0) glUniform1f(id,focalLength);
+    id = glGetUniformLocation(dofShader,"fstop");
+    if (id>=0) glUniform1f(id,fstop);
+    id = glGetUniformLocation(dofShader,"showFocus");
+    if (id>=0) glUniform1i(id,showFocus);
+    id = glGetUniformLocation(dofShader,"ndofstart");
+    if (id>=0) glUniform1f(id,ndofstart);
+    id = glGetUniformLocation(dofShader,"ndofdist");
+    if (id>=0) glUniform1f(id,ndofdist);
+    id = glGetUniformLocation(dofShader,"fdofstart");
+    if (id>=0) glUniform1f(id,fdofstart);
+    id = glGetUniformLocation(dofShader,"fdofdist");
+    if (id>=0) glUniform1f(id,fdofdist);
+    
+    
+    id = glGetUniformLocation(dofShader,"img");
+    if (id>=0) glUniform1i(id,0);
+    id = glGetUniformLocation(dofShader,"bgl_DepthTexture");
     if (id>=0) glUniform1i(id,6);
     
     //  Disable depth
@@ -290,11 +347,13 @@ void display()
     //  Shader off
     glUseProgram(0);
     
+    
+    
    //  Display parameters
    glWindowPos2i(5,5);
-    /*Print("RingFreq=%.4f    LightGrains=%.4f    DarkGrains=%.4f\
-             GrainThreshold=%.4f    Noisiness=%.4f    GrainScale=%.4f\
-             Scale=%.4f    NoiseScale=%.4f,%.4f,%.4f",RingFreq,LightGrains,DarkGrains,GrainThreshold,Noisiness,GrainScale,Scale,NoiseScale[0],NoiseScale[1],NoiseScale[2]);*/
+   Print("focalLength=%.4f    fstop=%.4f    focalDepth=%.4f showFocus=%d   ndofstart=%.4f   ndofdist=%.4f   fdofstart=%.4f   fdofdist=%.4f"
+         ,focalLength,fstop,focalDepth,showFocus,ndofstart,ndofdist,fdofstart, fdofdist);
+    
     //Print("inner: %f   outer: %f   1: %f   2: %f", inner, outer, t1, t2);
    //  Render the scene and make it visible
    glFlush();
@@ -400,13 +459,31 @@ void key(unsigned char ch,int x,int y)
    if (ch == 'i')
        if (zoom < 30.0) {
            zoom += 1.0;
+           //fstop -= 2.5;
        }
+    if(ch == 'o')
+        if(zoom  > 1.0){
+            zoom -= 1.0;
+            //fstop += 2.5;
+        }
     
+    if (ch == 'w') showFocus = 1 - showFocus;
+    if (ch == 'e') focalLength++;
+    if (ch == 'E') focalLength--;
+    if (ch == 'r') fstop++;
+    if (ch == 'R') fstop--;
+    if (ch == 't') focalDepth++;
+    if (ch == 'T') focalDepth--;
+    if (ch == 'y') ndofstart += 0.1;
+    if (ch == 'Y') ndofstart -= 0.1;
+    if (ch == 'u') ndofdist += 0.1;
+    if (ch == 'U') ndofdist -= 0.1;
+    if (ch == 'a') fdofstart += 0.1;
+    if (ch == 'A') fdofstart -= 0.1;
+    if (ch == 's') fdofdist += 0.1;
+    if (ch == 'S') fdofdist -= 0.1;
     
-   if(ch == 'o')
-       if(zoom  > 1.0){
-           zoom -= 1.0;
-       }
+   
     //  Passes
        if (ch == 'N' && Nt>1)
            Nt--;
