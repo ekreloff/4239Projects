@@ -1,12 +1,13 @@
 /* *******************************************************
- * Created By Ethan Kreloff February 2, 2014.
+ * Created By Ethan Kreloff April 8th, 2014.
  * *******************************************************
  * Based off of code from CSCI 5239/4239 Advanced Computer
  * Graphics at the University of Colorado, Boulder.
  * *******************************************************
- * Calls glut and gl functions to a sphere
+ * Calls glut and gl functions to draw a scene of a 
+ * basketball
  * *******************************************************
- * hw3.c
+ * final.c
  * ******************************************************/
 
 // OpenGL 2.0 is deprecated in Mavericks
@@ -29,7 +30,6 @@
 
 #define MODE 3
 #define TEXTURES 4
-#define TEST 1
 
 /*
  *  Global variables 
@@ -37,8 +37,8 @@
 
 
 int shadeMode = 0; //Shader Mode
-int th=0;         //  Azimuth of view angle
-int ph=0;         //  Elevation of view angle
+int th=270;         //  Azimuth of view angle
+int ph=25;         //  Elevation of view angle
 int fov=10;       //  Field of view (for perspective)
 int axes = 0;     //  Display axes
 double asp=1.0;     //  Aspect ratio
@@ -56,9 +56,9 @@ unsigned int defaultTextures[2];
 unsigned int img;   //  Image texture
 unsigned int depthTexture;
 int W,H;            //  Texture dimensions
-int Nt=1;            //  Texture passes
 int MaxTexSize;     //  Maximum texture size
 float dX,dY;        //  Image pixel offset
+
 
 // Lighting/Shadow Variables
 int lth = 90; // Lighting Azimuth
@@ -71,27 +71,22 @@ double bounceDist = 5;
 float Nv[] = {0, -1, 0}; // Normal vector for the plane
 float Ev[] = {0, Yfloor, 0 }; // Point of the plane
 
-double inner = 1.0;
-double outer = 2.0;
-double t1 = 100.0;
-double t2 = 100.0;
-
 int showFocus = 0;
 float focalLength = 20.0; //focal length in mm
-float fstop = 13.0;//75.0;
+float fstop = 8.0;//75.0;
 float focalDepth = 3.0;
 
-float ndofstart = 0.3; //near dof blur start
-float ndofdist = 0.4; //near dof blur falloff distance
-float fdofstart = 0.3; //far dof blur start
-float fdofdist = 0.5; //far dof blur falloff distance
+float ndofstart = 0.6; //near dof blur start
+float ndofdist = 2.6; //near dof blur falloff distance
+float fdofstart = 2.8; //far dof blur start
+float fdofdist = 16.8; //far dof blur falloff distance
 
 
 /*
  *  Prototypes
  */
 static void Vertex(int th,int ph);
-void Sphere(int shadow);
+void Sphere(int shadow, int extra, double x, double y, double z);
 
 void FloorBounds();
 
@@ -107,20 +102,6 @@ void ShadowProjection(float Lv[4], float Ev[4], float Nv[4]);
  */
 void display()
 {
-   /*
-   //  Light position and colors
-//   float Emission[]  = {0.0,0.0,0.0,1.0};
-//   float Ambient[]   = {0.3,0.3,0.3,1.0};
-//   float Diffuse[]   = {1.0,1.0,1.0,1.0};
-//   float Specular[]  = {1.0,1.0,1.0,1.0};
-//   float Position[]  = {2*Cos(lth),YLight,2*Sin(lth),1.0};
-//   float Shinyness[] = {36};
-    
-//    GLfloat ambient_light[] =
-//    GLfloat diffuse_light[] =
-//    GLfloat specular_light[] =
-//    GLfloat position_light[] = { 0.0f, 0.0f, -1.0f, 0.0f };
-    */
 
     float Emission[]  = {0.0,0.0,0.0,1.0};
     float Ambient[]   = { 0.3f, 0.3f, 0.3f, 1.0f };
@@ -138,13 +119,13 @@ void display()
    
    
    //  Perspective - set eye position
-    double Ex = -2*dim*Sin(th)*Cos(ph);
-    double Ey = +2*dim        *Sin(ph);
-    double Ez = +2*dim*Cos(th)*Cos(ph);
+   double Ex = -2*dim*Sin(th)*Cos(ph);
+   double Ey = +2*dim        *Sin(ph);
+   double Ez = +2*dim*Cos(th)*Cos(ph);
     
     
-    gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
-    gluPerspective(360.0f,asp,1.0f,30.0f);
+   gluLookAt(Ex,Ey,Ez , 0.0,0.0,0.0 , 0,Cos(ph),0);
+   gluPerspective(360.0f,asp,1.0f,30.0f);
 
    //  OpenGL should normalize normal vectors
    glEnable(GL_NORMALIZE);
@@ -190,8 +171,6 @@ void display()
     
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D,texture[2]);
-    
-    
 
     glUseProgram(bumpShader);
     id = glGetUniformLocation(bumpShader,"tex1");
@@ -199,15 +178,13 @@ void display()
     
     id = glGetUniformLocation(bumpShader,"tex0");
     if (id>=0) glUniform1i(id,4);
-    
-    
-    
  
     //Draw Bball
     glPushMatrix();
     glScaled(zoom,zoom,zoom);
     glUseProgram(bumpShader);
-    Sphere(0);
+    Sphere(0, 0, 0.0, 0.0, 0.0);
+    Sphere(0, 1, -80.0, 7.0, 8.0);
     glUseProgram(0);
     Hoop(-24.0, -.775, 3.0, 90.0, 0);
     Hoop(25.1, -.775, 1.2, -90.0, 0);
@@ -237,9 +214,9 @@ void display()
     glPushMatrix();
     glScaled(zoom*1.1,zoom,2.3*zoom);
     ShadowProjection(Position,Ev,Nv);
-    Sphere(1);
+    Sphere(1, 0, 0.0, 0.0, 0.0);
     glRotated(180, 0,1,0);
-    Sphere(1);
+    Sphere(1, 0, 0.0, 0.0, 0.0);
     glPopMatrix();
     glScaled(zoom,zoom,zoom);
     Hoop(-24.0, -.775, 3.0, 90.0, 1);
@@ -263,26 +240,8 @@ void display()
     //  Copy original scene to texture
     glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,0,0,W,H,0);
    
-   //  Set shader
+   //  Set shader pass in unifroms
     glUseProgram(dofShader);
-    
-    //  Set offsets
-    /*
-    uniform sampler2D bgl_RenderedTexture;
-    uniform sampler2D bgl_DepthTexture;
-    uniform float bgl_RenderedTextureWidth;
-    uniform float bgl_RenderedTextureHeight;
-    uniform float focalDepth;  //focal distance value in meters, but you may use autofocus option below
-    uniform float focalLength; //focal length in mm
-    uniform float fstop; //f-stop value
-    uniform bool showFocus; //show debug focus point and focal range (red = focal point, green = focal range)
-    
-    
-    float ndofstart = 1.0; //near dof blur start
-    float ndofdist = 2.0; //near dof blur falloff distance
-    float fdofstart = 1.0; //far dof blur start
-    float fdofdist = 3.0; //far dof blur falloff distance
-    */
     
     id = glGetUniformLocation(dofShader,"dX");
     if (id>=0) glUniform1f(id,dX);
@@ -314,7 +273,7 @@ void display()
     if (id>=0) glUniform1i(id,0);
     id = glGetUniformLocation(dofShader,"bgl_DepthTexture");
     if (id>=0) glUniform1i(id,6);
-    
+
     //  Disable depth
     glDisable(GL_DEPTH_TEST);
     
@@ -323,38 +282,28 @@ void display()
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    //  Shader passes
-    for (int k=TEST;k<Nt;k++)
-    {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,defaultTextures[0]);
-        //  Copy original scene to texture
-        glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,0,0,W,H,0);
         
-        //  Redraw the texture
-        glClear(GL_COLOR_BUFFER_BIT);
-        glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0,0); glVertex2f(-1,-1);
-        glTexCoord2f(0,1); glVertex2f(-1,+1);
-        glTexCoord2f(1,1); glVertex2f(+1,+1);
-        glTexCoord2f(1,0); glVertex2f(+1,-1);
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-    }
+    //  Redraw the texture
+    glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0,0); glVertex2f(-1,-1);
+    glTexCoord2f(0,1); glVertex2f(-1,+1);
+    glTexCoord2f(1,1); glVertex2f(+1,+1);
+    glTexCoord2f(1,0); glVertex2f(+1,-1);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
     
+
     //  Shader off
     glUseProgram(0);
     
     
     
    //  Display parameters
-   glWindowPos2i(5,5);
-   Print("focalLength=%.4f    fstop=%.4f    focalDepth=%.4f showFocus=%d   ndofstart=%.4f   ndofdist=%.4f   fdofstart=%.4f   fdofdist=%.4f"
-         ,focalLength,fstop,focalDepth,showFocus,ndofstart,ndofdist,fdofstart, fdofdist);
-    
-    //Print("inner: %f   outer: %f   1: %f   2: %f", inner, outer, t1, t2);
+//   glWindowPos2i(5,5);
+//   Print("focalLength=%.4f    fstop=%.4f    focalDepth=%.4f showFocus=%d   ndofstart=%.4f   ndofdist=%.4f   fdofstart=%.4f   fdofdist=%.4f"
+//   ,focalLength,fstop,focalDepth,showFocus,ndofstart,ndofdist,fdofstart, fdofdist);
    //  Render the scene and make it visible
    glFlush();
    glutSwapBuffers();
@@ -362,17 +311,24 @@ void display()
 
 void idle()
 {
-    //  Elapsed time in seconds
-    double t;
+    double t;     //  Elapsed time in seconds
     
-    if (movement) {
-        t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-        bounceDist = 5.0*cos(t*3.0) + 5.0;
+        if (movement) {
+            t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+            bounceDist = 5.0*cos(t*3.0) + 5.0;
+        }else{
+            t = 0;
+            bounceDist = 0.0;
+        }
+    
+    if (movement){
+        fdofstart = 1024.6;
+        ndofstart = 1024.2;
     }else{
-        bounceDist = 0.0;
-        t = 0;
+        fdofstart = 2.8;
+        ndofstart = 0.6;
     }
-    
+    //Reproject
     Project(fov,asp,dim);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
@@ -394,14 +350,11 @@ void special(int key,int x,int y)
    else if (key == GLUT_KEY_UP)
       ph += 5;
    //  Down arrow key - decrease elevation by 5 degrees
-   else if (key == GLUT_KEY_DOWN)
-      ph -= 5;
-   //  PageUp key - increase dim
-   else if (key == GLUT_KEY_PAGE_UP)
-      dim += 0.1;
-   //  PageDown key - decrease dim
-   else if (key == GLUT_KEY_PAGE_DOWN && dim>1)
-      dim -= 0.1;
+   else if (key == GLUT_KEY_DOWN){
+    
+    ph -= 5;
+   }
+    
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
@@ -416,14 +369,7 @@ void special(int key,int x,int y)
  */
 void key(unsigned char ch,int x,int y)
 {
-   //  Exit on ESC
-   if (ch == 27)
-      exit(0);
-   //  Reset view angle
-   if (ch == 'x'){
-      th = ph = 0;
-      zoom = 1;
-   }
+   
    /*
     //  Change field of view angle
    if (ch == '9' && ch>1)
@@ -450,22 +396,6 @@ void key(unsigned char ch,int x,int y)
     if (ch == 'E') t1--;
     if (ch == 'r') t2++;
     if (ch == 'R') t2--;*/
-   
-    
-    //if (ch == 'q') bounceDist += 0.5;
-    //if (ch == 'Q') bounceDist -= 0.5;
-    if (ch == 'q') movement = 1-movement;
-    //Zoom
-   if (ch == 'i')
-       if (zoom < 30.0) {
-           zoom += 1.0;
-           //fstop -= 2.5;
-       }
-    if(ch == 'o')
-        if(zoom  > 1.0){
-            zoom -= 1.0;
-            //fstop += 2.5;
-        }
     
     if (ch == 'w') showFocus = 1 - showFocus;
     if (ch == 'e') focalLength++;
@@ -483,15 +413,38 @@ void key(unsigned char ch,int x,int y)
     if (ch == 's') fdofdist += 0.1;
     if (ch == 'S') fdofdist -= 0.1;
     
-   
-    //  Passes
-       if (ch == 'N' && Nt>1)
-           Nt--;
-       if (ch == 'n')
-           Nt++;
     
-    //Change axis on and off
-    //if (ch == 'z') axes = !axes;
+   
+    if (ch == 'q') movement = 1-movement;
+    //Zoom
+    if (ch == 'i'){
+       if (zoom < 27.0) {
+           zoom += 1.0;
+       }
+    }
+    if(ch == 'o'){
+        if(zoom  > 1.0){
+            zoom -= 1.0;
+        }
+    }
+    
+    //  Exit on ESC
+    if (ch == 27)
+        exit(0);
+    //  Reset view angle
+    if (ch == 'x'){
+        th = 270;
+        ph = 25;
+        zoom = 1;
+    }
+    // Switch to DoF angle
+    if (ch == 'z') {
+        zoom = 27.0;
+        th = 270.0;
+        ph = 0;
+        bounceDist = 0.0;
+        movement = 0;
+    }
     
    //  Reproject
    Project(fov,asp,dim);
@@ -508,14 +461,14 @@ void reshape(int width,int height)
    asp = (height>0) ? (double)width/height : 1;
    //  Set the viewport to the entire window
    glViewport(0,0, width,height);
-    //  Set size of texture
-    W = width;
-    H = height;
-    if (W>MaxTexSize) W = MaxTexSize;
-    if (H>MaxTexSize) H = MaxTexSize;
-    //  Set texture offsets for kernel
-    dX = 1.0/W;
-    dY = 1.0/H;
+   //  Set size of texture
+   W = width;
+   H = height;
+   if (W>MaxTexSize) W = MaxTexSize;
+   if (H>MaxTexSize) H = MaxTexSize;
+   //  Set texture offsets for kernel
+   dX = 1.0/W;
+   dY = 1.0/H;
    //  Set projection
    Project(fov,asp,dim);
    glutPostRedisplay();
@@ -526,12 +479,12 @@ void reshape(int width,int height)
  */
 int main(int argc,char* argv[])
 {
-    int n;
+   int n;
    //  Initialize GLUT
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-   glutInitWindowSize(1700,1100);
+   glutInitWindowSize(1200,800);
    glutCreateWindow("Final Project: Ethan Kreloff");
    //  Set callbacks
    glutDisplayFunc(display);
@@ -540,12 +493,12 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
    glutIdleFunc(idle);
     
-    glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
-    if (n<6) Fatal("Insufficient texture Units %d\n",n);
-    //  Maximum texture size
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE,&MaxTexSize);
-    //  Background color
-    //glClearColor(0.5,0.5,0.5,1.0);
+   glGetIntegerv(GL_MAX_TEXTURE_UNITS,&n);
+   if (n<6) Fatal("Insufficient texture Units %d\n",n);
+   //  Maximum texture size
+   glGetIntegerv(GL_MAX_TEXTURE_SIZE,&MaxTexSize);
+   //  Background color
+   glClearColor(1.0,1.0,1.0,1.0);
    //  Load textures
    glActiveTexture(GL_TEXTURE2);
    texture[0]  = LoadTexBMP("pepsicenter.bmp");
@@ -564,12 +517,10 @@ int main(int argc,char* argv[])
    bumpShader = CreateShaderProg("bump.vert","bump.frag");
    maskShader = CreateShaderProg(NULL, "mask.frag");
    dofShader = CreateShaderProg(NULL,"blur.frag");
-    //depthShader = CreateShaderProg("depth.vert", "depth.frag");
     
     //  Load random texture
     CreateNoise3D(GL_TEXTURE1);
     
-    //glActiveTexture(GL_TEXTURE0);
     //  Image texture
     
     glGenTextures(2,defaultTextures);
@@ -623,14 +574,18 @@ static void Vertex(int th,int ph)
 
 
 
-void Sphere(int shadow)
+void Sphere(int shadow, int extra, double x, double y, double z)
 {
     int th,ph;
     //  Latitude bands
     shadow ? glColor4f(0.1,0.1,0.1,0.2) : glColor3f(1.0,1.0,1.0);
     glPushMatrix();
     glScaled(0.25, 0.25, 0.25);
-    shadow ? glTranslated(0, 0, -bounceDist - 0.9) : glTranslated(0, bounceDist, -0.15);
+    if (!extra) {
+        shadow ? glTranslated(0, 0, -bounceDist - 0.9) : glTranslated(0.0,bounceDist, - 0.15);
+    }else{
+        shadow ? glTranslated(x + 0.0, y + 0.0, z - 0.9) : glTranslated(x + 0.0, y, z - 0.15);//glTranslated(x,y,z);
+    }
     for (ph=-90;ph<90;ph+=5)
     {
         glBegin(GL_QUAD_STRIP);
@@ -649,34 +604,34 @@ void FloorBounds(){
     glColor3f(0.027,0.112,0.208);
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.24, -13.0);
-    glVertex3d(25.62, -0.24, -10.47);
-    glVertex3d(-24.5, -0.24, -10.47);
-    glVertex3d(-24.5, -0.24, -13.0);
+    glVertex3d(25.62, -0.24999, -13.0);
+    glVertex3d(25.62, -0.24999, -10.47);
+    glVertex3d(-24.5, -0.24999, -10.47);
+    glVertex3d(-24.5, -0.24999, -13.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.24, 17.0);
-    glVertex3d(25.62, -0.24, 14.42);
-    glVertex3d(-24.5, -0.24, 14.42);
-    glVertex3d(-24.5, -0.24, 17.0);
+    glVertex3d(25.62, -0.24999, 17.0);
+    glVertex3d(25.62, -0.24999, 14.42);
+    glVertex3d(-24.5, -0.24999, 14.42);
+    glVertex3d(-24.5, -0.24999, 17.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(-24.5, -0.24, -13.0);
-    glVertex3d(-28.5, -0.24, -13.0);
-    glVertex3d(-28.5, -0.24, 17.0);
-    glVertex3d(-24.5, -0.24, 17.0);
+    glVertex3d(-24.5, -0.24999, -13.0);
+    glVertex3d(-28.5, -0.24999, -13.0);
+    glVertex3d(-28.5, -0.24999, 17.0);
+    glVertex3d(-24.5, -0.24999, 17.0);
     glEnd();
     
     glBegin(GL_QUADS);
     glNormal3d(0.0, 1.0, 0.0);
-    glVertex3d(25.62, -0.24, -13.0);
-    glVertex3d(25.62, -0.24, 17.0);
-    glVertex3d(29.62, -0.24, 17.0);
-    glVertex3d(29.62, -0.24, -13.0);
+    glVertex3d(25.62, -0.24999, -13.0);
+    glVertex3d(25.62, -0.24999, 17.0);
+    glVertex3d(29.62, -0.24999, 17.0);
+    glVertex3d(29.62, -0.24999, -13.0);
     glEnd();
 }
 
@@ -826,48 +781,10 @@ void Hoop(double x, double y, double z, double yrot, int shadow){
     glEnd();
     
     //Rim
-    //Torus(0.5, 3.8, 0.2, 0.0, 0.0, 1.0, 0.2);
     glTranslated(0.5, 4.0, 0.3);
     glRotated(90.0, 1.0, 0.0, 0.0);
     glColor3f(0.93725490196, 0.29411764705, 0.15686274509);
-    glutSolidTorus(0.02/*inner*/, /*outer*/.28, 100.0, 100.0);
+    glutSolidTorus(0.02, 0.28, 100.0, 100.0);
     glPopMatrix();
 }
 
-
-/*
- void Floortest(){
- 
- glColor3f(.5,.5,.5);
- glBegin(GL_QUADS);
- glNormal3d(0.0, 1.0, 0.0);
- glVertex3d(-23.5, -0.5, -12.5);
- glVertex3d(-23.5, -0.5, -1.38);
- glVertex3d(-2.5, -0.5, -1.38);
- glVertex3d(-2.5, -0.5, -12.5);
- glEnd();
- 
- 
- }
- 
- void Floor2(){
- double i, j;
- int offset = 0;
- for(i = 1; i <= 50; i += //2.005// 3.0){
- for (j = 1; j <= 28; j += //0.127// .5) {
- glColor3f(.5,.5,.5);
- glBegin(GL_QUADS);
- glNormal3d(0.0, 1.0, 0.0);
- double off;
- if(offset)off = 1.0;
- else off = 0.0;
- glVertex3d(-23.5+i, -0.5, -12.5+j+off);
- glVertex3d(-23.5+i, -0.5, -12.38+j+off);
- glVertex3d(-25.5+i, -0.5, -12.38+j+off);
- glVertex3d(-25.5+i, -0.5, -12.5+j+off);
- glEnd();
- offset = !offset;
- }
- }
- 
- }*/

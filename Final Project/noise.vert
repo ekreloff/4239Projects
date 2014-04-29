@@ -1,38 +1,18 @@
-// Derived from CSCI 4239 examples
+
+/* *******************************************************
+ * Created By Ethan Kreloff April 8th, 2014.
+ *********************************************************
+ * Based off of code from the Orange Book Chapter 8 by
+ * Charles Gruenwald and sample code from CSCI 4239/5239
+ * at University of Colorado at Boulder.
+ * *******************************************************
+ * Shader creates noise for a vertex shader.
+ * *******************************************************
+ * noise.vert
+ * ******************************************************/
 
 varying float LightIntensity;
 varying vec2 texCoord;
-
-
-/*
-varying vec3 Vertex_LightDir;
-varying vec3 Vertex_EyeVec;
-varying vec3 Vertex_Normal;
-
-varying vec4 light_diffuse;
-varying vec4 material_diffuse;
-varying vec4 light_specular;
-varying vec4 material_specular;
-varying float material_shininess;
-
-void main()
-{
-    vec3 LightPos = vec3(gl_LightSource[0].position);
-    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-    Vertex_Normal = gl_NormalMatrix * gl_Normal;
-    vec4 view_vertex = gl_ModelViewMatrix * gl_Vertex;
-    Vertex_LightDir = LightPos.xyz - view_vertex.xyz;
-    Vertex_EyeVec = -view_vertex.xyz;
-    
-    light_diffuse = gl_FrontLightProduct[0].diffuse;
-    material_diffuse = gl_FrontMaterial.diffuse;
-    light_specular = gl_FrontLightProduct[0].specular;
-    material_specular = gl_FrontMaterial.specular;
-    material_shininess = gl_FrontMaterial.shininess;
-    
-    
-}*/
 
 vec4 phong()
 {
@@ -80,8 +60,6 @@ void main()
     //  Texture coordinate
     gl_TexCoord[0] = gl_Vertex;
     
-    //  Texture coordinate for fragment shader
-    //texCoord = gl_MultiTexCoord0.xy;
     
     //  Return fixed transform coordinates for this vertex
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;

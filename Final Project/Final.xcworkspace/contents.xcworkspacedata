@@ -58,12 +58,6 @@
          location = "group:blur.frag">
       </FileRef>
       <FileRef
-         location = "group:depth.frag">
-      </FileRef>
-      <FileRef
-         location = "group:depth.vert">
-      </FileRef>
-      <FileRef
          location = "group:mask.frag">
       </FileRef>
       <FileRef
@@ -76,25 +70,10 @@
          location = "group:wood.frag">
       </FileRef>
       <FileRef
-         location = "group:granite.frag">
-      </FileRef>
-      <FileRef
-         location = "group:marble.frag">
-      </FileRef>
-      <FileRef
          location = "group:noise.vert">
-      </FileRef>
-      <FileRef
-         location = "group:shader1.frag">
-      </FileRef>
-      <FileRef
-         location = "group:shader1.vert">
       </FileRef>
    </Group>
    <FileRef
       location = "group:final.c">
-   </FileRef>
-   <FileRef
-      location = "group:ex11.c">
    </FileRef>
 </Workspace>

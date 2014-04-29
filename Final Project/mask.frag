@@ -1,13 +1,18 @@
-//  Derived from Orange Book Chapter 6 by Charles Gruenwald
+/* *******************************************************
+ * Created By Ethan Kreloff April 8th, 2014.
+ * *******************************************************
+ * Shader that adds a premade mask image to effect the
+ * drawing of the scene.
+ * *******************************************************
+ * mask.frag
+ * ******************************************************/
 
-//Stripes
 uniform sampler2D mask;
 uniform float alphaDist;
 
 void main()
 {
-   //Percent to be ora
-   // Uses positioning and stripes to determine final color
+
     
     vec2 texPosition = (gl_TexCoord[0].xy + vec2(1.5, 0.7)) * vec2(1.0,.25);
     vec4 maskVec = texture2D(mask, texPosition);

@@ -3,14 +3,44 @@ README
 Final Project
 
 Created by Ethan Kreloff for University of Colorado CSCI4239
-Febuary 2th, 2014
+April 8th, 2014
 
-TIME SPENT: ?????
+TIME SPENT: approximatley 50 hours
 
 
-This program demonstrates ????????
+    This program displays a scene of the Denver Nuggets basketball court with 
+    two balls and two hoops. It demonstrates the use of different shaders to
+    achieve various effects. The first shader uses a programmatic mixing of 
+    woody colors to create the effect of the wood floor. The wood shader also 
+    draws the paint lines and logos on the court. The second shader is a masking 
+    shader that makes the shadow of the ball appear blurry and fade out, like 
+    what would be seen on a real basketball court. The third shader is a Bump 
+    Map shader which allows for the generation of ultra realistic texture on the 
+    basketball. Lastly, there is a shader that creates a depth of field effect 
+    where objects in the backgound and objects very close get blurred out.
+    
+    To see the effects described here in detail it is important to do the 
+    following:
 
+        1. Hit the 'q' key to start the center basketball moving up and down, which demonstrates the shadows well. (Please note that the DoF calculations are slightly different when its moving, so the background changes color.) If you need to zoom in hit the 'i' key.
+        2. After checking out the shadows with movement, you should hit the 'q' key again to stop the motion. You should stop the ball's motion before you look at it up close.
+        3. After the ball is stationary, hit the 'z' key to zoom in all the way to view the bump mapping on the basketball.
+        3. While you are all the way zoomed in, you can change the view to include the second basketball in the scene, which nicely demonstrates the depth of field effect. (Change view with arrow keys)
+        4. Otherwise you can hit the x key and it will reset the view so you can check other things in the scene like the wood floor and texture.
+
+
+CONTROLS
 
 Arrow Keys: Control rotation of the scene up/down left/right
 
+'q' Key   : Toggles the center basketball's movement on and off.
 
+'i' Key   : Zooms in.
+
+'o' Key   : Zooms in.
+
+'x' Key   : Sets view to area which shows the DoF effect off well.
+
+'x' Key   : Resets view to starting position.
+
+'esc' Key : Quits program.

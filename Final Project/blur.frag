@@ -1,3 +1,15 @@
+/* *******************************************************
+ * Created By Ethan Kreloff April 8th, 2014.
+ * *******************************************************
+ * Based off of code from Martin Upitis.
+ * *******************************************************
+ * Depth of field shader
+ * *******************************************************
+ * blur.frag
+ * ******************************************************/
+
+
+
 /*
  DoF with bokeh GLSL shader v2.4
  by Martins Upitis (martinsh) (devlog-martinsh.blogspot.com)

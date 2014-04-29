@@ -1,9 +1,19 @@
-//  Derived from Orange Book Chapter 8 by Charles Gruenwald
+
+/* *******************************************************
+ * Created By Ethan Kreloff April 8th, 2014.
+ *********************************************************
+ * Based off of code from the Orange Book Chapter 8 by 
+ * Charles Gruenwald and sample code from CSCI 4239/5239
+ * at University of Colorado at Boulder.
+ * *******************************************************
+ * Shader that adds a woody moxture of colors to an object
+ * *******************************************************
+ * wood.frag
+ * ******************************************************/
+
+
 
 varying float LightIntensity;
-//varying vec2 texCoord;
-
-//  wood frag shader
 
 uniform sampler3D Noise3D;
 uniform sampler2D CourtTex0;
@@ -44,7 +54,6 @@ void main(void)
     }else{
         color -= LightWood * LightGrains * noisev[2];
     }
-    //color *= LightIntensity;
     
     //  Apply final color
     if((logo.r + logo.g +logo.b)/3.0 == 1.0){
@@ -52,11 +61,6 @@ void main(void)
     }else{
         gl_FragColor = logo * vec4(color, 1.0) * LightIntensity;
     }
-    /*
-    if (logo.a > 0.5) {
-        gl_FragColor = logo;
-    }else{
-        gl_FragColor = vec4(color, 1.0);
-    }*/
+
 }
 
